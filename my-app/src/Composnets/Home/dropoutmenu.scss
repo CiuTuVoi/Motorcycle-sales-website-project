@@ -1,0 +1,58 @@
+// DropdownMenu.scss
+.menu-item {
+    position: relative; 
+    list-style: none; 
+    padding: 10px 30px; 
+  }
+  
+  a {
+    text-decoration: none; 
+    color: #3154A5; 
+    font-size: 15px; 
+    font-weight: bold; 
+    display: inline-flex; 
+    align-items: center; 
+
+    &:hover {
+        color: #ffffff; 
+      }
+  }
+  
+  
+  
+  .dropdown-icon {
+    position: absolute;
+    margin-left: 5px; 
+    font-size: 15px; 
+  }
+  
+  .dropdown-list {
+    position: absolute; 
+    top: 100%; 
+    left: 0;
+    background-color: #3154A5; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    z-index: 1; 
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border-radius: 5px; 
+    width: 100%; 
+  }
+  
+  .dropdown-item {
+    padding: 10px 20px; 
+    color: white; 
+    text-decoration: none; 
+    font-size: 14px; 
+    transition: color 0.3s ease-in-out;
+    transition: background-color 0.3s ease; 
+
+    &:hover{
+        background-color: rgb(25, 14, 182);
+        transform: scale(1.02)
+    }
+  }
+  
+  
+  
