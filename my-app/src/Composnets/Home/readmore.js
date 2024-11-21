@@ -135,56 +135,70 @@ function More() {
       </div>
 
       {/* Product Detail Section */}
-      <div className="product">
-        <div className="product-detail">
-          <div className="product-img">
-            <img src={product[0].img} alt={product[0].name} />
-          </div>
-
-          <div className="content">
-            <h3>{product[0].name}</h3>
-
-            <div className="price">
-              <p className="old-price">{product[0].oldPrice}</p>
-              <p className="new-price">{product[0].newPrice}</p>
+      <div className="container-content">
+        <div className="product">
+          <div className="product-detail">
+            <div className="product-img">
+              <img src={product[0].img} alt={product[0].name} />
             </div>
-            <ul>
-              <li>🎁 01 Nón bảo hiểm</li>
-              <li>🎁 01 Khung biển số</li>
-              <li>🎁 01 Móc khóa</li>
-              <li>🎁 01 Túi vải</li>
-              <li>🎁 01 Gói bảo dưỡng - bảo trì 5 năm</li>
-              <li>
-                <InputNumber
-                  className="add-number"
-                  min={1}
-                  max={100}
-                  defaultValue={1}
-                  onChange={onchange}
-                />
-              </li>
-            </ul>
+
+            <div className="content-wrapper">
+              <h3>{product[0].name}</h3>
+
+              <div className="price">
+                <p className="old-price">{product[0].oldPrice}</p>
+                <p className="new-price">{product[0].newPrice}</p>
+              </div>
+              <ul>
+                <li>🎁 01 Nón bảo hiểm</li>
+                <li>🎁 01 Khung biển số</li>
+                <li>🎁 01 Móc khóa</li>
+                <li>🎁 01 Túi vải</li>
+                <li>🎁 01 Gói bảo dưỡng - bảo trì 5 năm</li>
+                <li>
+                  <InputNumber
+                    className="add-number"
+                    min={1}
+                    max={100}
+                    defaultValue={1}
+                    onChange={onchange}
+                  />
+                </li>
+              </ul>
+            </div>
+
+            {/* Banner Section */}
+            <div className="banner">
+              <div className="hotline">
+                <h2>HOTLINE</h2>
+                <h2>123456789</h2>
+              </div>
+              <div className="content">
+                <ul>
+                  <li>Sản phẩm chính hãng</li>
+                  <li>Giá thành cạnh tranh</li>
+                  <li>Thương hiệu uy tín</li>
+                  <li>Bảo hành, bảo dưỡng 5 năm</li>
+                </ul>
+              </div>
+            </div>
           </div>
+
           <div className="addtocart">
             <button>ADD TO CART</button>
-
-
           </div>
-        </div>
 
-        {/* Banner Section */}
-        <div className="banner">
-          <div className="hotline">
-            <h2>HOTLINE</h2>
-            <h2>123456789</h2>
-          </div>
-          <div className="content">
-            <ul>
-              <li>Sản phẩm chính hãng</li>
-              <li>Giá thành cạnh tranh</li>
-              <li>Thương hiệu uy tín</li>
-              <li>Bảo hành, bảo dưỡng 5 năm</li>
-            </ul>
+          <div className="descerption">
+            <div className="desception-baner">
+              <h4>DESCRIPTION</h4>
+            </div>
+            <div className = "dash"></div>
+            <p>
+              <b>Yamaha R15 V3 </b>là mẫu xe máy đang rất được ưa chuộng đến từ hãng xe
+              máy Yamaha. Sản phẩm đang sẵn hàng và có giá ưu đãi cực tốt tại<b> Hệ
+              Thống Xe Máy Hoàng Cầu </b>. Gọi ngay <b className = "color-red">1900 63 66 67</b> để được trải nghiệm
+              miễn phí mẫu xe Yamaha R15 V3
+            </p>
           </div>
         </div>
       </div>

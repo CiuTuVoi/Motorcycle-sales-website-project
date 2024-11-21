@@ -176,114 +176,153 @@
 
 
 /* Product Detail Section */
-.product {
+.container-content {
   display: flex;
   justify-content: space-between;
   margin-top: 100px;
+  margin-left: 100px;
+  margin-right: 50px;
 
-
-  .product-detail {
-    display: flex;
-
-
-    .product-img {
-      position: relative;
-      width: 50%;
-      overflow: hidden;
-
-      img{
-        width: 80%;
-        height: auto;
+    /*addtocart*/
+  .addtocart {
+    margin-left: 600px;
+    margin-top: -35px;
+  
+    button {
+      padding: 10px;
+      background-color: rgba(65, 88, 208);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      transition: transform 0.3s ease-in-out;
+  
+      &:hover {
+        transform: scale(1.1);
+  
       }
     }
-    .content {
-      margin-left: 100px;
 
-      h3 {
-        color: rgba(65, 88, 208);
-        font-size: 27px;
-        margin-bottom: 20px;
-      }
-
-      .price {
-        display: flex;
-
-        .old-price {
-          text-decoration: line-through;
-          margin-right: 10px;
-        }
-
-        .new-price {
-          font-size: 25px;
-          color: black;
-          font-weight: bold;
-        }
-      }
-
-      ul {
-        list-style: none;
-        padding-top: 10px;
-        font-size: 17px;
-
-        li {
-          padding-top: 10px;
-          margin-top: 25px;
-        }
-      }
-    }
   }
 
-  .banner {
-    height: 450px;
-    background-color: #ec3237;
-    margin-right: 40px;
-    padding: 20px;
-    color: #ebdcdc;
+  /*product-detail*/
+  .product {
+    .product-detail {
+      display: flex;
+      justify-content: space-between;
 
-    .hotline {
-      margin-top: 10px;
 
-      h2 {
-        margin-top: 5px;
+      .product-img {
+        width: 50%;
+        overflow: hidden;
+
+        img {
+          width: 60%;
+          height: auto;
+        }
       }
+
+      .content-wrapper {
+        margin-right: 160px;
+
+
+        h3 {
+          color: rgba(65, 88, 208);
+          font-size: 27px;
+          margin-bottom: 20px;
+        }
+
+        .price {
+          display: flex;
+
+          .old-price {
+            text-decoration: line-through;
+            margin-right: 10px;
+          }
+
+          .new-price {
+            font-size: 25px;
+            color: black;
+            font-weight: bold;
+          }
+        }
+
+        ul {
+          list-style: none;
+          padding-top: 10px;
+          font-size: 17px;
+
+          li {
+            padding-top: 10px;
+            margin-top: 25px;
+          }
+        }
+      }
+
     }
 
-    .content {
-      margin-top: 30px;
-      ul {
+    .banner {
+      height: 450px;
+      background-color: #ec3237;
+      padding: 20px;
+      color: #ebdcdc;
+
+      .hotline {
+        margin-top: 10px;
+
+        h2 {
+          margin-top: 5px;
+        }
+      }
+
+      .content {
         margin-top: 30px;
 
-        li {
-          list-style: none;
-          margin-top: 35px;
+        ul {
+          margin-top: 30px;
 
-        }
-        button{
-          margin-top: 10px;
+          li {
+            list-style: none;
+            margin-top: 35px;
+
+          }
+
+          button {
+            margin-top: 10px;
+          }
         }
       }
-    } 
+
+    }
+
+    
+  }
+  .descerption {
+    margin-top: 100px;
+
+    .desception-baner{
+      background-color: rgba(65, 88, 208);
+      width: 15%;
+      padding: 10px;
+      color: #fff;
+      border-radius: 0 10px  0 0;
+    }
+    .dash{
+      background-color: rgba(65, 88, 208);
+      height: 3px;
+    }
+
+    p{
+      margin-top: 20px;
+      font-size: 16px;
+
+      .color-red{
+        color: red;
+      }
+    }
+
 
   }
-
+  
   
 }
 
-.addtocart{
-  margin-top: 410px;
-  margin-left: -150px;
-  button{
-    padding: 10px;
-    background-color:  rgba(65, 88, 208);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    transition: transform 0.3s ease-in-out;
-
-    &:hover{
-      transform: scale(1.1);
-
-    }
-  }
-
-}
