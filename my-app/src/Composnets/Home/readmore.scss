@@ -2,178 +2,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: utm-avo, sans-serif;
 }
 
-.container {
-  .wrapper {
+.container{
+
+  .Layout{
     position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-
-    .inner-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 30px;
-      background-attachment: fixed;
-
-
-
-
-      /* Logo Section */
-      .logo {
-        margin-top: 10px;
-
-        a {
-          font-size: 20px;
-          color: #333;
-          text-decoration: none;
-        }
-
-      }
-
-      /* Search Bar Section */
-      .search {
-        position: relative;
-        margin-top: 10px;
-        display: block;
-
-
-
-        input {
-          width: 350px;
-          height: 35px;
-          border-radius: 15px;
-          border: 1.5px solid rgb(65, 88, 208);
-          padding-left: 30px;
-          padding-right: 10px;
-
-
-        }
-
-
-        .icon {
-          position: absolute;
-          top: 50%;
-          right: 325px;
-          transform: translateY(-50%);
-          font-size: 15px;
-          color: rgb(65, 88, 208);
-        }
-
-      }
-
-
-      /* Action Buttons Section */
-      .button-actions {
-        display: flex;
-        gap: 10px;
-        padding: 20px;
-        margin-right: 80px;
-
-        .button-icon {
-          button {
-
-            display: block;
-            padding: 10px;
-            border: 2.5px solid rgb(65, 88, 208);
-            border-radius: 6px;
-            color: rgb(65, 88, 208);
-            background: none;
-            cursor: pointer;
-            transition: 0.4s ease;
-
-            &:hover {
-              background-color: rgb(65, 88, 208);
-              color: #fff;
-            }
-          }
-        }
-      }
-
-
-
-      /* Cart Button Section */
-      .button-cart {
-        padding: 15px;
-        margin-left: -80px;
-
-        button {
-          padding: 10px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          border: 1.5px solid rgb(65, 88, 208);
-          border-radius: 5px;
-          background-color: rgb(65, 88, 208);
-          color: #fff;
-          cursor: pointer;
-
-          h4 {
-            margin: 0;
-          }
-
-        }
-
-      }
-
-      /* Favorites Button Section */
-      .button-favorites {
-        padding: 15px;
-        position: relative;
-        margin-right: 200px;
-
-        button {
-          padding: 10px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          border: 1.5px solid rgb(65, 88, 208);
-          border-radius: 5px;
-          background-color: rgb(65, 88, 208);
-          color: #fff;
-          cursor: pointer;
-        }
-      }
-    }
-
-
-    /* Login/Signup */
-    .login {
-      position: absolute;
-      margin-left: 83%;
-
-      a {
-        text-decoration: none;
-        color: rgb(65, 88, 208);
-        font-size: 17px;
-        padding: 1.5px;
-        transition: 0.4s ease;
-
-        &:hover {
-          color: red;
-        }
-      }
-
-      span {
-        color: rgb(65, 88, 208);
-        font-size: 20px;
-      }
-    }
-
-    /* Menu Section */
-    .menu {
-      display: flex;
-
-    }
   }
 }
-
 
 /* Product Detail Section */
 .container-content {
@@ -183,11 +20,10 @@
   margin-left: 100px;
   margin-right: 50px;
 
-    /*addtocart*/
+  /*addtocart*/
   .addtocart {
     margin-left: 600px;
-    margin-top: -35px;
-  
+
     button {
       padding: 10px;
       background-color: rgba(65, 88, 208);
@@ -195,10 +31,10 @@
       border: none;
       border-radius: 10px;
       transition: transform 0.3s ease-in-out;
-  
+
       &:hover {
         transform: scale(1.1);
-  
+
       }
     }
 
@@ -210,15 +46,25 @@
       display: flex;
       justify-content: space-between;
 
+      .main-slide {
+        margin-top: 20px;
+        margin-left: -100px;
 
-      .product-img {
-        width: 50%;
-        overflow: hidden;
+      }
 
-        img {
-          width: 60%;
-          height: auto;
-        }
+      .carousel .slider-wrapper {
+        width: 60%;
+      }
+
+      .carousel .thumb {
+        width: 5%;
+        height: 70px;
+
+      }
+
+      .carousel {
+        text-align: center;
+
       }
 
       .content-wrapper {
@@ -294,35 +140,36 @@
 
     }
 
-    
+
   }
+
   .descerption {
     margin-top: 100px;
 
-    .desception-baner{
+    .desception-baner {
       background-color: rgba(65, 88, 208);
       width: 15%;
       padding: 10px;
       color: #fff;
-      border-radius: 0 10px  0 0;
+      border-radius: 0 10px 0 0;
     }
-    .dash{
+
+    .dash {
       background-color: rgba(65, 88, 208);
       height: 3px;
     }
 
-    p{
+    p {
       margin-top: 20px;
       font-size: 16px;
 
-      .color-red{
+      .color-red {
         color: red;
       }
     }
 
 
   }
-  
-  
-}
 
+
+}

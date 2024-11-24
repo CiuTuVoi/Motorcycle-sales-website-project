@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { AiOutlineDown } from "react-icons/ai";
 import './dropoutmenu.scss';
@@ -9,14 +8,20 @@ function DropdownMenu({ title, items }) {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
-    <li className="menu-item" onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
-      <a href="">{title}</a>
-      <span className="dropdown-icon"><AiOutlineDown /></span>
+    <li
+      className="menu-item"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <a href="#" className="menu-link">
+        {title}
+        <span className="dropdown-icon"><AiOutlineDown /></span>
+      </a>
       {isOpen && (
         <ul className="dropdown-list">
           {items.map((item, index) => (
             <li key={index} className="dropdown-item">
-              <a href={item.link}>{item.label}</a>
+              <a href={item.link} className="dropdown-link">{item.label}</a>
             </li>
           ))}
         </ul>
