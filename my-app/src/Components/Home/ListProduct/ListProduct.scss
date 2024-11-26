@@ -5,10 +5,16 @@
 }
 
 .container {
+    .Header-list-product{
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 9999;
+    }
     .container-product {
         display: flex;
         margin-left: 70px;
-        margin-top: 100px;
+        margin-top: 230px;
 
         .product-list-brand {
             background-color: var(--primary-color);
@@ -92,6 +98,10 @@
     
         }
 
+    }
+
+    .footer-wrapper{
+        margin-top: 500px;
     }
 
 

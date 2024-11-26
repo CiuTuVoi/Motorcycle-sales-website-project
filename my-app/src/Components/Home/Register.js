@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import "./Login.scss";
+import "./Login/Login";
 
 export default function Register({ onRegister }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showRegister, setShowRegister] = useState(false);
+  const [setShowRegister] = useState(false);
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
@@ -54,7 +54,6 @@ export default function Register({ onRegister }) {
           <p class = "toggle-text">
             Đã có tài khoản?{" "}
             <span onClick={() => setShowRegister(false)}>Đăng nhập</span>
-
           </p>
         </from>
       </div>

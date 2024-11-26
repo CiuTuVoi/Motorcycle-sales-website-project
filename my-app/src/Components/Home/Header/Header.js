@@ -12,7 +12,7 @@ import "react-slideshow-image/dist/styles.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import DropdownMenu from "../DropdowMenu/dropoutMenu";
-import "./layout.scss";
+import "./Header.scss";
 
 const blandItem = [
   { label: "Yamaha" },
@@ -105,7 +105,7 @@ class Layout extends Component {
             <ul>
               <div className="no-drop">
                 <li>
-                  <Link to="/Home">TRANG CHỦ</Link>
+                  <Link to="/">TRANG CHỦ</Link>
                 </li>
                 <li>
                   <Link to="/gioi-thieu">GIỚI THIỆU</Link>

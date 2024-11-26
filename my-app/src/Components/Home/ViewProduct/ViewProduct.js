@@ -1,14 +1,16 @@
-import React from "react";
-import "./readmore.scss";
-import "./Home.scss";
+import React, { useState } from "react";
+import "./ViewProduct.scss";
 
 import "react-slideshow-image/dist/styles.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { InputNumber } from "antd";
-import Layout from "./Layout/layout";
+import { InputNumber} from "antd";
+import Header from "../Header/Header";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import dataSpecc from "../../data/dataSpecc.json";
+import Footer from "../Footer/Footer";
+
 
 const onchange = (value) => {
   console.log(value);
@@ -41,10 +43,23 @@ const product = [
 ];
 
 function More() {
+  const [rating, setRating] = useState(0);
+
+  const handleStarClick = (index) => {
+    setRating(index + 1);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Xử lý gửi dữ liệu ở đây
+    console.log("Rating:", rating);
+    alert("Review submitted!");
+  };
+
   return (
     <div className="container">
-      <div>
-        <Layout />
+      <div className="header-view">
+        <Header />
       </div>
 
       {/* Product Detail Section */}
@@ -104,14 +119,14 @@ function More() {
               </div>
             </div>
           </div>
-
           <div className="addtocart">
             <button>ADD TO CART</button>
           </div>
 
+          {/*dexcerption-product*/}
           <div className="descerption">
             <div className="desception-baner">
-              <h4>DESCRIPTION</h4>
+              <h4>MIÊU TẢ</h4>
             </div>
             <div className="dash"></div>
             <p>
@@ -122,8 +137,103 @@ function More() {
               miễn phí mẫu xe Yamaha R15 V3
             </p>
           </div>
+
+          {/*specifications-product*/}
+          <div className="specifications">
+            <div className="specifications-banner">
+              <h4>THÔNG SỐ KỸ THUẬT</h4>
+            </div>
+            <div className="separate"></div>
+            <div className="specifications-list">
+              {dataSpecc.map((spec, index) => (
+                <div key={spec.label + index} className="spec-conten">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>{spec.label} : </td>
+                        <td>{spec.value}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="banner-img">
+            <h4>HÌNH ẢNH SẢN PHẨM</h4>
+          </div>
+          <div className="separate-img"></div>
+          <div className = "slide-product-img">
+            
+          </div>
+
+          {/*review*/}
+          <div className="review-container">
+            <h3>
+              Be the first to review “Yamaha LEXI 155 VVA - Phiên Bản Tiêu
+              Chuẩn”
+            </h3>
+
+            <form className="review-form" onSubmit={handleSubmit}>
+              {/* Rating Section */}
+              <div className="rating">
+                <label>Your rating *</label>
+                <div className="stars">
+                  {[...Array(5)].map((_, index) => (
+                    <span
+                      key={index}
+                      className={`star ${index < rating ? "active" : ""}`}
+                      onClick={() => handleStarClick(index)}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Review Text */}
+              <div className="review-text">
+                <label htmlFor="review">Your review *</label>
+                <textarea
+                  id="review"
+                  rows="5"
+                  placeholder="Write your review..."
+                  required
+                ></textarea>
+              </div>
+
+              {/* Name and Email */}
+              <div className="name-email">
+                <div className="field">
+                  <label htmlFor="name">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="Your name"
+                    required
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="Your email"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button type="submit" className="submit-btn">
+                SUBMIT
+              </button>
+            </form>
+          </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

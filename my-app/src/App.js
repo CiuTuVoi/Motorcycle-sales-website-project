@@ -1,12 +1,13 @@
     import './App.scss';
 
-    import Home from './Composnets/Home/Home';
+    import Home from './Components/Home/Home';
     import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-    import Login from './Composnets/Home/Login';
-    import Register from './Composnets/Home/Register';
-    import Honda from './Composnets/Home/Honda/honda';
-    import More from './Composnets/Home/readmore';
-    import Layout from './Composnets/Home/Layout/layout';
+    import Login from './Components/Home/Login/Login';
+    import Register from './Components/Home/Register';
+    import Honda from './Components/Home/ListProduct/ListProduct';
+    import More from './Components/Home/ViewProduct/ViewProduct';
+    import Header from './Components/Home/Header/Header';
+    import Footer from './Components/Home/Footer/Footer';
     function App() {
     return (
         <Router>
@@ -16,7 +17,8 @@
                 <Route path = "/register" element={<Register/>}/>
                 <Route path = "/honda" element = {<Honda/>}/>
                 <Route path = "/readmore" element = {<More/>}/>
-                <Route path = "/layout" element = {<Layout/>}/>
+                <Route path = "/header" element = {<Header/>}/>
+                <Route path = "/footer" element = {<Footer/>}/>
             </Routes>
         </Router>
     );

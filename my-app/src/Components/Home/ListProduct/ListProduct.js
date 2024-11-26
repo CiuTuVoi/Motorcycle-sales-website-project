@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import Layout from "../Layout/layout";
-import "./honda.scss";
+import Layout from "../Header/Header";
+import "./ListProduct.scss";
+import Footer from "../Footer/Footer";
 
 const Data = require("../data.json");
 class Honda extends Component {
   render() {
     return (
       <div className="container">
-        <div>
-          <Layout />{" "}
+        <div className="Header-list-product">
+          <Layout />
         </div>
 
         <div className="container-product">
@@ -45,7 +46,12 @@ class Honda extends Component {
             ))}
           </div>
         </div>
+        
         </div>
+        <div className = "footer-wrapper">
+          <Footer/>
+        </div>
+        
         
       </div>
     );
