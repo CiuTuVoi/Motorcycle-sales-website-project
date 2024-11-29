@@ -22,6 +22,7 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     ten = Column(String(255))
     mo_ta = Column(TEXT)
+    gia = Column(Integer)
     hinh_anh = Column(JSON)
     created_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
