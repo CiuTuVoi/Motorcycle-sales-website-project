@@ -5,12 +5,13 @@
 }
 
 .container {
-    .Header-list-product{
+    .Header-list-product {
         position: fixed;
         top: 0;
         width: 100%;
         z-index: 9999;
     }
+
     .container-product {
         display: flex;
         margin-left: 70px;
@@ -31,31 +32,41 @@
                 margin-top: 30px;
                 list-style: none;
                 font-size: 17px;
+                transition: transform 0.3s ease-in-out;
+
+                &:hover {
+                    transform: scale(1.05);
+
+                }
 
                 a {
                     color: #fff;
                     text-decoration: none;
-                    transition: .3s ease;
+                    transition: 0.3s ease;
 
                     &:hover {
-                        color: rgb(222, 243, 36);
+                        color: red;
                     }
+
+
+
                 }
             }
         }
+
         .home {
             position: absolute;
             padding: 20px;
             margin-left: 250px;
             margin-right: 5px;
             margin-top: -20px;
-    
+
             .product-list {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 20px;
             }
-    
+
             .product-item {
                 border: 1px solid #ddd;
                 padding: 15px;
@@ -65,42 +76,43 @@
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 transition: transform 0.5s ease-in-out;
 
-                &:hover{
+                &:hover {
                     transform: scale(1.05);
                 }
+
                 .product-image {
                     width: 100%;
                     height: auto;
                     border-radius: 5px;
-    
-                    
+
+
                 }
-    
+
                 .product-name {
                     font-size: 18px;
                     font-weight: bold;
                     margin: 10px 0;
-    
-    
+
+
                 }
-    
+
                 .product-brand {
                     font-size: 14px;
                     color: #666;
                 }
-    
+
                 .price {
                     color: red;
                     font-size: 18px;
                 }
-    
+
             }
-    
+
         }
 
     }
 
-    .footer-wrapper{
+    .footer-wrapper {
         margin-top: 500px;
     }
 

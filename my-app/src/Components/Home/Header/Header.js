@@ -14,6 +14,8 @@ import "slick-carousel/slick/slick-theme.css";
 import DropdownMenu from "../DropdowMenu/dropoutMenu";
 import "./Header.scss";
 
+const data = require("../../data/dataproduct.json");
+
 const blandItem = [
   { label: "Yamaha" },
   { label: "Honda" },
@@ -33,15 +35,29 @@ const skin = [
 ];
 
 class Layout extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selecedCategory: "honda",
+    };
+  }
+
+  handleCategoryChange = (category) => {
+    this.setState({ selecedCategory: category });
+  };
   render() {
+    const{selecedCategory} = this.state
+    const fitleData = data.filter((item) => item.category === selecedCategory);
     return (
       <div className="container">
         <div className="wrapper">
           <div className="inner-wrapper">
             {/* Logo Section */}
             <div className="logo">
-              <Link to="/Home">
-                <h1>LOGO</h1>
+              <Link to="/">
+                <h1>
+                  <img src="https://bizweb.dktcdn.net/100/422/602/themes/814220/assets/brand_image_2.png?1663380727397" />
+                </h1>
               </Link>
             </div>
 

@@ -4,43 +4,18 @@ import "./ViewProduct.scss";
 import "react-slideshow-image/dist/styles.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { InputNumber} from "antd";
+import { InputNumber } from "antd";
 import Header from "../Header/Header";
 import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import dataSpecc from "../../data/dataSpecc.json";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Footer from "../Footer/Footer";
 
+const dataproduct = require("../../data/dataproduct.json");
+const dataSpecc = require("../../data/dataSpecc.json");
 
 const onchange = (value) => {
   console.log(value);
 };
-
-// Dữ liệu sản phẩm
-
-const product = [
-  {
-    image:
-      "https://www.yamaha-motor-india.com/theme/v3/image/r15m/color/gray.png",
-    name: "R15 V3",
-    oldPrice: "20000000",
-    newPrice: "1000000",
-  },
-  {
-    image:
-      "https://product.hstatic.net/200000281285/product/den_cbba673c2a6d456bbc915e3af3784d69.png",
-    name: "R15 V3",
-    oldPrice: "20000000",
-    newPrice: "1000000",
-  },
-  {
-    image:
-      "https://yamaha-motor.com.vn/wp/wp-content/uploads/2017/11/R15_STDBLUE_IDN_2020-copy.png",
-    name: "R15 V3",
-    oldPrice: "20000000",
-    newPrice: "1000000",
-  },
-];
 
 function More() {
   const [rating, setRating] = useState(0);
@@ -51,11 +26,11 @@ function More() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Xử lý gửi dữ liệu ở đây
     console.log("Rating:", rating);
     alert("Review submitted!");
   };
 
+  
   return (
     <div className="container">
       <div className="header-view">
@@ -66,40 +41,40 @@ function More() {
       <div className="container-content">
         <div className="product">
           <div className="product-detail">
-            <Carousel className="main-slide">
-              <div>
-                <img src={product[0].image} alt="Image 1" />
-              </div>
-              <div>
-                <img src={product[1].image} alt="Image 2" />
-              </div>
-              <div>
-                <img src={product[2].image} alt="Image 3" />
-              </div>
-            </Carousel>
-
+              <Carousel className="main-slide">
+                {dataproduct.map((index) => (
+                  <div key = {index.id}>
+                    <img src = {dataproduct[0].hinhAnh}/>
+                  </div>
+                ))}
+                <div>
+                  
+                </div>
+              </Carousel>;
             <div className="content-wrapper">
-              <h3>{product[0].name}</h3>
+              <h3>{dataproduct[0].tenXe}</h3>
 
               <div className="price">
-                <p className="old-price">{product[0].oldPrice}</p>
-                <p className="new-price">{product[0].newPrice}</p>
+                <p className="new-price">{dataproduct[0].gia}</p>
               </div>
+
               <ul>
                 <li>🎁 01 Nón bảo hiểm</li>
                 <li>🎁 01 Khung biển số</li>
                 <li>🎁 01 Móc khóa</li>
                 <li>🎁 01 Túi vải</li>
                 <li>🎁 01 Gói bảo dưỡng - bảo trì 5 năm</li>
-                <li>
-                  <InputNumber
-                    className="add-number"
-                    min={1}
-                    max={100}
-                    defaultValue={1}
-                    onChange={onchange}
-                  />
-                </li>
+                <div className="add-number">
+                  <li>
+                    <InputNumber
+                      min={1}
+                      max={100}
+                      defaultValue={1}
+                      onChange={onchange}
+                    />
+                    <button onClick={handleSubmit}>ADD TO CART</button>
+                  </li>
+                </div>
               </ul>
             </div>
 
@@ -119,26 +94,23 @@ function More() {
               </div>
             </div>
           </div>
-          <div className="addtocart">
-            <button>ADD TO CART</button>
-          </div>
 
-          {/*dexcerption-product*/}
-          <div className="descerption">
-            <div className="desception-baner">
+          {/* Description Section */}
+          <div className="description">
+            <div className="description-banner">
               <h4>MIÊU TẢ</h4>
             </div>
             <div className="dash"></div>
             <p>
-              <b>Yamaha R15 V3 </b>là mẫu xe máy đang rất được ưa chuộng đến từ
-              hãng xe máy Yamaha. Sản phẩm đang sẵn hàng và có giá ưu đãi cực
-              tốt tại<b> Hệ Thống Xe Máy Hoàng Cầu </b>. Gọi ngay{" "}
-              <b className="color-red">1900 63 66 67</b> để được trải nghiệm
-              miễn phí mẫu xe Yamaha R15 V3
+              <b>Yamaha R15 V3</b> là mẫu xe máy đang rất được ưa chuộng từ hãng
+              xe Yamaha. Sản phẩm đang sẵn hàng với giá ưu đãi tại
+              <b> Hệ Thống Xe Máy Hoàng Cầu</b>. Gọi ngay{" "}
+              <b className="color-red">1900 63 66 67</b> để trải nghiệm mẫu xe
+              miễn phí.
             </p>
           </div>
 
-          {/*specifications-product*/}
+          {/* Specifications Section */}
           <div className="specifications">
             <div className="specifications-banner">
               <h4>THÔNG SỐ KỸ THUẬT</h4>
@@ -146,7 +118,7 @@ function More() {
             <div className="separate"></div>
             <div className="specifications-list">
               {dataSpecc.map((spec, index) => (
-                <div key={spec.label + index} className="spec-conten">
+                <div key={spec.label + index} className="spec-content">
                   <table>
                     <tbody>
                       <tr>
@@ -160,15 +132,13 @@ function More() {
             </div>
           </div>
 
+          {/* Image Gallery Section */}
           <div className="banner-img">
             <h4>HÌNH ẢNH SẢN PHẨM</h4>
           </div>
           <div className="separate-img"></div>
-          <div className = "slide-product-img">
-            
-          </div>
 
-          {/*review*/}
+          {/* Review Section */}
           <div className="review-container">
             <h3>
               Be the first to review “Yamaha LEXI 155 VVA - Phiên Bản Tiêu
@@ -233,6 +203,7 @@ function More() {
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );

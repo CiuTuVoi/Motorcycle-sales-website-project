@@ -14,13 +14,15 @@
 
       /* Logo Section */
       .logo {
-        a {
-          font-size: 24px;
-          font-weight: bold;
-          color: #333;
-          text-decoration: none;
-          &:hover {
-            color: rgb(65, 88, 208);
+        h1{
+          img{
+            width: 150px;
+            transition: transform 0.3s ease-in-out;
+
+            &:hover{
+              transform: scale(1);
+
+            }
           }
         }
       }

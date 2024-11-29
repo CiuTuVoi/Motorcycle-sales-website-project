@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "tenXe": "Honda Wave Alpha",
+      "hangXe": "Honda",
+      "gia": "17,000,000 VND",
+      "hinhAnh": "https://yamaha-motor.com.vn/wp/wp-content/uploads/2022/12/Exciter-155-Mat-Black-004-768x645.png",
+      "category": "honda"
+    },
+    {
+      "id": 2,
+      "tenXe": "Yamaha Sirius",
+      "hangXe": "Yamaha",
+      "gia": "20,000,000 VND",
+      "hinhAnh": "https://yamaha-motor.com.vn/wp/wp-content/uploads/2023/07/Janus-Limited-Cyan-004-768x645.png",
+      "category": "yamaha"
+    },
+    {
+      "id": 3,
+      "tenXe": "Elegant 50",
+      "hangXe": "Sym",
+      "gia": "25,000,000 VND",
+      "hinhAnh": "https://symkymcohaquynh.vn/admin/sanpham/sym_2404248127_1_.png",
+      "category": "sym"
+    }
+  ]
+  

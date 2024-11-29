@@ -11,6 +11,7 @@
 
 .container {
 
+
   .header-view {
     position: fixed;
     top: 0;
@@ -27,29 +28,10 @@
 .container-content {
   display: flex;
   justify-content: space-between;
-  margin-top: 200px;
+  margin-top: 230px;
   margin-left: 100px;
   margin-right: 50px;
 
-  /*addtocart*/
-  .addtocart {
-    margin-left: 600px;
-
-    button {
-      padding: 10px;
-      background-color: rgba(65, 88, 208);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      transition: transform 0.3s ease-in-out;
-
-      &:hover {
-        transform: scale(1.1);
-
-      }
-    }
-
-  }
 
   /*product-detail*/
   .product {
@@ -58,8 +40,9 @@
       justify-content: space-between;
 
       .main-slide {
+        width: 60%;
         margin-top: 20px;
-        margin-left: -100px;
+        margin-left: -150px;
 
       }
 
@@ -111,8 +94,31 @@
           li {
             padding-top: 10px;
             margin-top: 25px;
+
+            button {
+              background-color: var(--primary-color);
+              padding: 10px;
+              margin-top: 10px;
+              color: #fff;
+              border: none;
+              border-radius: 10px;
+              position: relative;
+              margin-left: -7px;
+              transition: transform .4s ease-in-out;
+
+              &:hover {
+                transform: scale(1.0);
+              }
+            }
           }
         }
+      }
+
+    }
+
+    .add-number {
+      li {
+        margin-left: 70px;
       }
 
     }
@@ -154,10 +160,10 @@
   }
 
 
-  .descerption {
+  .description {
     margin-top: 100px;
 
-    .desception-baner {
+    .description-banner {
       background-color: rgba(65, 88, 208);
       display: inline-flex;
       padding: 10px 20px;
@@ -210,7 +216,7 @@
     flex-direction: column;
     gap: 3px;
 
-    .spec-conten {
+    .spec-content {
       background-color: #ffffff87;
       border: 1px solid #ddd;
       padding: 10px;
@@ -240,7 +246,7 @@
 }
 
 /*view-product-img*/
-.banner-img{
+.banner-img {
   margin-top: 30px;
   background-color: var(--primary-color);
   display: inline-flex;
@@ -248,10 +254,11 @@
   color: #fff;
   border-radius: 0 10px 0 0;
 
-  
+
 
 }
-.separate-img{
+
+.separate-img {
   background-color: var(--primary-color);
   height: 2px;
 }
@@ -294,14 +301,14 @@
         font-size: 20px;
         color: #ddd;
         cursor: pointer;
-        transition: color 0.3s ;
+        transition: color 0.3s;
 
         &.active {
           color: #f39c12;
         }
 
         &:hover,
-        &:hover ~ .star {
+        &:hover~.star {
           color: #f39c12;
         }
       }
@@ -362,7 +369,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    
+
 
     &:hover {
       background-color: #004494;

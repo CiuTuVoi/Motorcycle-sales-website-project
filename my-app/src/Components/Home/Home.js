@@ -10,6 +10,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Header from "./Header/Header";   
 import Footer from "./Footer/Footer";
+import ViewProduct from './ViewProduct/ViewProduct'
 
 
 const slideImages = [
@@ -215,8 +216,6 @@ const Home = () => {
                     ))}
                 </Slide>
             </div>
-
-
             {/*best-selling-products */}
             <div className = "best-selling-products">
                 <h1>SẢN PHẨM BÁN CHẠY</h1>
@@ -240,7 +239,6 @@ const Home = () => {
                 </Slide>
             </div>
 
-            
             {/*HOTPRODUCT-CART-CONTAINER*/}
             <div className="product-slideshow">
                 <Slider {...settingProductHot}>
@@ -264,7 +262,7 @@ const Home = () => {
                             <li>🎁 01 Túi vải</li>
                             <li>🎁 01 Gói bảo dưỡng - bảo trì 5 năm</li>
                             </ul>
-                            <button><a href="./readmore">ĐỌC TIẾP</a></button>
+                            <button><Link to = '/viewProduct'>MORE</Link></button>
                         </div>
                         </div>
                     </div>
@@ -279,7 +277,7 @@ const Home = () => {
                 <h1>XE MÁY HONDA </h1>
             </div>
             <link rel="stylesheet" href="" />
-            <div className = "morehonda"><Link to = "honda">XEM THÊM <AiOutlineRight /></Link></div>
+            <div className = "morehonda"><Link to = "listProduct">XEM THÊM <AiOutlineRight /></Link></div>
             <div className = "border">  </div>
 
             {/*BLANDHONDA */}
@@ -321,7 +319,6 @@ const Home = () => {
 
 
             {/*SLIDE-PRODUCT-YAMAHA*/}
-
             <div className = "slide-product-yamaha">
                 <Slide {...settingsYamaha}>
                     {SlideProductYamaha.map((product, index) => (
