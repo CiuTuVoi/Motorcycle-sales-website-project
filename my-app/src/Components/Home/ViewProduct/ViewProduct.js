@@ -20,6 +20,8 @@ const onchange = (value) => {
 function More() {
   const [rating, setRating] = useState(0);
 
+  const [selecedColor, setSelecedColor] = useState("black");
+
   const handleStarClick = (index) => {
     setRating(index + 1);
   };
@@ -30,7 +32,6 @@ function More() {
     alert("Review submitted!");
   };
 
-  
   return (
     <div className="container">
       <div className="header-view">
@@ -41,22 +42,22 @@ function More() {
       <div className="container-content">
         <div className="product">
           <div className="product-detail">
-              <Carousel className="main-slide">
-                {dataproduct.map((index) => (
-                  <div key = {index.id}>
-                    <img src = {dataproduct[0].hinhAnh}/>
-                  </div>
-                ))}
-                <div>
-                  
+            <Carousel className="main-slide">
+              {dataproduct.map((index) => (
+                <div key={index.id}>
+                  <img src={index.hinhAnh[selecedColor]} alt={index.tenXe} />
                 </div>
-              </Carousel>;
+              ))}
+              <div></div>
+            </Carousel>
             <div className="content-wrapper">
               <h3>{dataproduct[0].tenXe}</h3>
 
               <div className="price">
                 <p className="new-price">{dataproduct[0].gia}</p>
               </div>
+
+
 
               <ul>
                 <li>🎁 01 Nón bảo hiểm</li>
@@ -78,6 +79,23 @@ function More() {
               </ul>
             </div>
 
+            {/*Color Selection Section*/}
+            <div className="color-selection">
+              <h4>Chọn màu</h4>
+              <div className="colors">
+                {Object.keys(dataproduct[0].hinhAnh).map((color) => (
+                  <button
+                    key={color}
+                    className={`color-option ${color}`}
+                    onClick={() => setSelecedColor(color)}
+                  >
+                    {color.charAt(0).toUpperCase() + color.slice(1)} {/* Hiển thị tên màu */}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            
             {/* Banner Section */}
             <div className="banner">
               <div className="hotline">

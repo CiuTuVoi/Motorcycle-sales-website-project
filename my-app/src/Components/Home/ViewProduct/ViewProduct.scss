@@ -20,8 +20,6 @@
     z-index: 9999;
 
   }
-
-
 }
 
 /* Product Detail Section */
@@ -120,6 +118,48 @@
       li {
         margin-left: 70px;
       }
+
+    }
+
+    .color-selection {
+      position: absolute;
+      margin-top: 435px;
+      margin-left: 300px;
+
+      h4 {
+        background-color: var(--primary-color);
+        color: #fff;
+        padding: 10px;
+      }
+
+      .colors {
+        display: block;
+        margin-top: 4px;
+
+        button {
+          padding: 5px;
+          border: none;
+          color: #fff;
+          cursor: pointer;
+          font-size: 14px;
+          margin-right: 10px;
+
+          &.red {
+            background-color: red;
+          }
+          &.black{
+            background-color: black ;
+          }
+          &.white{
+            background-color: #fff;
+            color: black;
+          }
+
+        }
+
+
+      }
+
 
     }
 

@@ -67,6 +67,8 @@
                 gap: 20px;
             }
 
+            
+
             .product-item {
                 border: 1px solid #ddd;
                 padding: 15px;
@@ -108,9 +110,71 @@
 
             }
 
+            .pagination-wrapper {
+                .pagination {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  margin-top: 20px;
+                  list-style: none;
+                  padding: 0;
+              
+                  .pagination-item {
+                    margin: 0 5px;
+              
+                    .pagination-item-link {
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      width: 30px;
+                      height: 30px;
+                      border: 1px solid #ddd;
+                      background-color: #fff;
+                      color: #333;
+                      font-size: 14px;
+                      font-weight: bold;
+                      border-radius: 50%;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+              
+                      &:hover {
+                        background-color: var(--primary-color);
+                        color: #fff;
+                        border-color: var(--primary-color);
+                      }
+              
+                      &:disabled {
+                        cursor: not-allowed;
+                        background-color: #f5f5f5;
+                        color: #aaa;
+                      }
+              
+                      i {
+                        font-size: 18px;
+                      }
+                    }
+                  }
+              
+                  .number {
+                    .pagination-item-link {
+                      width: auto;
+                      padding: 0 10px;
+                      border-radius: 5px;
+              
+                      &.active {
+                        background-color: var(--primary-color);
+                        color: #fff;
+                        border-color: var(--primary-color);
+                      }
+                    }
+                  }
+                }
+              }
+              
         }
-
     }
+
+    
 
     .footer-wrapper {
         margin-top: 500px;
