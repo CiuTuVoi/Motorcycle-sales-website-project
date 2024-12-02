@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2024 at 07:14 AM
+-- Generation Time: Dec 02, 2024 at 07:28 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -62,6 +62,21 @@ CREATE TABLE `don_hang` (
   `tong_tien` decimal(15,2) NOT NULL,
   `trang_thai` enum('Dang_xu_ly','Hoan_thanh','Da_huy') DEFAULT 'Dang_xu_ly',
   `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hinh_anh`
+--
+
+CREATE TABLE `hinh_anh` (
+  `ma_hinh_anh` int(11) DEFAULT NULL,
+  `ma_san_pham` int(11) DEFAULT NULL,
+  `anh_1` varchar(225) DEFAULT NULL,
+  `anh_2` varchar(225) DEFAULT NULL,
+  `anh_3` varchar(225) DEFAULT NULL,
+  `anh_4` varchar(225) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -222,6 +237,12 @@ ALTER TABLE `don_hang`
   ADD KEY `ma_nguoi_dung` (`ma_nguoi_dung`);
 
 --
+-- Indexes for table `hinh_anh`
+--
+ALTER TABLE `hinh_anh`
+  ADD KEY `ma_san_pham` (`ma_san_pham`);
+
+--
 -- Indexes for table `kho_hang`
 --
 ALTER TABLE `kho_hang`
@@ -361,6 +382,12 @@ ALTER TABLE `danh_gia`
 --
 ALTER TABLE `don_hang`
   ADD CONSTRAINT `don_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`);
+
+--
+-- Constraints for table `hinh_anh`
+--
+ALTER TABLE `hinh_anh`
+  ADD CONSTRAINT `hinh_anh_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 
 --
 -- Constraints for table `kho_hang`
