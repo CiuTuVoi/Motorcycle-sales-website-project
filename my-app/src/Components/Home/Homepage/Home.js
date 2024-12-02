@@ -7,7 +7,6 @@ import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
@@ -234,7 +233,7 @@ const Home = () => {
 
       {/*HOTPRODUCT-CART-CONTAINER*/}
       <div className="product-slideshow">
-        <Slider {...settingProductHot}>
+        <Slide {...settingProductHot}>
           <div className="product-card-container" key={productHot.id}>
             <div className="product-card">
               <div className="product-img">
@@ -263,7 +262,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </Slider>
+        </Slide>
       </div>
 
       {/* HONDAMENU */}

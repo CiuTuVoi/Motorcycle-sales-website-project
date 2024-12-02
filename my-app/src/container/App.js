@@ -7,6 +7,7 @@
     import  ViewProduct from  '../Components/Home/ViewProduct/ViewProduct';
     import Header from '../Components/Home/Header/Header';
     import Footer from '../Components/Home/Footer/Footer';
+    import Cart from '../Components/Home/ShoppingCart/Cart';
     import './App.scss';
     function App() {
     return (
@@ -19,6 +20,7 @@
                 <Route path = "/viewProduct" element = {<ViewProduct/>}/>
                 <Route path = "/header" element = {<Header/>}/>
                 <Route path = "/footer" element = {<Footer/>}/>
+                <Route path  = "/cart" element = {<Cart/>}/>
             </Routes>
         </Router>
     );

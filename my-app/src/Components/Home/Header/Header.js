@@ -95,7 +95,7 @@ class Layout extends Component {
             {/* Cart Button Section */}
             <div className="button-cart">
               <button type="button">
-                <h4>GIỎ HÀNG</h4>
+                <Link to  = "/cart">GIỎ HÀNG</Link>
                 <FaShoppingCart />
               </button>
             </div>
