@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2024 at 08:38 PM
+-- Generation Time: Dec 02, 2024 at 07:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -67,6 +67,19 @@ CREATE TABLE `don_hang` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `kho_hang`
+--
+
+CREATE TABLE `kho_hang` (
+  `ma_kho` int(11) NOT NULL,
+  `ma_san_pham` int(11) NOT NULL,
+  `so_luong_ton` int(11) NOT NULL,
+  `ngay_cap_nhat` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `khuyen_mai`
 --
 
@@ -78,6 +91,20 @@ CREATE TABLE `khuyen_mai` (
   `ngay_bat_dau` date DEFAULT NULL,
   `ngay_ket_thuc` date DEFAULT NULL,
   `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lich_su_giao_dich`
+--
+
+CREATE TABLE `lich_su_giao_dich` (
+  `ma_giao_dich` int(11) NOT NULL,
+  `ma_don_hang` int(11) NOT NULL,
+  `loai_thanh_toan` enum('STK','TienMat') NOT NULL,
+  `trang_thai_giao_hang` enum('DangGiao','HoanThanh','DaHuy') NOT NULL,
+  `thoi_gian_tao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -124,9 +151,6 @@ CREATE TABLE `san_pham` (
   `ten_san_pham` varchar(255) NOT NULL,
   `hang_xe` varchar(255) DEFAULT NULL,
   `gia` decimal(15,2) NOT NULL,
-  `gia_khuyen_mai` decimal(15,2) DEFAULT NULL,
-  `ton_kho` int(11) DEFAULT 0,
-  `bao_hanh` int(11) DEFAULT NULL,
   `anh_dai_dien` varchar(255) DEFAULT NULL,
   `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -198,10 +222,24 @@ ALTER TABLE `don_hang`
   ADD KEY `ma_nguoi_dung` (`ma_nguoi_dung`);
 
 --
+-- Indexes for table `kho_hang`
+--
+ALTER TABLE `kho_hang`
+  ADD PRIMARY KEY (`ma_kho`),
+  ADD KEY `ma_san_pham` (`ma_san_pham`);
+
+--
 -- Indexes for table `khuyen_mai`
 --
 ALTER TABLE `khuyen_mai`
   ADD PRIMARY KEY (`ma_khuyen_mai`);
+
+--
+-- Indexes for table `lich_su_giao_dich`
+--
+ALTER TABLE `lich_su_giao_dich`
+  ADD PRIMARY KEY (`ma_giao_dich`),
+  ADD KEY `ma_don_hang` (`ma_don_hang`);
 
 --
 -- Indexes for table `loai_xe`
@@ -259,10 +297,22 @@ ALTER TABLE `don_hang`
   MODIFY `ma_don_hang` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `kho_hang`
+--
+ALTER TABLE `kho_hang`
+  MODIFY `ma_kho` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `khuyen_mai`
 --
 ALTER TABLE `khuyen_mai`
   MODIFY `ma_khuyen_mai` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `lich_su_giao_dich`
+--
+ALTER TABLE `lich_su_giao_dich`
+  MODIFY `ma_giao_dich` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `loai_xe`
@@ -311,6 +361,18 @@ ALTER TABLE `danh_gia`
 --
 ALTER TABLE `don_hang`
   ADD CONSTRAINT `don_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`);
+
+--
+-- Constraints for table `kho_hang`
+--
+ALTER TABLE `kho_hang`
+  ADD CONSTRAINT `kho_hang_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `lich_su_giao_dich`
+--
+ALTER TABLE `lich_su_giao_dich`
+  ADD CONSTRAINT `lich_su_giao_dich_ibfk_1` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `san_pham`
