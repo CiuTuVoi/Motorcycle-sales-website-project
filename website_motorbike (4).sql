@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2024 at 12:14 PM
+-- Generation Time: Dec 03, 2024 at 02:12 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -20,28 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `website_motorbike`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `chi_tiet_don_hang`
---
-
-CREATE TABLE `chi_tiet_don_hang` (
-  `ma_chi_tiet` int(11) NOT NULL,
-  `ma_don_hang` int(11) NOT NULL,
-  `ma_san_pham` int(11) NOT NULL,
-  `so_luong` int(11) NOT NULL,
-  `gia` decimal(15,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `chi_tiet_don_hang`
---
-
-INSERT INTO `chi_tiet_don_hang` (`ma_chi_tiet`, `ma_don_hang`, `ma_san_pham`, `so_luong`, `gia`) VALUES
-(1, 1, 1, 1, 106000000.00),
-(2, 2, 15, 1, 23000000.00);
 
 -- --------------------------------------------------------
 
@@ -75,18 +53,13 @@ INSERT INTO `danh_gia` (`ma_danh_gia`, `ma_san_pham`, `ma_nguoi_dung`, `so_sao`,
 CREATE TABLE `don_hang` (
   `ma_don_hang` int(11) NOT NULL,
   `ma_nguoi_dung` int(11) NOT NULL,
+  `ma_san_pham` int(11) NOT NULL,
+  `so_luong` int(11) DEFAULT NULL,
+  `don_gia` decimal(15,2) DEFAULT NULL,
   `tong_tien` decimal(15,2) NOT NULL,
   `trang_thai` enum('Dang_xu_ly','Hoan_thanh','Da_huy') DEFAULT 'Dang_xu_ly',
   `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `don_hang`
---
-
-INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `tong_tien`, `trang_thai`, `ngay_tao`) VALUES
-(1, 5, 100000000.00, 'Dang_xu_ly', '2024-12-03 07:29:57'),
-(2, 6, 20000000.00, 'Hoan_thanh', '2024-12-03 07:29:57');
 
 -- --------------------------------------------------------
 
@@ -154,14 +127,6 @@ CREATE TABLE `lich_su_giao_dich` (
   `trang_thai_giao_hang` enum('DangGiao','HoanThanh','DaHuy') NOT NULL,
   `thoi_gian_tao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `lich_su_giao_dich`
---
-
-INSERT INTO `lich_su_giao_dich` (`ma_giao_dich`, `ma_don_hang`, `loai_thanh_toan`, `trang_thai_giao_hang`, `thoi_gian_tao`) VALUES
-(1, 1, 'STK', 'DangGiao', '2024-12-03 07:35:44'),
-(2, 2, 'TienMat', 'HoanThanh', '2024-12-03 07:35:44');
 
 -- --------------------------------------------------------
 
@@ -344,14 +309,6 @@ INSERT INTO `thong_so_ky_thuat` (`ma_thong_so`, `ma_san_pham`, `khoi_luong`, `DR
 --
 
 --
--- Indexes for table `chi_tiet_don_hang`
---
-ALTER TABLE `chi_tiet_don_hang`
-  ADD PRIMARY KEY (`ma_chi_tiet`),
-  ADD KEY `ma_don_hang` (`ma_don_hang`),
-  ADD KEY `ma_san_pham` (`ma_san_pham`);
-
---
 -- Indexes for table `danh_gia`
 --
 ALTER TABLE `danh_gia`
@@ -364,7 +321,8 @@ ALTER TABLE `danh_gia`
 --
 ALTER TABLE `don_hang`
   ADD PRIMARY KEY (`ma_don_hang`),
-  ADD KEY `ma_nguoi_dung` (`ma_nguoi_dung`);
+  ADD KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
+  ADD KEY `fk_don_hang` (`ma_san_pham`);
 
 --
 -- Indexes for table `kho_hang`
@@ -429,12 +387,6 @@ ALTER TABLE `thong_so_ky_thuat`
 --
 
 --
--- AUTO_INCREMENT for table `chi_tiet_don_hang`
---
-ALTER TABLE `chi_tiet_don_hang`
-  MODIFY `ma_chi_tiet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
 -- AUTO_INCREMENT for table `danh_gia`
 --
 ALTER TABLE `danh_gia`
@@ -481,13 +433,6 @@ ALTER TABLE `thong_so_ky_thuat`
 --
 
 --
--- Constraints for table `chi_tiet_don_hang`
---
-ALTER TABLE `chi_tiet_don_hang`
-  ADD CONSTRAINT `chi_tiet_don_hang_ibfk_1` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`),
-  ADD CONSTRAINT `chi_tiet_don_hang_ibfk_2` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
-
---
 -- Constraints for table `danh_gia`
 --
 ALTER TABLE `danh_gia`
@@ -498,7 +443,8 @@ ALTER TABLE `danh_gia`
 -- Constraints for table `don_hang`
 --
 ALTER TABLE `don_hang`
-  ADD CONSTRAINT `don_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`);
+  ADD CONSTRAINT `don_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
+  ADD CONSTRAINT `fk_don_hang` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 
 --
 -- Constraints for table `kho_hang`
