@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2024 at 10:04 AM
+-- Generation Time: Dec 03, 2024 at 12:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `chi_tiet_don_hang` (
   `ma_chi_tiet` int(11) NOT NULL,
-  `ma_don_hang` int(11) DEFAULT NULL,
-  `ma_san_pham` int(11) DEFAULT NULL,
+  `ma_don_hang` int(11) NOT NULL,
+  `ma_san_pham` int(11) NOT NULL,
   `so_luong` int(11) NOT NULL,
   `gia` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -51,8 +51,8 @@ INSERT INTO `chi_tiet_don_hang` (`ma_chi_tiet`, `ma_don_hang`, `ma_san_pham`, `s
 
 CREATE TABLE `danh_gia` (
   `ma_danh_gia` int(11) NOT NULL,
-  `ma_san_pham` int(11) DEFAULT NULL,
-  `ma_nguoi_dung` int(11) DEFAULT NULL,
+  `ma_san_pham` int(11) NOT NULL,
+  `ma_nguoi_dung` int(11) NOT NULL,
   `so_sao` int(11) DEFAULT NULL,
   `nhan_xet` text DEFAULT NULL,
   `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp()
@@ -74,7 +74,7 @@ INSERT INTO `danh_gia` (`ma_danh_gia`, `ma_san_pham`, `ma_nguoi_dung`, `so_sao`,
 
 CREATE TABLE `don_hang` (
   `ma_don_hang` int(11) NOT NULL,
-  `ma_nguoi_dung` int(11) DEFAULT NULL,
+  `ma_nguoi_dung` int(11) NOT NULL,
   `tong_tien` decimal(15,2) NOT NULL,
   `trang_thai` enum('Dang_xu_ly','Hoan_thanh','Da_huy') DEFAULT 'Dang_xu_ly',
   `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp()
@@ -95,30 +95,28 @@ INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `tong_tien`, `trang_thai
 --
 
 CREATE TABLE `kho_hang` (
-  `ma_kho` int(11) NOT NULL,
   `ma_san_pham` int(11) NOT NULL,
-  `so_luong_ton` int(11) NOT NULL,
-  `ngay_cap_nhat` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `so_luong` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kho_hang`
 --
 
-INSERT INTO `kho_hang` (`ma_kho`, `ma_san_pham`, `so_luong_ton`, `ngay_cap_nhat`) VALUES
-(1, 1, 50, '2024-12-03 07:28:51'),
-(2, 2, 30, '2024-12-03 07:28:51'),
-(3, 3, 20, '2024-12-03 07:28:51'),
-(4, 4, 20, '2024-12-03 07:28:51'),
-(5, 5, 20, '2024-12-03 07:28:51'),
-(6, 6, 20, '2024-12-03 07:28:51'),
-(7, 7, 20, '2024-12-03 07:28:51'),
-(8, 8, 20, '2024-12-03 07:28:51'),
-(9, 11, 20, '2024-12-03 07:28:51'),
-(12, 12, 20, '2024-12-03 07:28:51'),
-(13, 13, 20, '2024-12-03 07:28:51'),
-(14, 14, 20, '2024-12-03 07:28:51'),
-(15, 15, 20, '2024-12-03 07:28:51');
+INSERT INTO `kho_hang` (`ma_san_pham`, `so_luong`) VALUES
+(1, 50),
+(2, 50),
+(3, 50),
+(4, 50),
+(5, 50),
+(6, 50),
+(7, 50),
+(8, 50),
+(11, 50),
+(12, 50),
+(13, 50),
+(14, 50),
+(15, 50);
 
 -- --------------------------------------------------------
 
@@ -195,7 +193,7 @@ INSERT INTO `loai_xe` (`ma_loai_xe`, `loai_xe`) VALUES
 
 CREATE TABLE `mau_san_pham` (
   `ma_hinh_anh` int(11) DEFAULT NULL,
-  `ma_san_pham` int(11) DEFAULT NULL,
+  `ma_san_pham` int(11) NOT NULL,
   `mau_sac` varchar(20) DEFAULT NULL,
   `anh_1` varchar(225) DEFAULT NULL,
   `anh_2` varchar(225) DEFAULT NULL,
@@ -254,7 +252,7 @@ INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ten_dang_nhap`, `mat_khau`, `ho_ten`
 
 CREATE TABLE `san_pham` (
   `ma_san_pham` int(11) NOT NULL,
-  `ma_loai_xe` int(11) DEFAULT NULL,
+  `ma_loai_xe` int(11) NOT NULL,
   `ten_san_pham` varchar(255) NOT NULL,
   `hang_xe` varchar(255) DEFAULT NULL,
   `gia` decimal(15,2) NOT NULL,
@@ -309,7 +307,7 @@ INSERT INTO `san_pham_khuyen_mai` (`ma_san_pham`, `ma_khuyen_mai`) VALUES
 
 CREATE TABLE `thong_so_ky_thuat` (
   `ma_thong_so` int(11) NOT NULL,
-  `ma_san_pham` int(11) DEFAULT NULL,
+  `ma_san_pham` int(11) NOT NULL,
   `khoi_luong` varchar(10) DEFAULT NULL,
   `DRC` varchar(20) DEFAULT NULL,
   `khoang_cach_truc_banh_xe` varchar(10) DEFAULT NULL,
@@ -372,7 +370,6 @@ ALTER TABLE `don_hang`
 -- Indexes for table `kho_hang`
 --
 ALTER TABLE `kho_hang`
-  ADD PRIMARY KEY (`ma_kho`),
   ADD KEY `ma_san_pham` (`ma_san_pham`);
 
 --
@@ -450,12 +447,6 @@ ALTER TABLE `don_hang`
   MODIFY `ma_don_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `kho_hang`
---
-ALTER TABLE `kho_hang`
-  MODIFY `ma_kho` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
 -- AUTO_INCREMENT for table `khuyen_mai`
 --
 ALTER TABLE `khuyen_mai`
@@ -478,12 +469,6 @@ ALTER TABLE `loai_xe`
 --
 ALTER TABLE `nguoi_dung`
   MODIFY `ma_nguoi_dung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `san_pham`
---
-ALTER TABLE `san_pham`
-  MODIFY `ma_san_pham` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `thong_so_ky_thuat`
@@ -519,7 +504,7 @@ ALTER TABLE `don_hang`
 -- Constraints for table `kho_hang`
 --
 ALTER TABLE `kho_hang`
-  ADD CONSTRAINT `kho_hang_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`) ON DELETE CASCADE;
+  ADD CONSTRAINT `kho_hang_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 
 --
 -- Constraints for table `lich_su_giao_dich`
