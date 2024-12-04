@@ -99,6 +99,36 @@ def create_product(
     # Trả về sản phẩm mới tạo
     return ProductCreate.from_orm(new_product)
 
+
+# API: Sửa sản phẩm (chỉ cho admin)
+@router.put("/products/{product_id}", response_model=ProductCreate)
+def update_product(
+    product_id: int,
+    product_update: ProductCreate,
+    db: Session = Depends(get_db),
+    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+):
+    # Tìm sản phẩm trong cơ sở dữ liệu
+    product = db.query(SanPham).filter(SanPham.ma_san_pham == product_id).first()
+    
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    # Cập nhật thông tin sản phẩm
+    product.ma_loai_xe = product_update.ma_loai_xe
+    product.ten_san_pham = product_update.ten_san_pham
+    product.hang_xe = product_update.hang_xe
+    product.gia = product_update.gia
+    product.anh_dai_dien = product_update.anh_dai_dien
+
+    # Commit thay đổi vào cơ sở dữ liệu
+    db.commit()
+    db.refresh(product)
+
+    # Trả về sản phẩm sau khi cập nhật
+    return ProductCreate.from_orm(product)
+
+
 # API: Xóa sản phẩm (chỉ cho admin)
 @router.delete("/products/{product_id}")
 def delete_product(
@@ -106,7 +136,7 @@ def delete_product(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("admin"))  # Kiểm tra role admin
 ):
-    product = db.query(SanPham).filter(SanPham.id == product_id).first()
+    product = db.query(SanPham).filter(SanPham.ma_san_pham == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     
