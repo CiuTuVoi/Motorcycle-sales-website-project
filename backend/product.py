@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, Security
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models import Product
+from models import SanPham
 from fastapi.security import OAuth2PasswordBearer
 import jwt
 from sqlalchemy import create_engine
@@ -44,10 +44,11 @@ def verify_role(required_role: str):
 
 # Schema sản phẩm
 class ProductCreate(BaseModel):
-    ten: str
-    mo_ta: str
+    ma_loai_xe: int
+    ten_san_pham: str
+    hang_xe: str
     gia: int
-    hinh_anh: list[str]
+    anh_dai_dien: str
 
     class Config:
         orm_mode = True
@@ -64,7 +65,7 @@ def get_db():
 # API: Lấy danh sách sản phẩm (cho cả user và admin)
 @router.get("/products")
 def get_products(db: Session = Depends(get_db), _: str = Depends(oauth2_scheme)):
-    products = db.query(Product).all()
+    products = db.query(SanPham).all()
     if not products:
         raise HTTPException(status_code=404, detail="Không tìm thấy sản phẩm")
     return products
@@ -74,19 +75,20 @@ def get_products(db: Session = Depends(get_db), _: str = Depends(oauth2_scheme))
 def create_product(
     product_create: ProductCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
 ):
     # Kiểm tra nếu sản phẩm đã tồn tại
-    existing_product = db.query(Product).filter(Product.ten == product_create.ten).first()
+    existing_product = db.query(SanPham).filter(SanPham.ten == product_create.ten).first()
     if existing_product:
         raise HTTPException(status_code=400, detail="Sản phẩm đã tồn tại")
 
     # Tạo đối tượng Product mới từ dữ liệu nhận được
-    new_product = Product(
-        ten=product_create.ten,
-        mo_ta=product_create.mo_ta,
+    new_product = SanPham(
+        ma_loai_xe=product_create.ma_loai_xe,
+        ten_san_pham=product_create.ten_san_pham,
+        hang_xe=product_create.hang_xe,
         gia=product_create.gia,
-        hinh_anh=product_create.hinh_anh  # Lưu mảng tên hình ảnh vào cơ sở dữ liệu
+        anh_dai_dien=product_create.anh_dai_dien  # Lưu mảng tên hình ảnh vào cơ sở dữ liệu
     )
 
     # Lưu sản phẩm vào cơ sở dữ liệu
@@ -104,7 +106,7 @@ def delete_product(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("admin"))  # Kiểm tra role admin
 ):
-    product = db.query(Product).filter(Product.id == product_id).first()
+    product = db.query(SanPham).filter(SanPham.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     
