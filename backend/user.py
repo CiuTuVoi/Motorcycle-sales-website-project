@@ -79,34 +79,26 @@ def create_access_token(data: dict):
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# API: Tạo người dùng mới
-@router.post("/users", status_code=status.HTTP_201_CREATED)
-def create_user(user_create: UserCreate, db: Session = Depends(get_db)):
-    # Kiểm tra nếu tài khoản đã tồn tại
-    existing_user = db.query(NguoiDung).filter(NguoiDung.email == user_create.email).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Tài khoản đã tồn tại")
+# API: Đăng nhập và lấy token
+@router.post("/login", status_code=status.HTTP_200_OK)
+def login(request: LoginRequest, db: Session = Depends(get_db)):
+    # Kiểm tra người dùng trong cơ sở dữ liệu
+    user = db.query(NguoiDung).filter(NguoiDung.email == request.email).first()
+    if not user or not verify_password(request.mat_khau, user.mat_khau):  
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Tài khoản hoặc mật khẩu không chính xác"
+        )
 
-    # Mã hóa mật khẩu
-    hashed_password = hash_password(user_create.mat_khau)
+    # Tạo token JWT với ma_nguoi_dung
+    access_token = create_access_token(data={
+        "sub": user.email,  # email của người dùng
+        "role": user.vai_tro,  # vai trò người dùng
+        "ma_nguoi_dung": user.ma_nguoi_dung  # thêm ma_nguoi_dung vào token
+    })
+    
+    return {"access_token": access_token, "token_type": "bearer", "role": user.vai_tro}
 
-    # Tạo đối tượng người dùng mới
-    new_user = NguoiDung(
-        ten_dang_nhap=user_create.ten_dang_nhap,
-        mat_khau=hashed_password,
-        ho_ten=user_create.ho_ten,
-        tuoi=user_create.tuoi,
-        gioi_tinh=user_create.gioi_tinh,
-        email=user_create.email,
-        so_dien_thoai=user_create.so_dien_thoai,
-        dia_chi=user_create.dia_chi,
-        vai_tro=user_create.vai_tro.value,
-        trang_thai=user_create.trang_thai.value
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return {"message": "Tạo người dùng thành công", "user": {"ten": new_user.ho_ten, "email": new_user.email, "so_dien_thoai": new_user.so_dien_thoai, "dia_chi": new_user.dia_chi}}
 
 # API: Đăng nhập và lấy token
 @router.post("/login", status_code=status.HTTP_200_OK)
@@ -131,18 +123,36 @@ def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
         role = payload.get("role")
+        ma_nguoi_dung = payload.get("ma_nguoi_dung")
+
         if not email or not role:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token không hợp lệ"
             )
-        user = db.query(NguoiDung).filter(NguoiDung.email == email).first()
-        if not user:
+
+        # Kiểm tra nếu người dùng là admin
+        if role != 'Admin':
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Bạn không có quyền truy cập vào tài nguyên này"
+            )
+
+        # Nếu là admin, lấy danh sách tất cả người dùng
+        users = db.query(NguoiDung).all()  # Lấy tất cả người dùng
+
+        if not users:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Người dùng không tồn tại"
+                detail="Không tìm thấy người dùng"
             )
-        return {"email": user.email, "role": user.vai_tro}
+
+        # Trả về thông tin của tất cả người dùng
+        return [
+            {"email": user.email, "role": user.vai_tro, "ma_nguoi_dung": user.ma_nguoi_dung}
+            for user in users
+        ]
+
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

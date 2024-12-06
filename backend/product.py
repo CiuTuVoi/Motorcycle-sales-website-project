@@ -4,23 +4,8 @@ from sqlalchemy.orm import Session
 from models import SanPham
 from fastapi.security import OAuth2PasswordBearer
 import jwt
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-import os
+from database import get_db
 
-load_dotenv()
-
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_NAME = os.getenv("DB_NAME")
-
-SQLALCHEMY_DATABASE_URL = f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 router = APIRouter()
 
@@ -53,13 +38,6 @@ class ProductCreate(BaseModel):
     class Config:
         from_attributes = True
 
-# Hàm lấy session cơ sở dữ liệu
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # API: Lấy danh sách sản phẩm (cho cả user và admin)
 @router.get("/products")
@@ -133,7 +111,7 @@ def update_product(
 def delete_product(
     product_id: int,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
 ):
     product = db.query(SanPham).filter(SanPham.ma_san_pham == product_id).first()
     if not product:
