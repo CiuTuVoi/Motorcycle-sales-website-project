@@ -56,7 +56,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     so_dien_thoai: str
     dia_chi: str
-    vai_tro: VaiTroEnum
+    vai_tro: VaiTroEnum = VaiTroEnum.user
     trang_thai: TrangThaiEnum
 
 # Schema cho đăng nhập

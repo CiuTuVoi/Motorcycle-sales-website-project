@@ -67,7 +67,6 @@ class ThongSoCreate(BaseModel):
     ty_so_nen: str
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 # Hàm lấy session cơ sở dữ liệu

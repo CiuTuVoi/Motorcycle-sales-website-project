@@ -51,7 +51,6 @@ class ProductCreate(BaseModel):
     anh_dai_dien: str
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 # Hàm lấy session cơ sở dữ liệu

@@ -89,7 +89,7 @@ class ThongSoKyThuat(Base):
     DRC = Column(String(50))
     khoang_cach_truc_banh_xe = Column(String(10))
     do_cao_yen = Column(String(10))
-    khoang_cach_gam_xe = Column(String(10))
+    khoang_sang_gam_xe = Column(String(10))
     dung_tich_binh_xang = Column(String(10))
     kich_thuoc_lop_truoc = Column(String(50))
     kich_thuoc_lop_sau = Column(String(50))
@@ -113,7 +113,7 @@ class DonHang(Base):
     ma_don_hang = Column(Integer, primary_key=True, index=True, autoincrement=True)
     ma_nguoi_dung = Column(Integer, ForeignKey('nguoi_dung.ma_nguoi_dung'))
     ma_san_pham = Column(Integer, ForeignKey('san_pham.ma_san_pham'))
-    so_luong = Column(Integer),
+    so_luong = Column(Integer)
     don_gia = Column(DECIMAL(10, 2))
     tong_tien = Column(DECIMAL(10,2))
     trang_thai = Column(Enum('Dang_xu_ly', 'Hoan_thanh', 'Da_huy', name = 'trang_thai'), default = 'Dang_xu_ly', nullable=False)
