@@ -6,26 +6,9 @@ from models import NguoiDung
 from password_utils import hash_password, verify_password
 from fastapi.security import OAuth2PasswordBearer
 import jwt
+from database import get_db
 from datetime import datetime, timedelta
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-import os
-
-# Load environment variables
-load_dotenv()
-
-# Database configuration
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_NAME = os.getenv("DB_NAME")
-
-SQLALCHEMY_DATABASE_URL = f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+import re
 
 # FastAPI router setup
 router = APIRouter()
@@ -61,60 +44,65 @@ class UserCreate(BaseModel):
 
 # Schema cho đăng nhập
 class LoginRequest(BaseModel):
-    email: EmailStr
+    ten_dang_nhap: str  # Tên đăng nhập (email hoặc số điện thoại)
     mat_khau: str
 
-# Database session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# Kiểm tra tên đăng nhập là email hay số điện thoại
+def is_email(ten_dang_nhap: str) -> bool:
+    # Kiểm tra định dạng email
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    return bool(re.match(email_regex, ten_dang_nhap))
+
+def is_phone_number(ten_dang_nhap: str) -> bool:
+    # Kiểm tra định dạng số điện thoại
+    phone_regex = r'^(0[3-9])([0-9]{8})$'
+    return bool(re.match(phone_regex, ten_dang_nhap))
+
 
 # Tạo token JWT
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    access_token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return access_token
 
 # API: Đăng nhập và lấy token
 @router.post("/login", status_code=status.HTTP_200_OK)
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     # Kiểm tra người dùng trong cơ sở dữ liệu
-    user = db.query(NguoiDung).filter(NguoiDung.email == request.email).first()
-    if not user or not verify_password(request.mat_khau, user.mat_khau):  
+    user = None
+    print(f"Đang kiểm tra tài khoản: {request.ten_dang_nhap}")  # Debug thông tin tài khoản
+    if is_email(request.ten_dang_nhap):
+        print("Kiểm tra email")
+        user = db.query(NguoiDung).filter(NguoiDung.email == request.ten_dang_nhap).first()
+    elif is_phone_number(request.ten_dang_nhap):
+        print("Kiểm tra số điện thoại")
+        user = db.query(NguoiDung).filter(NguoiDung.so_dien_thoai == request.ten_dang_nhap).first()
+
+    if not user:
+        print("Không tìm thấy người dùng trong cơ sở dữ liệu")  # Debug
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Tài khoản hoặc mật khẩu không chính xác"
+            detail="Tài khoản không tồn tại"
         )
 
-    # Tạo token JWT với ma_nguoi_dung
-    access_token = create_access_token(data={
-        "sub": user.email,  # email của người dùng
-        "role": user.vai_tro,  # vai trò người dùng
-        "ma_nguoi_dung": user.ma_nguoi_dung  # thêm ma_nguoi_dung vào token
-    })
-    
-    return {"access_token": access_token, "token_type": "bearer", "role": user.vai_tro}
-
-
-# API: Đăng nhập và lấy token
-@router.post("/login", status_code=status.HTTP_200_OK)
-def login(request: LoginRequest, db: Session = Depends(get_db)):
-    # Kiểm tra người dùng trong cơ sở dữ liệu
-    user = db.query(NguoiDung).filter(NguoiDung.email == request.email).first()
-    if not user or not verify_password(request.mat_khau, user.mat_khau):  
+    # Kiểm tra mật khẩu
+    if not verify_password(request.mat_khau, user.mat_khau):
+        print(f"Kiểm tra mật khẩu sai: {request.mat_khau} != {user.mat_khau}")  # Debug
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Tài khoản hoặc mật khẩu không chính xác"
         )
 
     # Tạo token JWT
-    access_token = create_access_token(data={"sub": user.email, "role": user.vai_tro})
-    return {"access_token": access_token, "token_type": "bearer", "role": user.vai_tro}
+    access_token = create_access_token(data={
+        "sub": user.email,  # email của người dùng
+        "role": user.vai_tro,  # vai trò người dùng
+        "ma_nguoi_dung": user.ma_nguoi_dung  # thêm ma_nguoi_dung vào token
+    })
 
+    return {"access_token": access_token, "token_type": "bearer", "role": user.vai_tro}
 
 # API: Lấy thông tin người dùng (chỉ dành cho admin)
 @router.get("/users/me")
