@@ -3,6 +3,7 @@ from user import router as user_router  # Import router từ user.py
 from reset_password import router as reset_password_router # Import router từ reset_passwork.py
 from product import router as product_router # Import router từ product.py
 from danh_gia import router as danhgia_router # Import router từ danhgia.py
+from kho_hang import router as khohang_router # Import router từ khohang.py
 
 
 app = FastAPI()
@@ -13,3 +14,4 @@ app.include_router(user_router)
 app.include_router(reset_password_router)
 app.include_router(product_router)
 app.include_router(danhgia_router)
+app.include_router(khohang_router)

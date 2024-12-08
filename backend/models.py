@@ -46,7 +46,7 @@ class SanPham(Base):
     # Thiết lập mối quan hệ ngược lại với đánh giá
     danhGia = relationship('DanhGia', back_populates="sanPham")
     # Thiết lập mối quan hệ ngược lại với kho hàng
-    khoHang = relationship('KhoHang', back_populates="sanPham")
+    khoHang = relationship('KhoHang', back_populates="sanPham", uselist=False)
     # Thiết lập mối quan hệ ngược lại với loại xe
     loaiXe = relationship('LoaiXe', back_populates="sanPham")
     # Thiết lập mối quan hệ ngược lại với thông số kỹ thuật
@@ -72,10 +72,9 @@ class DanhGia(Base):
 
 class KhoHang(Base):
     __tablename__ = 'kho_hang'
-    ma_kho = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    ma_san_pham = Column(Integer, ForeignKey('san_pham.ma_san_pham'))
-    so_luong_ton = Column(Integer)
-    ngay_tao = Column(DateTime, default=func.now(), onupdate=func.now())
+    ma_san_pham = Column(Integer,ForeignKey('san_pham.ma_san_pham'), primary_key=True, index=True)
+    so_luong = Column(Integer)
+    
 
     sanPham = relationship('SanPham', back_populates="khoHang")
 
