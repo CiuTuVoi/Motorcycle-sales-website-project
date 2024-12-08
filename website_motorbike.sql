@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2024 at 02:12 PM
+-- Generation Time: Dec 06, 2024 at 12:41 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -194,7 +194,8 @@ CREATE TABLE `nguoi_dung` (
   `dia_chi` varchar(225) DEFAULT NULL,
   `vai_tro` enum('Admin','User') DEFAULT 'User',
   `trang_thai` enum('HoatDong','BiKhoa') DEFAULT 'HoatDong',
-  `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp()
+  `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp(),
+  `refresh_token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -208,6 +209,20 @@ INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ten_dang_nhap`, `mat_khau`, `ho_ten`
 (4, 'leductu2', '123456', 'Lê Đức Tú 2', 18, 'Nam', 'ldt19082004@gmail.com', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53'),
 (5, 'luongduythai', '123456', 'Lường Duy Thái', 17, 'Nữ', 'leductu19082004', '0965814070', 'Hoa Binh', 'User', 'HoatDong', '2024-12-03 06:52:53'),
 (6, 'dohungdang', '123456', 'Đỗ Hùng Đăng', 30, 'Nam', 'leductu19082004', '0965814070', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `phan_hoi`
+--
+
+CREATE TABLE `phan_hoi` (
+  `ma_phan_hoi` int(11) NOT NULL,
+  `ma_danh_gia` int(11) NOT NULL,
+  `ma_nguoi_dung` int(11) NOT NULL,
+  `noi_dung` text DEFAULT NULL,
+  `ngay_tao` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -263,6 +278,19 @@ INSERT INTO `san_pham_khuyen_mai` (`ma_san_pham`, `ma_khuyen_mai`) VALUES
 (1, 1),
 (2, 1),
 (15, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `thong_bao`
+--
+
+CREATE TABLE `thong_bao` (
+  `ma_thong_bao` int(11) NOT NULL,
+  `ma_nguoi_dung` int(11) NOT NULL,
+  `noi_dung` text DEFAULT NULL,
+  `da_doc` enum('đã đọc','chưa đọc') DEFAULT 'chưa đọc'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -362,6 +390,14 @@ ALTER TABLE `nguoi_dung`
   ADD PRIMARY KEY (`ma_nguoi_dung`);
 
 --
+-- Indexes for table `phan_hoi`
+--
+ALTER TABLE `phan_hoi`
+  ADD PRIMARY KEY (`ma_phan_hoi`),
+  ADD KEY `fk_danh_gia_phan_hoi` (`ma_danh_gia`),
+  ADD KEY `fk_nguoi_dung_phan_hoi` (`ma_nguoi_dung`);
+
+--
 -- Indexes for table `san_pham`
 --
 ALTER TABLE `san_pham`
@@ -374,6 +410,13 @@ ALTER TABLE `san_pham`
 ALTER TABLE `san_pham_khuyen_mai`
   ADD PRIMARY KEY (`ma_san_pham`,`ma_khuyen_mai`),
   ADD KEY `ma_khuyen_mai` (`ma_khuyen_mai`);
+
+--
+-- Indexes for table `thong_bao`
+--
+ALTER TABLE `thong_bao`
+  ADD PRIMARY KEY (`ma_thong_bao`),
+  ADD KEY `fk_thong_bao` (`ma_nguoi_dung`);
 
 --
 -- Indexes for table `thong_so_ky_thuat`
@@ -465,6 +508,13 @@ ALTER TABLE `mau_san_pham`
   ADD CONSTRAINT `mau_san_pham_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 
 --
+-- Constraints for table `phan_hoi`
+--
+ALTER TABLE `phan_hoi`
+  ADD CONSTRAINT `fk_danh_gia_phan_hoi` FOREIGN KEY (`ma_danh_gia`) REFERENCES `danh_gia` (`ma_danh_gia`),
+  ADD CONSTRAINT `fk_nguoi_dung_phan_hoi` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`);
+
+--
 -- Constraints for table `san_pham`
 --
 ALTER TABLE `san_pham`
@@ -476,6 +526,12 @@ ALTER TABLE `san_pham`
 ALTER TABLE `san_pham_khuyen_mai`
   ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`),
   ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_2` FOREIGN KEY (`ma_khuyen_mai`) REFERENCES `khuyen_mai` (`ma_khuyen_mai`);
+
+--
+-- Constraints for table `thong_bao`
+--
+ALTER TABLE `thong_bao`
+  ADD CONSTRAINT `fk_thong_bao` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`);
 
 --
 -- Constraints for table `thong_so_ky_thuat`
