@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime, func, DECIMAL, Enum, JSON
+from sqlalchemy import Column, Integer, String, ForeignKey,Boolean, Text, DateTime, func, DECIMAL, Enum, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -22,11 +22,15 @@ class NguoiDung(Base):
     vai_tro = Column(Enum('Admin', 'User', name = 'vai_tro'), default='User', nullable=False)
     trang_thai = Column(Enum('HoatDong', 'BiKhoa', name = 'trang_thai'), default = 'HoatDong', nullable=False)
     ngay_tao = Column(DateTime, default=func.now(), onupdate=func.now())
+    refresh_token = Column(String, nullable=True)
 
     # Thiết lập mối quan hệ ngược lại với đánh giá
     danhGia = relationship('DanhGia', back_populates="nguoiDung")
     # Thiết lập mối quan hệ ngược lại với đơn hàng
     donHang = relationship('DonHang', back_populates="nguoiDung")
+    # Thiết lập mối quan hệ ngược lại với thông báo
+    thongBao = relationship('ThongBao', back_populates="nguoiDung")
+    phanHoi = relationship('PhanHoi', back_populates="nguoiDung")
 
 
 class SanPham(Base):
@@ -64,6 +68,7 @@ class DanhGia(Base):
     # Thiết lập mối quan hệ với NguoiDung và SanPham
     nguoiDung = relationship('NguoiDung', back_populates="danhGia")
     sanPham = relationship('SanPham', back_populates="danhGia")
+    phanHoi = relationship('PhanHoi', back_populates="danhGia")
 
 class KhoHang(Base):
     __tablename__ = 'kho_hang'
@@ -153,3 +158,28 @@ class KhuyenMai(Base):
     ngay_tao = Column(DateTime, default=func.now(), onupdate=func.now())
 
     sanPhamKhuyenMai = relationship('SanPhamKhuyenMai', back_populates="khuyenMai")
+
+class ThongBao(Base):
+    __tablename__ = 'thong_bao'
+    
+    ma_thong_bao = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    ma_nguoi_dung = Column(Integer, ForeignKey('nguoi_dung.ma_nguoi_dung'))
+    noi_dung = Column(String(255))
+    da_doc = Column(Boolean, default=False)  # Kiểm tra nếu thông báo đã được đọc
+
+    nguoiDung = relationship('NguoiDung', back_populates="thongBao")
+
+
+class PhanHoi(Base):
+    __tablename__ = 'phan_hoi'
+    ma_phan_hoi = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    ma_danh_gia = Column(Integer, ForeignKey('danh_gia.ma_danh_gia'), index=True)
+    ma_nguoi_dung = Column(Integer, ForeignKey('nguoi_dung.ma_nguoi_dung'), index=True)
+    noi_dung = Column(Text)
+    ngay_tao = Column(DateTime, default=func.now())
+    
+    # Quan hệ với bảng đánh giá và người dùng
+    danhGia = relationship('DanhGia', back_populates="phanHoi")
+    nguoiDung = relationship('NguoiDung', back_populates="phanHoi")
+
+

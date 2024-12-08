@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Response, Cookie
 from pydantic import BaseModel, EmailStr
 from enum import Enum
 from sqlalchemy.orm import Session
@@ -18,6 +18,10 @@ SECRET_KEY = "your_secret_key"  # Replace this with a secure key
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 # Enum vai trò người dùng
 class VaiTroEnum(str, Enum):
@@ -72,16 +76,12 @@ def create_access_token(data: dict):
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     # Kiểm tra người dùng trong cơ sở dữ liệu
     user = None
-    print(f"Đang kiểm tra tài khoản: {request.ten_dang_nhap}")  # Debug thông tin tài khoản
     if is_email(request.ten_dang_nhap):
-        print("Kiểm tra email")
         user = db.query(NguoiDung).filter(NguoiDung.email == request.ten_dang_nhap).first()
     elif is_phone_number(request.ten_dang_nhap):
-        print("Kiểm tra số điện thoại")
         user = db.query(NguoiDung).filter(NguoiDung.so_dien_thoai == request.ten_dang_nhap).first()
 
     if not user:
-        print("Không tìm thấy người dùng trong cơ sở dữ liệu")  # Debug
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Tài khoản không tồn tại"
@@ -89,20 +89,31 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
 
     # Kiểm tra mật khẩu
     if not verify_password(request.mat_khau, user.mat_khau):
-        print(f"Kiểm tra mật khẩu sai: {request.mat_khau} != {user.mat_khau}")  # Debug
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Tài khoản hoặc mật khẩu không chính xác"
         )
 
-    # Tạo token JWT
+    # Tạo access token
     access_token = create_access_token(data={
-        "sub": user.email,  # email của người dùng
-        "role": user.vai_tro,  # vai trò người dùng
-        "ma_nguoi_dung": user.ma_nguoi_dung  # thêm ma_nguoi_dung vào token
+        "sub": user.email,
+        "role": user.vai_tro,
+        "ma_nguoi_dung": user.ma_nguoi_dung
     })
 
-    return {"access_token": access_token, "token_type": "bearer", "role": user.vai_tro}
+    # Tạo refresh token
+    refresh_token = create_refresh_token(data={
+        "sub": user.email,
+        "role": user.vai_tro,
+        "ma_nguoi_dung": user.ma_nguoi_dung
+    })
+
+    # Cập nhật refresh_token vào cơ sở dữ liệu
+    user.refresh_token = refresh_token
+    db.commit()  # Lưu thay đổi vào cơ sở dữ liệu
+
+    return {"access_token": access_token, "token_type": "bearer", "refresh_token": refresh_token}
+
 
 # API: Lấy thông tin người dùng (chỉ dành cho admin)
 @router.get("/users/me")
@@ -151,3 +162,74 @@ def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token không hợp lệ"
         )
+
+def decode_refresh_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Refresh token hết hạn.")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Refresh token không hợp lệ.")
+
+def create_refresh_token(data: dict):
+    expire = datetime.utcnow() + timedelta(days=7)  # Refresh token có hiệu lực 7 ngày
+    to_encode = data.copy()
+    to_encode.update({"exp": expire})
+    refresh_token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return refresh_token
+
+def create_access_token(data: dict):
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode = data.copy()
+    to_encode.update({"exp": expire})
+    access_token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return access_token
+
+@router.post("/refresh_token", response_model=Token)
+async def refresh_token(
+    response: Response,
+    refresh_token: str = Cookie(None),  # Lấy refresh token từ cookie
+):
+    if not refresh_token:
+        raise HTTPException(status_code=401, detail="No refresh token provided")
+
+    try:
+        payload = decode_refresh_token(refresh_token)  # Giải mã token
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Refresh token đã hết hạn")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Refresh token không hợp lệ")
+
+    # Tạo token mới
+    ma_nguoi_dung = payload["sub"]  # Lấy ma_nguoi_dung từ payload
+    role = payload["role"]
+    new_access_token = create_access_token(data={"sub": ma_nguoi_dung, "role": role})
+    new_refresh_token = create_refresh_token(data={"sub": ma_nguoi_dung, "role": role})
+
+    # Lưu refresh token mới vào cookie
+    response.set_cookie(
+        key="refresh_token",
+        value=new_refresh_token,
+        httponly=True,
+        secure=True,  # Đảm bảo dùng HTTPS khi sản phẩm chạy trên môi trường production
+        samesite="lax",
+    )
+
+    return {"access_token": new_access_token, "token_type": "bearer"}
+
+
+@router.post("/logout", status_code=status.HTTP_200_OK)
+async def logout(response: Response, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+        user = db.query(NguoiDung).filter(NguoiDung.email == email).first()
+        if user:
+            user.refresh_token = None
+            db.commit()
+    except jwt.PyJWTError:
+        pass
+    response.delete_cookie("refresh_token")
+    return {"message": "Logged out successfully"}
+
