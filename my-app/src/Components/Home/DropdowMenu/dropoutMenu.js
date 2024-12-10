@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { AiOutlineDown } from "react-icons/ai";
-import './dropoutmenu.scss';
+import "./dropoutmenu.scss";
 
 function DropdownMenu({ title, items }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,13 +15,17 @@ function DropdownMenu({ title, items }) {
     >
       <a href="#" className="menu-link">
         {title}
-        <span className="dropdown-icon"><AiOutlineDown /></span>
+        <span className="dropdown-icon">
+          <AiOutlineDown />
+        </span>
       </a>
       {isOpen && (
         <ul className="dropdown-list">
           {items.map((item, index) => (
             <li key={index} className="dropdown-item">
-              <a href={item.link} className="dropdown-link">{item.label}</a>
+              <a href={item.link} className="dropdown-link">
+                {item.label}
+              </a>
             </li>
           ))}
         </ul>
