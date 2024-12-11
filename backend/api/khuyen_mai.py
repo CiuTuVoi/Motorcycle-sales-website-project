@@ -57,7 +57,7 @@ def create_khuyenmai(
     _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
 ):
     # Kiểm tra nếu khuyến mại đã tồn tại
-    existing_khuyenmai = db.query(KhuyenMai).filter(KhuyenMai.ma_khuyen_mai == khuyenmai_create.ma_khuyen_mai).first()
+    existing_khuyenmai = db.query(KhuyenMai).filter(KhuyenMai.ten_khuyen_mai == khuyenmai_create.ten_khuyen_mai).first()
     if existing_khuyenmai:
         raise HTTPException(status_code=400, detail="Trùng khuyến mại")
 

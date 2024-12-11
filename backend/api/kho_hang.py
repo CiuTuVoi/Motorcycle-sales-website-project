@@ -29,6 +29,7 @@ def verify_role(required_role: str):
 
 # Schema sản phẩm
 class KhohangCreate(BaseModel):
+    ma_san_pham: int
     so_luong: int
 
     class Config:
@@ -52,12 +53,13 @@ def create_khohang(
     _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
 ):
     # Kiểm tra nếu sản phẩm đã tồn tại
-    existing_khohang = db.query(KhoHang).filter(KhoHang.ma_san_pham == khohang_create.ma_kho_hang).first()
+    existing_khohang = db.query(KhoHang).filter(KhoHang.ma_san_pham == khohang_create.ma_san_pham).first()
     if existing_khohang:
         raise HTTPException(status_code=400, detail="Trùng sản phẩm")
 
     # Tạo đối tượng kho hàng mới từ dữ liệu nhận được
     new_khohang = KhoHang(
+        ma_san_pham=khohang_create.ma_san_pham,
         so_luong=khohang_create.so_luong
         
     )
