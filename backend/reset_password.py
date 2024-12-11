@@ -4,7 +4,7 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import User  
+from models import NguoiDung  
 import redis
 from email_utils import send_email  
 from password_utils import hash_password  # Hàm mã hóa mật khẩu
@@ -53,7 +53,7 @@ class ResetPasswordRequest(BaseModel):
 @router.post("/reset-password-request")
 def reset_password_request(email: EmailStr, db: Session = Depends(get_db)):
     """API để yêu cầu đặt lại mật khẩu qua email."""
-    user = db.query(User).filter(User.email == email).first()
+    user = db.query(NguoiDung).filter(NguoiDung.email == email).first()
     if not user:
         raise HTTPException(status_code=404, detail="Email không tồn tại.")
     
@@ -84,7 +84,7 @@ def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Token không hợp lệ hoặc đã hết hạn.")
     
     # Lấy người dùng từ cơ sở dữ liệu
-    user = db.query(User).filter(User.email == email).first()
+    user = db.query(NguoiDung).filter(NguoiDung.email == email).first()
     if not user:
         raise HTTPException(status_code=404, detail="Email không tồn tại.")
     

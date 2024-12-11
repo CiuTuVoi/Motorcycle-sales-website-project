@@ -6,13 +6,13 @@ connection = pymysql.connect(
     host="localhost",
     user="root",
     password="",
-    database="ban_xe"
+    database="website_motorbike"
 )
 
 try:
     with connection.cursor() as cursor:
         # Lấy tất cả người dùng có mật khẩu chưa mã hóa
-        cursor.execute("SELECT id, mat_khau FROM nguoi_dung WHERE mat_khau NOT LIKE '$%'")
+        cursor.execute("SELECT ma_nguoi_dung, mat_khau FROM nguoi_dung WHERE mat_khau NOT LIKE '$%'")
         users = cursor.fetchall()
 
         for user in users:
@@ -24,7 +24,7 @@ try:
 
             # Cập nhật mật khẩu đã mã hóa vào cơ sở dữ liệu
             cursor.execute(
-                "UPDATE nguoi_dung SET mat_khau = %s WHERE id = %s",
+                "UPDATE nguoi_dung SET mat_khau = %s WHERE ma_nguoi_dung = %s",
                 (hashed_password, user_id)
             )
             print(f"Đã mã hóa mật khẩu cho người dùng ID: {user_id}")
