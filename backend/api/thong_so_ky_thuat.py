@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, Security
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models import ThongSoKyThuat
+from models.models import ThongSoKyThuat
 from fastapi.security import OAuth2PasswordBearer
 import jwt
-from database import get_db
+from models.database import get_db
 
 
 router = APIRouter()
@@ -63,6 +63,7 @@ def get_thongso(db: Session = Depends(get_db), _: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=404, detail="Không tìm thấy thông số")
     return thongso
 
+
 # API: Thêm thông số mới (chỉ cho admin)
 @router.post("/thongso", response_model=ThongSoCreate)
 def create_thongso(
@@ -98,7 +99,6 @@ def create_thongso(
         dung_tich_xylanh=thongso_create.dung_tich_xylanh,
         duong_kich_x_hanh_trinh_pitong=thongso_create.duong_kich_x_hanh_trinh_pitong,
         ty_so_nen=thongso_create.ty_so_nen
-        
     )
 
     # Lưu thông số vào cơ sở dữ liệu
@@ -122,7 +122,7 @@ def update_thongso(
     thongso = db.query(ThongSoKyThuat).filter(ThongSoKyThuat.ma_thong_so == thongso_id).first()
     
     if not thongso:
-        raise HTTPException(status_code=404, detail="ThongSo not found")
+        raise HTTPException(status_code=404, detail="Thông số không tìm thấy")
     
     # Cập nhật thông tin thông số
     thongso.ma_san_pham = thongso_update.ma_san_pham
@@ -144,7 +144,7 @@ def update_thongso(
     thongso.he_thong_khoi_dong = thongso_update.he_thong_khoi_dong
     thongso.moment_cuc_dai = thongso_update.moment_cuc_dai
     thongso.dung_tich_xylanh = thongso_update.dung_tich_xylanh
-    thongso.duong_kinh_x_hanh_trinh_pitong = thongso_update.duong_kich_x_hanh_trinh_pitong
+    thongso.duong_kich_x_hanh_trinh_pitong = thongso_update.duong_kich_x_hanh_trinh_pitong
     thongso.ty_so_nen = thongso_update.ty_so_nen
     
     # Commit thay đổi vào cơ sở dữ liệu
@@ -164,8 +164,8 @@ def delete_thongso(
 ):
     thongso = db.query(ThongSoKyThuat).filter(ThongSoKyThuat.ma_thong_so == thongso_id).first()
     if not thongso:
-        raise HTTPException(status_code=404, detail="Thong So not found")
+        raise HTTPException(status_code=404, detail="Thông số không tìm thấy")
     
     db.delete(thongso)
     db.commit()
-    return {"message": "Thong So deleted successfully"}
+    return {"message": "Thông số đã được xóa thành công"}

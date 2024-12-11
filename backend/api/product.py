@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, Security
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models import SanPham
+from models.models import SanPham
 from fastapi.security import OAuth2PasswordBearer
 import jwt
-from database import get_db
+from models.database import get_db
 
 
 router = APIRouter()
@@ -55,7 +55,7 @@ def create_product(
     _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
 ):
     # Kiểm tra nếu sản phẩm đã tồn tại
-    existing_product = db.query(SanPham).filter(SanPham.ten == product_create.ten).first()
+    existing_product = db.query(SanPham).filter(SanPham.ma_san_pham == product_create.ma_san_pham).first()
     if existing_product:
         raise HTTPException(status_code=400, detail="Sản phẩm đã tồn tại")
 

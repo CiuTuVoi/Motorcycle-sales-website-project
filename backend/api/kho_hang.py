@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, Security
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models import KhoHang
+from models.models import KhoHang
 from fastapi.security import OAuth2PasswordBearer
 import jwt
-from database import get_db
+from models.database import get_db
 
 
 router = APIRouter()
@@ -29,7 +29,6 @@ def verify_role(required_role: str):
 
 # Schema sản phẩm
 class KhohangCreate(BaseModel):
-    ma_san_pham: int
     so_luong: int
 
     class Config:

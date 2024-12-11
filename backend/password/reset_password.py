@@ -4,10 +4,10 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import NguoiDung  
+from models.models import NguoiDung  
 import redis
-from email_utils import send_email  
-from password_utils import hash_password  # Hàm mã hóa mật khẩu
+from password.email_utils import send_email  
+from password.password_utils import hash_password  # Hàm mã hóa mật khẩu
 from dotenv import load_dotenv
 import os
 import secrets

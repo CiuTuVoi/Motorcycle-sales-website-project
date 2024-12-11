@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey,Boolean, Text, DateTime, func, DECIMAL, Enum, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-
+from models.database import Base
 
 Base = declarative_base()
 
@@ -90,7 +90,7 @@ class ThongSoKyThuat(Base):
     ma_thong_so = Column(Integer, primary_key=True, index=True, autoincrement=True)
     ma_san_pham = Column(Integer, ForeignKey('san_pham.ma_san_pham'))
     khoi_luong = Column(String(10))
-    DRC = Column(String(50))
+    DRC = Column(String(20))
     khoang_cach_truc_banh_xe = Column(String(10))
     do_cao_yen = Column(String(10))
     khoang_sang_gam_xe = Column(String(10))

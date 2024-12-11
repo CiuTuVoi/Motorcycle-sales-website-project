@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models import DanhGia, NguoiDung
+from models.models import DanhGia, NguoiDung
 from fastapi.security import OAuth2PasswordBearer
 import jwt
-from database import get_db  # Hàm lấy session DB
+from models.database import get_db  # Hàm lấy session DB
 
 
 router = APIRouter()

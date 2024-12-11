@@ -2,11 +2,11 @@ from fastapi import APIRouter, HTTPException, Depends, status, Response, Cookie
 from pydantic import BaseModel, EmailStr
 from enum import Enum
 from sqlalchemy.orm import Session
-from models import NguoiDung
-from password_utils import hash_password, verify_password
+from models.models import NguoiDung
+from password.password_utils import hash_password, verify_password
 from fastapi.security import OAuth2PasswordBearer
 import jwt
-from database import get_db
+from models.database import get_db
 from datetime import datetime, timedelta
 import re
 
@@ -232,4 +232,3 @@ async def logout(response: Response, db: Session = Depends(get_db), token: str =
         pass
     response.delete_cookie("refresh_token")
     return {"message": "Logged out successfully"}
-

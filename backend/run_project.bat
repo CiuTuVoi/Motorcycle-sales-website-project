@@ -1,4 +1,7 @@
 @echo off
+REM Cài đặt PYTHONPATH để Python nhận diện đúng các thư mục
+set PYTHONPATH=%CD%
+
 REM Chạy Redis
 start D:\Redis\Redis-x64-3.0.504\redis-server.exe
 
