@@ -39,9 +39,9 @@ class ProductCreate(BaseModel):
         from_attributes = True
 
 
-# API: Lấy danh sách sản phẩm (cho cả user và admin)
+# API: Lấy danh sách sản phẩm (cho tất cả người dùng, không yêu cầu đăng nhập)
 @router.get("/products")
-def get_products(db: Session = Depends(get_db), _: str = Depends(oauth2_scheme)):
+def get_products(db: Session = Depends(get_db)):
     products = db.query(SanPham).all()
     if not products:
         raise HTTPException(status_code=404, detail="Không tìm thấy sản phẩm")

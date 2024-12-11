@@ -41,9 +41,9 @@ class KhuyenmaiCreate(BaseModel):
         from_attributes = True
 
 
-# API: Lấy danh sách khuyến mại
+# API: Lấy danh sách khuyến mại không cần đăng nhập 
 @router.get("/khuyenmai")
-def get_khuyenmai(db: Session = Depends(get_db), _: str = Depends(oauth2_scheme)): 
+def get_khuyenmai(db: Session = Depends(get_db)): 
     khuyenmai = db.query(KhuyenMai).all()
     if not khuyenmai:
         raise HTTPException(status_code=404, detail="Không tìm thấy khuyến mại")

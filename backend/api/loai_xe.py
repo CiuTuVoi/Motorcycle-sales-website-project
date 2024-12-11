@@ -35,13 +35,14 @@ class LoaixeCreate(BaseModel):
         from_attributes = True
 
 
-# API: Lấy danh sách loại xe
+# API: Lấy danh sách loại xe không cần đăng nhập
 @router.get("/loaixe")
-def get_loaixe(db: Session = Depends(get_db), _: str = Depends(oauth2_scheme)): 
+def get_loaixe(db: Session = Depends(get_db)):
     loaixe = db.query(LoaiXe).all()
     if not loaixe:
         raise HTTPException(status_code=404, detail="Không tìm thấy loại xe")
     return loaixe
+
 
 # API: Thêm loại xe  (chỉ cho admin)
 @router.post("/loaixe", response_model=LoaixeCreate)

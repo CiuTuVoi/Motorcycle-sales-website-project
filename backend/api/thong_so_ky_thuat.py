@@ -55,9 +55,9 @@ class ThongSoCreate(BaseModel):
         from_attributes = True
 
 
-# API: Lấy danh sách thông số kỹ thuật (cho cả user và admin)
+# API: Lấy danh sách thông số kỹ thuật không cần đăng nhập
 @router.get("/thongso")
-def get_thongso(db: Session = Depends(get_db), _: str = Depends(oauth2_scheme)):
+def get_thongso(db: Session = Depends(get_db)):
     thongso = db.query(ThongSoKyThuat).all()
     if not thongso:
         raise HTTPException(status_code=404, detail="Không tìm thấy thông số")
