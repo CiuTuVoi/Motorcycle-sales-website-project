@@ -1,0 +1,37 @@
+Cách để test chạy trên postman. 
+b1 nhập url của phương thức post /login phần body nhập theo định dạng 
+{
+    "email": "email",
+    "mat_khau": "mật khẩu" # mật khẩu này là mật khẩu ban đầu tạo không phải mật khẩu mã hóa
+}
+
+khi chạy xong sẽ cho ra định dạng 
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmhyb3Nla2l0QGdtYWlsLmNvbSIsInJvbGUiOiJraGFjaF9oYW5nIiwiZXhwIjoxNzMyOTkxOTIwfQ.Psvsi31HYC89eFkxEl0KBSYEGl29bwC_hPLV_3PSkSs",
+    "token_type": "bearer",
+    "role": "khach_hang"
+}
+
+từ đây cái access_token sẽ là dung cho đăng nhập tài khoản đó
+vd lấy tất cả sản phẩm
+ vào hàm get vào mục Header thêm Authorization : Bearer <accsess_token>
+mục đích là để kiểm tra role xem là admin hay khach_hang để giới hạn quyền truy cập
+- rồi cứ thế truy cập vào api. các tài khoản role là khach_hang sẽ bị giới hạn vào các api như việc không thể thêm sản phẩm mới
+
+
+
+
+# Với việc đặt lại mật khẩu ta cần
+
+chạy hàm post với url /reset-password-request?email=<email cần reset>
+sau khi chạy xong sẽ có email thông báo về và có dạng 
+"https://yourapp.com/reset-password?token={reset_token}
+
+hãy copy phần token rồi sử dụng hàm post với url /reset-password
+phần body để kiểu json là 
+{
+    "token": {reset_token},
+    "new_password": "mật khẩu mới" 
+}
+
+
