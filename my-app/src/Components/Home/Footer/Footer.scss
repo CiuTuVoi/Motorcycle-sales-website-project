@@ -1,0 +1,190 @@
+/* FOOTER*/
+.footer {
+    background-color: #3154A5;
+    color: white;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin-top: 50px;
+
+    .footer-services {
+        text-align: center;
+        margin-bottom: 20px;
+
+        h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .services-menu {
+            button {
+                background-color: white;
+                color: #3154A5;
+                border: none;
+                padding: 15px 30px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+                margin-top: 20px;
+
+                &:hover {
+                    transform: scale(1.1)
+                }
+            }
+        }
+    }
+
+    .footer-description {
+        display: flex;
+        justify-content: space-around;
+        font-size: 16px;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 80px;
+
+        .footer-left {
+            .contact-button {
+                border: none;
+                border-radius: 10px;
+                transition: transform 0.2s ease-in-out;
+                margin-left: 10px;
+
+                &:hover {
+                    transform: scale(1.0);
+                }
+
+                a {
+                    text-decoration: none;
+                    color: #fff;
+                }
+            }
+
+            .email-button {
+                border: none;
+                border-radius: 10px;
+
+                a {
+                    text-decoration: none;
+                    ;
+                    color: #fff;
+                }
+            }
+
+            h3 {
+                text-align: center;
+                margin-left: -30px;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 13px;
+            }
+
+        }
+
+        .footer-policies {
+            margin-left: 70px;
+
+            ul {
+                margin-top: 15px;
+
+                li {
+                    padding: 5px;
+                }
+            }
+        }
+
+        .footer-info {
+            margin-left: 20px;
+
+            ul {
+                margin-top: 15px;
+
+                li {
+                    padding: 5px;
+                }
+            }
+
+        }
+
+        .footer-contact {
+            flex: 1;
+            min-width: 200px;
+
+            h3 {
+                margin-bottom: 10px;
+            }
+
+            p {
+                padding: 10px;
+
+                span {
+                    font-size: 13px;
+                }
+            }
+        }
+
+        .footer-left {
+
+            .contact-button,
+            .email-button {
+                background-color: #3154A5;
+                color: white;
+                border: 2px solid white;
+                padding: 10px 20px;
+                margin-right: 10px;
+                cursor: pointer;
+
+                &.email-button {
+                    background-color: red;
+                }
+            }
+        }
+
+        .footer-policies,
+        .footer-info {
+            ul {
+                list-style: none;
+                padding: 0;
+
+                li {
+                    color: #ffbf00;
+                    cursor: pointer;
+                    margin-bottom: 5px;
+                }
+            }
+        }
+
+        .footer-contact {
+
+            margin-left: 100px;
+
+            .search {
+                display: flex;
+                margin-top: 10px;
+                border: none;
+
+                input {
+                    flex: 1;
+                    padding: 5px;
+                    border: none;
+                }
+
+                button {
+                    background-color: red;
+                    border: none;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
