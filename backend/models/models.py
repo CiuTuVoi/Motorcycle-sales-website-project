@@ -20,7 +20,8 @@ class NguoiDung(Base):
     dia_chi = Column(String(255))
     so_dien_thoai = Column(String(20))
     vai_tro = Column(Enum('Admin', 'User', name = 'vai_tro'), default='User', nullable=False)
-    trang_thai = Column(Enum('HoatDong', 'BiKhoa', name = 'trang_thai'), default = 'HoatDong', nullable=False)
+    trang_thai = Column(Enum('HoatDong', 'BiKhoa', name = 'trang_thai'), default='HoatDong', nullable=False)
+
     ngay_tao = Column(DateTime, default=func.now(), onupdate=func.now())
     refresh_token = Column(String, nullable=True)
 
