@@ -3,9 +3,9 @@ import pymysql
 
 # Kết nối cơ sở dữ liệu
 connection = pymysql.connect(
-    host="localhost",
+    host="127.0.0.1",
     user="root",
-    password="",
+    password="123456",
     database="website_motorbike"
 )
 
