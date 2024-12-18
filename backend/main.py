@@ -7,6 +7,7 @@ from api.kho_hang import router as khohang_router # Import router từ kho_hang.
 from api.loai_xe import router as loaixe_router # Import router từ loai_xe.py
 from api.khuyen_mai import router as khuyenmai_router # Import router từ khuyenmai.py
 from api.thong_so_ky_thuat import router as thongsokythuat_router # Import router từ thong_so_ky_thuat.py
+from api.thong_bao_phan_hoi import router as thongbaophanhoi_router # Import router từ thong_bao_phan_hoi.py
 import sys
 import os
 
@@ -23,3 +24,4 @@ app.include_router(khohang_router)
 app.include_router(loaixe_router)
 app.include_router(khuyenmai_router)
 app.include_router(thongsokythuat_router)
+app.include_router(thongbaophanhoi_router)
