@@ -244,6 +244,7 @@
     /* SLIDE-PRODUCT-HONDA*/
     .slide-product-honda {
         .product-container {
+            margin-top: 20px ;
             border: 1px soid #d9534f;
             border-radius: 5px;
             box-shadow: 0px 10px 200px rgba(38, 15, 189, 0.1);
@@ -264,12 +265,9 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            transition: transform 0.2s ease-in-out;
 
 
-            &:hover {
-                transform: scale(1.25);
-            }
+            
         }
 
         .product-info {

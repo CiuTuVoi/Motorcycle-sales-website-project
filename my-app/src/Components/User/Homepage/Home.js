@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Home.scss";
 import { AiOutlineRight } from "react-icons/ai";
@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import axios from "axios";
 
 const slideImages = [
   {
@@ -60,38 +61,7 @@ const settings = {
 };
 
 /*img-product-bland-honda */
-const SlideProductHonda = [
-  {
-    title: "SH mode 125",
-    price: "57.132.000đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/August2024/3mJZ9NV7sBmWVJalt796.png",
-  },
-  {
-    title: "SH350i",
-    price: "151.190.000đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/November2024/sYTCNfgI5E0JUJ8BCTQ3.png",
-  },
-  {
-    title: "Vario 160",
-    price: "51.990.000đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/August2024/OdEB73r6Io8GOwX51wTV.png",
-  },
-  {
-    title: "SH160i/125i",
-    price: "73.921.091đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/August2024/h9TheYxZITC0FtJOlGmK.png",
-  },
-  {
-    title: "REBEL 500 2024",
-    price: "181.300.000đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/September2024/VQWtrj4jqeSb7T5SMFPU.png",
-  },
-];
+
 /*Object-components-slide-bland-honda */
 const settingsHonda = {
   dots: true,
@@ -182,6 +152,32 @@ const settingProductHot = {
 
 const productHotData = require("../../data/dataproduct.json");
 const Home = () => {
+
+  const [SlideProductHonda, setSlideProductHonda] = useState([]);
+  const [SlideProductYamaha, setSlideProductYamaha] = useState([])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const productResponse = await axios.get(
+          "http://127.0.0.1:8000/products"
+        );
+        const allProduct  = productResponse.data;
+
+        const Honda = allProduct.filter((product) => product.hang_xe === 'Honda');
+        const Yamaha = allProduct.filter((product) => product.hang_xe === 'Yamaha')
+
+        setSlideProductHonda(Honda)
+        setSlideProductYamaha(Yamaha)
+      } catch (error) {
+        console.error("Error fetching data from API:", error);
+      }
+    };
+    fetchData();
+  });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [productHot, setProductHot] = useState(productHotData[0]);
 
   return (
@@ -290,20 +286,45 @@ const Home = () => {
 
       {/* SLIDE-PRODUCT-HONDA */}
       <div className="slide-product-honda">
-        <Slide {...settingsHonda}>
-          {SlideProductHonda.map((product, index) => (
-            <div key={index} className="product-container">
-              <div
-                className="product-img"
-                style={{ backgroundImage: `url(${product.image})` }}
-              ></div>
-              <div className="product-info">
-                <h5>{product.title}</h5>
-                <p className="product-price">{product.price}</p>
+        {SlideProductHonda && SlideProductHonda.length > 0 ? (
+          <Slide
+            slidesToShow={5}
+            slidesToScroll={5}
+            arrows
+            dots
+            autoplay
+            autoplaySpeed={3000}
+          >
+            {SlideProductHonda.map((product, index) => (
+              <div key={index} className="product-container">
+                {/* Hiển thị hình ảnh với xử lý lỗi */}
+                <Link to = {`/viewproduct/${SlideProductHonda.ma_san_pham}`}>
+                <div
+                  className="product-img"
+                  style={{
+                    backgroundImage: `url(${
+                      product.anh_dai_dien || "default_image.jpg"
+                    })`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    width: "100%",
+                    height: "200px", // Đảm bảo chiều cao hình ảnh
+                  }}
+                ></div>
+                </Link>
+                <div className="product-info">
+                  <h5>{product.ten_san_pham}</h5>
+                  <p className="product-price">{product.gia}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </Slide>
+            ))}
+          </Slide>
+        ) : (
+          // Hiển thị thông báo khi không có dữ liệu
+          <div className="no-products">
+            <p>Không có sản phẩm để hiển thị</p>
+          </div>
+        )}
       </div>
 
       {/* YAMAHAMENU */}
@@ -315,7 +336,7 @@ const Home = () => {
       </div>
 
       <div className="morehonda">
-        <Link to="/Honda">
+        <Link to="/listProduct">
           XEM THÊM <AiOutlineRight />
         </Link>
       </div>
@@ -334,21 +355,47 @@ const Home = () => {
       </div>
 
       {/*SLIDE-PRODUCT-YAMAHA*/}
-      <div className="slide-product-yamaha">
-        <Slide {...settingsYamaha}>
-          {SlideProductYamaha.map((product, index) => (
-            <div key={index} className="product-container">
-              <div
-                className="product-img"
-                style={{ backgroundImage: `url(${product.image})` }}
-              ></div>
-              <div className="product-info">
-                <h5>{product.title}</h5>
+       {/* SLIDE-PRODUCT-HONDA */}
+       <div className="slide-product-honda">
+        {SlideProductHonda && SlideProductHonda.length > 0 ? (
+          <Slide
+            slidesToShow={5}
+            slidesToScroll={5}
+            arrows
+            dots
+            autoplay
+            autoplaySpeed={3000}
+          >
+            {SlideProductYamaha.map((product, index) => (
+              <div key={index} className="product-container">
+                {/* Hiển thị hình ảnh với xử lý lỗi */}
+                <Link to = {`/viewproduct/${SlideProductYamaha.ma_san_pham}`}>
+                <div
+                  className="product-img"
+                  style={{
+                    backgroundImage: `url(${
+                      product.anh_dai_dien || "default_image.jpg"
+                    })`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    width: "100%",
+                    height: "200px", // Đảm bảo chiều cao hình ảnh
+                  }}
+                ></div>
+                </Link>
+                <div className="product-info">
+                  <h5>{product.ten_san_pham}</h5>
+                  <p className="product-price">{product.gia}</p>
+                </div>
               </div>
-              <div className="product-price">{product.price}</div>
-            </div>
-          ))}
-        </Slide>
+            ))}
+          </Slide>
+        ) : (
+          // Hiển thị thông báo khi không có dữ liệu
+          <div className="no-products">
+            <p>Không có sản phẩm để hiển thị</p>
+          </div>
+        )}
       </div>
       {/*FOOTER*/}
       <div>

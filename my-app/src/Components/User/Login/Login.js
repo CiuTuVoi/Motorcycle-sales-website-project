@@ -1,6 +1,6 @@
-
-
+import { loginAPI } from "../../services/adminService";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./Login.scss";
 
 export default function Login() {
@@ -11,16 +11,45 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [showRegister, setShowRegister] = useState(false);
 
-  const handleLoginSubmit = (e) => {
+  const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
+
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login with:", { phoneEmail, password });
-    
+
+    if (!phoneEmail || !password) {
+      alert("Vui lòng điền đầy đủ thông tin!");
+      return;
+    }
+
+    try {
+      // Gọi API đăng nhập
+      let res = await loginAPI(email, password);
+      console.log("Response từ API:", res);
+
+      if (res && res.role === "admin") {
+        // Lưu trạng thái đăng nhập vào localStorage/sessionStorage
+        localStorage.setItem("isAdmin", true);
+
+        // Điều hướng đến trang Admin Dashboard
+        navigate("/admin");
+      } else if (res && res.role === "user") {
+        // Lưu trạng thái người dùng
+        localStorage.setItem("isUser", true);
+
+        // Điều hướng đến trang chính của người dùng
+        navigate("/");
+      } else {
+        alert("Tên đăng nhập hoặc mật khẩu không đúng!");
+      }
+    } catch (error) {
+      console.error("Lỗi đăng nhập:", error);
+      alert("Đăng nhập không thành công. Vui lòng thử lại!");
+    }
   };
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
     console.log("Register with:", { name, phone, email, password });
-    
   };
 
   return (
@@ -73,10 +102,11 @@ export default function Login() {
               required
             />
             <input
-            type = "password"
-            placeholder="Mật khẩu *"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              placeholder="Mật khẩu *"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
             <button type="submit" className="button">ĐĂNG KÝ</button>
             <p className="toggle-text">

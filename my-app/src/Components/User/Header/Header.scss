@@ -95,18 +95,24 @@
           color: #fff;
           cursor: pointer;
           font-size: 14px;
-          .link_cart{
-            color: #fff;
+
+          &:hover{
+            background-color: #fff;
+            color:rgb(65, 88, 208)
+          }
+          
+        }
+        .link-cart{
+          color: #fff;
+          text-decoration: none;
+          
+          
+          &:hover{
+            color:rgb(65, 88, 208);
             
           }
-
-         
-
-          &:hover {
-            background-color: #fff;
-            color: rgb(65, 88, 208);
-          }
         }
+        
       }
 
       /* Favorites Button Section */

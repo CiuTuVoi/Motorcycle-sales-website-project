@@ -1,20 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Layout from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { Link } from "react-router-dom";
 import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
 import "./ListProduct.scss";
 
-const Data = require("../../data/dataproduct.json");
-
 const Honda = () => {
-  const [selectedCategory, setSelectedCategory] = useState("honda"); // Danh mục mặc định
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đưa trang về đầu
+  }, []);
 
+  const [products, setProducts] = useState([]); // Dữ liệu sản phẩm từ API
+  const [selectedCategory, setSelectedCategory] = useState("Honda"); // Danh mục mặc định
   const [currPage, setCurrPage] = useState(1);
   const itemsPerPage = 8; // Số lượng sản phẩm mỗi trang
+  const [isLoading, setIsLoading] = useState(true); // Trạng thái loading
 
-  // Lọc sản phẩm theo danh mục đã chọn
-  const filteredData = Data.filter((item) => item.category === selectedCategory);
+  // Hàm lấy dữ liệu từ API
+  const fetchData = async (category) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`http://127.0.0.1:8000/products`);
+      console.log("API Response:", response.data); // Log response
+      setProducts(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setIsLoading(false);
+    }
+  };
+  
+
+  // Lấy dữ liệu khi danh mục thay đổi
+  useEffect(() => {
+    fetchData(selectedCategory);
+  }, [selectedCategory]);
+
+  // Lọc sản phẩm theo danh mục
+  const filteredData = products.filter(
+    (item) => item.hang_xe.toLowerCase() === selectedCategory.toLowerCase()
+  ); // Dữ liệu từ API đã được lọc sẵn
+
+  console.log("Products:", products);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Lấy dữ liệu sản phẩm cho trang hiện tại
@@ -52,22 +80,22 @@ const Honda = () => {
           <h2>DANH MỤC SẢN PHẨM</h2>
           <ul>
             <li>
-              <button onClick={() => handleCategoryChange("honda")}>
+              <button onClick={() => handleCategoryChange("Honda")}>
                 Xe máy Honda
               </button>
             </li>
             <li>
-              <button onClick={() => handleCategoryChange("yamaha")}>
+              <button onClick={() => handleCategoryChange("Yamaha")}>
                 Xe máy Yamaha
               </button>
             </li>
             <li>
-              <button onClick={() => handleCategoryChange("sym")}>
+              <button onClick={() => handleCategoryChange("Sym")}>
                 Xe máy Sym
               </button>
             </li>
             <li>
-              <button onClick={() => handleCategoryChange("suzuki")}>
+              <button onClick={() => handleCategoryChange("Suzuki")}>
                 Xe máy Suzuki
               </button>
             </li>
@@ -76,23 +104,25 @@ const Honda = () => {
 
         {/* Danh sách sản phẩm */}
         <div className="home">
-          {currData.length === 0 ? (
-            <p className="no-products">Không có sản phẩm nào trong danh mục này.</p>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : currData.length === 0 ? (
+            <p className="no-products">Hiện sản phẩm chưa được cập nhật</p>
           ) : (
             <div className="product-list">
               {currData.map((item) => (
-                <Link to="/viewProduct" key={item.id}>
+                <Link to= {`/viewproduct/${products.ma_san_pham}`} key={item.ma_san_pham}>
                   <div
                     onClick={() => handleImgClick(item)}
                     className="product-item"
                   >
                     <img
-                      src={item.hinhAnh.black}
-                      alt={item.tenXe}
+                      src={item.anh_dai_dien}
+                      alt={item.ten_san_pham}
                       className="product-image"
                     />
-                    <h2 className="product-name">{item.tenXe}</h2>
-                    <p className="product-brand">{item.hangXe}</p>
+                    <h2 className="product-name">{item.ten_san_pham}</h2>
+                    <p className="product-brand">{item.hang_xe}</p>
                     <span className="price">{item.gia}</span>
                   </div>
                 </Link>
