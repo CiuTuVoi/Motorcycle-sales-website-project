@@ -155,29 +155,27 @@ const Home = () => {
 
   const [SlideProductHonda, setSlideProductHonda] = useState([]);
   const [SlideProductYamaha, setSlideProductYamaha] = useState([])
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const productResponse = await axios.get(
-          "http://127.0.0.1:8000/products"
+          `http://127.0.0.1:8000/products`
         );
         const allProduct  = productResponse.data;
-
+  
         const Honda = allProduct.filter((product) => product.hang_xe === 'Honda');
         const Yamaha = allProduct.filter((product) => product.hang_xe === 'Yamaha')
-
-        setSlideProductHonda(Honda)
-        setSlideProductYamaha(Yamaha)
+  
+        setSlideProductHonda(Honda);
+        setSlideProductYamaha(Yamaha);
       } catch (error) {
         console.error("Error fetching data from API:", error);
       }
     };
     fetchData();
-  });
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  }, []); // Đảm bảo chỉ gọi 1 lần khi component mount
+  
   const [productHot, setProductHot] = useState(productHotData[0]);
 
   return (
@@ -298,7 +296,7 @@ const Home = () => {
             {SlideProductHonda.map((product, index) => (
               <div key={index} className="product-container">
                 {/* Hiển thị hình ảnh với xử lý lỗi */}
-                <Link to = {`/viewproduct/${SlideProductHonda.ma_san_pham}`}>
+                <Link to = {`/viewproduct/${product.ma_san_pham}`}>
                 <div
                   className="product-img"
                   style={{
@@ -369,7 +367,7 @@ const Home = () => {
             {SlideProductYamaha.map((product, index) => (
               <div key={index} className="product-container">
                 {/* Hiển thị hình ảnh với xử lý lỗi */}
-                <Link to = {`/viewproduct/${SlideProductYamaha.ma_san_pham}`}>
+                <Link to = {`/viewproduct/${product.ma_san_pham}`}>
                 <div
                   className="product-img"
                   style={{

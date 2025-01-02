@@ -11,10 +11,17 @@ const Honda = () => {
     window.scrollTo(0, 0); // Đưa trang về đầu
   }, []);
 
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrPage(page);
+      window.scroll(0, 0);
+    }
+  };
+
   const [products, setProducts] = useState([]); // Dữ liệu sản phẩm từ API
   const [selectedCategory, setSelectedCategory] = useState("Honda"); // Danh mục mặc định
   const [currPage, setCurrPage] = useState(1);
-  const itemsPerPage = 8; // Số lượng sản phẩm mỗi trang
+  const itemsPerPage = 6; // Số lượng sản phẩm mỗi trang
   const [isLoading, setIsLoading] = useState(true); // Trạng thái loading
 
   // Hàm lấy dữ liệu từ API
@@ -30,7 +37,6 @@ const Honda = () => {
       setIsLoading(false);
     }
   };
-  
 
   // Lấy dữ liệu khi danh mục thay đổi
   useEffect(() => {
@@ -53,13 +59,6 @@ const Honda = () => {
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setCurrPage(1); // Đưa về trang đầu tiên
-  };
-
-  // Hàm xử lý chuyển trang
-  const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrPage(page);
-    }
   };
 
   // Hàm khi người dùng click vào sản phẩm
@@ -111,7 +110,10 @@ const Honda = () => {
           ) : (
             <div className="product-list">
               {currData.map((item) => (
-                <Link to= {`/viewproduct/${products.ma_san_pham}`} key={item.ma_san_pham}>
+                <Link
+                  to={`/viewProduct/${item.ma_san_pham}`}
+                  key={item.ma_san_pham}
+                >
                   <div
                     onClick={() => handleImgClick(item)}
                     className="product-item"
@@ -123,7 +125,12 @@ const Honda = () => {
                     />
                     <h2 className="product-name">{item.ten_san_pham}</h2>
                     <p className="product-brand">{item.hang_xe}</p>
-                    <span className="price">{item.gia}</span>
+                    <span className="price">
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(item.gia)}
+                    </span>
                   </div>
                 </Link>
               ))}

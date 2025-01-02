@@ -7,12 +7,10 @@ import ViewProduct from "../Components/User/ViewProduct/ViewProduct";
 import Header from "../Components/User/Header/Header";
 import Footer from "../Components/User/Footer/Footer";
 import Cart from "../Components/User/ShoppingCart/Cart";
+// import Admin from "../Components/Admin/admin";
 import "./App.scss";
 
-
-
 function App() {
-  
   return (
     <Router>
       <Routes>
@@ -20,14 +18,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/listProduct" element={<ListProduct />} />
-        <Route path="/viewproduct/:ma_san_pham" element={<ViewProduct/>} />
+        <Route path="/viewProduct/:ma_san_pham" element={<ViewProduct />}/>
         <Route path="/header" element={<Header />} />
         <Route path="/footer" element={<Footer />} /> 
         <Route path="/cart" element={<Cart />} />
-
-        
+        {/* <Route path = "/admin" element = {<Admin/>}/> */}
       </Routes>
-
     </Router>
   );
 }
