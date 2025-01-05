@@ -56,6 +56,8 @@ class SanPham(Base):
     donHang = relationship('DonHang', back_populates="sanPham")
     # Thiết lập mối quan hệ ngược lại với sản phẩm khuyến mãi
     sanPhamKhuyenMai = relationship('SanPhamKhuyenMai', back_populates="sanPham" ,uselist=False)
+    # Thiết lập mối quan hệ ngược lại với ảnh xe
+    anhXe = relationship('AnhXe', back_populates="sanPham")
 
 class DanhGia(Base):
     __tablename__ = 'danh_gia'
@@ -119,9 +121,9 @@ class DonHang(Base):
     ma_nguoi_dung = Column(Integer, ForeignKey('nguoi_dung.ma_nguoi_dung'))
     ma_san_pham = Column(Integer, ForeignKey('san_pham.ma_san_pham'))
     so_luong = Column(Integer)
-    don_gia = Column(DECIMAL(10, 2))
-    tong_tien = Column(DECIMAL(10,2))
-    trang_thai = Column(Enum('Dang_xu_ly', 'Hoan_thanh', 'Da_huy', name = 'trang_thai'), default = 'Dang_xu_ly', nullable=False)
+    don_gia = Column(DECIMAL(15, 2))
+    tong_tien = Column(DECIMAL(15,2))
+    trang_thai = Column(Enum('Dang_giao', 'Hoan_thanh', 'Da_huy', name = 'trang_thai'), default = 'Dang_giao', nullable=False)
     ngay_tao = Column(DateTime, default=func.now(), onupdate=func.now())
 
     nguoiDung = relationship('NguoiDung', back_populates="donHang")
@@ -181,5 +183,18 @@ class PhanHoi(Base):
     # Quan hệ với bảng đánh giá và người dùng
     danhGia = relationship('DanhGia', back_populates="phanHoi")
     nguoiDung = relationship('NguoiDung', back_populates="phanHoi")
+
+class AnhXe(Base):
+    __tablename__ = 'mau_san_pham'
+    ma_hinh_anh = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    ma_san_pham = Column(Integer, ForeignKey('san_pham.ma_san_pham'), index=True)
+    mau_sac = Column(String(20))
+    anh_1 = Column(String(225))
+    anh_2 = Column(String(225))
+    anh_3 = Column(String(225))
+    anh_4 = Column(String(225))
+
+    sanPham = relationship('SanPham', back_populates="anhXe")
+
 
 
