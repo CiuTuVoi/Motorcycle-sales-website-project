@@ -152,21 +152,24 @@ const settingProductHot = {
 
 const productHotData = require("../../data/dataproduct.json");
 const Home = () => {
-
   const [SlideProductHonda, setSlideProductHonda] = useState([]);
-  const [SlideProductYamaha, setSlideProductYamaha] = useState([])
-  
+  const [SlideProductYamaha, setSlideProductYamaha] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const productResponse = await axios.get(
           `http://127.0.0.1:8000/products`
         );
-        const allProduct  = productResponse.data;
-  
-        const Honda = allProduct.filter((product) => product.hang_xe === 'Honda');
-        const Yamaha = allProduct.filter((product) => product.hang_xe === 'Yamaha')
-  
+        const allProduct = productResponse.data;
+
+        const Honda = allProduct.filter(
+          (product) => product.hang_xe === "Honda"
+        );
+        const Yamaha = allProduct.filter(
+          (product) => product.hang_xe === "Yamaha"
+        );
+
         setSlideProductHonda(Honda);
         setSlideProductYamaha(Yamaha);
       } catch (error) {
@@ -175,7 +178,7 @@ const Home = () => {
     };
     fetchData();
   }, []); // Đảm bảo chỉ gọi 1 lần khi component mount
-  
+
   const [productHot, setProductHot] = useState(productHotData[0]);
 
   return (
@@ -296,23 +299,28 @@ const Home = () => {
             {SlideProductHonda.map((product, index) => (
               <div key={index} className="product-container">
                 {/* Hiển thị hình ảnh với xử lý lỗi */}
-                <Link to = {`/viewproduct/${product.ma_san_pham}`}>
-                <div
-                  className="product-img"
-                  style={{
-                    backgroundImage: `url(${
-                      product.anh_dai_dien || "default_image.jpg"
-                    })`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    width: "100%",
-                    height: "200px", // Đảm bảo chiều cao hình ảnh
-                  }}
-                ></div>
+                <Link to={`/viewproduct/${product.ma_san_pham}`}>
+                  <div
+                    className="product-img"
+                    style={{
+                      backgroundImage: `url(${
+                        product.anh_dai_dien || "default_image.jpg"
+                      })`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      width: "100%",
+                      height: "200px", // Đảm bảo chiều cao hình ảnh
+                    }}
+                  ></div>
                 </Link>
                 <div className="product-info">
                   <h5>{product.ten_san_pham}</h5>
-                  <p className="product-price">{product.gia}</p>
+                  <p className="product-price">
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(product.gia)}
+                  </p>
                 </div>
               </div>
             ))}
@@ -353,8 +361,8 @@ const Home = () => {
       </div>
 
       {/*SLIDE-PRODUCT-YAMAHA*/}
-       {/* SLIDE-PRODUCT-HONDA */}
-       <div className="slide-product-honda">
+      {/* SLIDE-PRODUCT-HONDA */}
+      <div className="slide-product-honda">
         {SlideProductHonda && SlideProductHonda.length > 0 ? (
           <Slide
             slidesToShow={5}
@@ -367,19 +375,19 @@ const Home = () => {
             {SlideProductYamaha.map((product, index) => (
               <div key={index} className="product-container">
                 {/* Hiển thị hình ảnh với xử lý lỗi */}
-                <Link to = {`/viewproduct/${product.ma_san_pham}`}>
-                <div
-                  className="product-img"
-                  style={{
-                    backgroundImage: `url(${
-                      product.anh_dai_dien || "default_image.jpg"
-                    })`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    width: "100%",
-                    height: "200px", // Đảm bảo chiều cao hình ảnh
-                  }}
-                ></div>
+                <Link to={`/viewproduct/${product.ma_san_pham}`}>
+                  <div
+                    className="product-img"
+                    style={{
+                      backgroundImage: `url(${
+                        product.anh_dai_dien || "default_image.jpg"
+                      })`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      width: "100%",
+                      height: "200px", // Đảm bảo chiều cao hình ảnh
+                    }}
+                  ></div>
                 </Link>
                 <div className="product-info">
                   <h5>{product.ten_san_pham}</h5>

@@ -49,7 +49,8 @@
 
       h3 {
         font-size: 28px;
-        color: rgba(65, 88, 208, 1);;
+        color: rgba(65, 88, 208, 1);
+        ;
         font-weight: 600;
       }
 
@@ -64,6 +65,7 @@
       ul {
         list-style-type: none;
         padding: 0;
+
         li {
           font-size: 16px;
           margin-top: 20px;
@@ -115,6 +117,102 @@
     }
   }
 
+  .productImage{
+    margin-top: 100px;
+    display: flex;
+    justify-content:  center;
+
+    div{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 50px;
+      justify-content: center;
+
+      img {
+        transition: transform 0.5s ease;
+      
+        &:hover {
+        transform: scale(2.0);
+        }
+      }
+
+
+    }
+  }
+   
+
+
+  // thông số kỹ thuật 
+  .detail-specification {
+    margin-top: 150px;
+    position: absolute;
+    background-color: rgba(65, 88, 208, 1);
+    padding: 10px;
+    color: #fff;
+    border-radius: 0 10px 0 0
+
+  }
+
+  .line-specification {
+    background-color: rgba(65, 88, 208, 1);
+    height: 2px;
+    width: 100%;
+    margin-top: 190px;
+  }
+
+  .specification {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .specification-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      tbody {
+        tr {
+          border-bottom: 1px solid #ddd;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          &:nth-child(even) {
+            background-color: #f5f5f5;
+          }
+
+          td {
+            padding: 12px 15px;
+            vertical-align: top;
+
+            &.label {
+              font-weight: 500;
+              color: #555;
+              width: 35%;
+              text-transform: capitalize;
+            }
+
+            &.value {
+              font-weight: 500;
+              color: #333;
+              width: 65%;
+              word-wrap: break-word;
+            }
+          }
+        }
+      }
+
+    }
+
+    p {
+      font-size: 1rem;
+      color: #777;
+      text-align: center;
+      margin-top: 15px;
+    }
+  }
+
   .review-container {
     margin-top: 100px;
     padding: 20px;
@@ -125,7 +223,8 @@
     h3 {
       font-size: 24px;
       margin-bottom: 20px;
-      color: rgba(65, 88, 208, 1);;
+      color: rgba(65, 88, 208, 1);
+      ;
     }
 
     .review-form {
@@ -154,12 +253,14 @@
             transition: color 0.3s ease, transform 0.2s;
 
             &.active {
-              color: rgba(65, 88, 208, 1); /* Màu sao khi được chọn */
+              color: rgba(65, 88, 208, 1);
+              /* Màu sao khi được chọn */
               transform: scale(1.2);
             }
 
             &:hover {
-              color: rgba(65, 88, 208, 0.8); /* Màu sao khi hover */
+              color: rgba(65, 88, 208, 0.8);
+              /* Màu sao khi hover */
               transform: scale(1.1);
             }
           }
