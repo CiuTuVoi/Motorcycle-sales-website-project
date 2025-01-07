@@ -477,6 +477,34 @@ INSERT INTO `san_pham_khuyen_mai` (`ma_san_pham`, `ma_khuyen_mai`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `gio_hang`
+--
+
+CREATE TABLE `gio_hang` (
+    `ma_gio_hang` INT AUTO_INCREMENT PRIMARY KEY,
+    `ma_nguoi_dung` INT NOT NULL,
+    `ma_san_pham` INT NOT NULL,
+    `so_luong` INT DEFAULT 1,
+    `ngay_them` timestamp NOT NULL DEFAULT current_timestamp(),
+    FOREIGN KEY (ma_nguoi_dung) REFERENCES nguoi_dung(ma_nguoi_dung),
+    FOREIGN KEY (ma_san_pham) REFERENCES san_pham(ma_san_pham)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `san_pham_khuyen_mai`
+--
+
+INSERT INTO `gio_hang` (`ma_nguoi_dung`, `ma_san_pham`, `so_luong`) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 3, 1),
+(4, 4, 1),
+(4, 10, 1);
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `thong_bao`
 --
 
