@@ -14,6 +14,8 @@ import Navbar from "./components/navbar/Navbar";
 import Menu from "./components/menu/Menu";
 import Login from "./pages/login/Login";
 import "./styles/global.scss";
+import User from "./pages/user/User.tsx";
+import Product from "./pages/product/Product.tsx";
 
 function App() {
   const Layout = () => {
@@ -49,6 +51,14 @@ function App() {
         {
           path: "/users",
           element: <Users />,
+        },
+        {
+          path: "/users/:id",
+          element: <User />,
+        },
+        {
+          path: "/products/:id",
+          element: <Product />,
         },
       ],
     },
