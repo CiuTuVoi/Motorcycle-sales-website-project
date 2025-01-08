@@ -348,12 +348,12 @@ CREATE TABLE `nguoi_dung` (
 --
 
 INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ten_dang_nhap`, `mat_khau`, `ho_ten`, `tuoi`, `gioi_tinh`, `email`, `so_dien_thoai`, `dia_chi`, `vai_tro`, `trang_thai`, `ngay_tao`, `refresh_token`) VALUES
-(1, 'leductu', '123456', 'Lê Đức Tú', 20, 'Nam', 'leductu_t67@hus.edu.vn', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
-(2, 'levungocanh', '123456', 'Lê Vũ Ngọc Anh', 20, 'Nam', 'levungocanh_t67@hus.edu.vn', '0965814070', 'Vinh Phuc', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
-(3, 'leductu1', '123456', 'Lê Đức Tú 1', 40, 'Nữ', 'letu19082004@gmail.com', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
-(4, 'leductu2', '123456', 'Lê Đức Tú 2', 18, 'Nam', 'ldt19082004@gmail.com', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
-(5, 'luongduythai', '123456', 'Lường Duy Thái', 17, 'Nữ', 'leductu19082004', '0965814070', 'Hoa Binh', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
-(6, 'dohungdang', '123456', 'Đỗ Hùng Đăng', 30, 'Nam', 'leductu19082004', '0965814070', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL);
+(1, 'leductu_t67@hus.edu.vn', '123456', 'Lê Đức Tú', 20, 'Nam', 'leductu_t67@hus.edu.vn', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(2, 'levungocanh_t67@hus.edu.vn', '123456', 'Lê Vũ Ngọc Anh', 20, 'Nam', 'levungocanh_t67@hus.edu.vn', '0965814070', 'Vinh Phuc', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(3, 'letu19082004@gmail.com', '123456', 'Lê Đức Tú 1', 40, 'Nữ', 'letu19082004@gmail.com', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(4, 'ldt19082004@gmail.com', '123456', 'Lê Đức Tú 2', 18, 'Nam', 'ldt19082004@gmail.com', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(5, 'luongduythai_t67@hus.edu.vn', '123456', 'Lường Duy Thái', 17, 'Nữ', 'luongduythai_t67@hus.edu.vn', '0965814070', 'Hoa Binh', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(6, 'dohungdang_t67@hus.edu.vn', '123456', 'Đỗ Hùng Đăng', 30, 'Nam', 'dohungdang_t67@hus.edu.vn', '0965814070', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL);
 
 -- --------------------------------------------------------
 
