@@ -2,15 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './container/App';
 import reportWebVitals from './container/reportWebVitals.js';
+import { Provider } from "react-redux"; // Import Provider từ react-redux
+import store from "./Components/User/redux/store.js"; // Import Redux store
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* Bọc ứng dụng trong Provider để kết nối với Redux store */}
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Nếu bạn muốn đo lường hiệu suất ứng dụng, sử dụng hàm log hoặc gửi kết quả đến endpoint phân tích
 reportWebVitals();

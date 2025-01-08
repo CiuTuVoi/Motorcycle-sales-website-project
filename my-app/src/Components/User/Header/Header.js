@@ -1,18 +1,14 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import {
-  FaSearch,
-  FaFacebookF,
-  FaPhone,
-  FaShoppingCart,
-  FaHeart,
-} from "react-icons/fa";
+import { FaSearch, FaFacebookF, FaPhone, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import "react-slideshow-image/dist/styles.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import DropdownMenu from "../DropdowMenu/dropoutMenu";
 import "./Header.scss";
+import { connect } from "react-redux";
+import { selectCartQuantity } from "../redux/cartSlice";
 
 const data = require("../../data/dataproduct.json");
 
@@ -45,9 +41,13 @@ class Layout extends Component {
   handleCategoryChange = (category) => {
     this.setState({ selecedCategory: category });
   };
+
   render() {
-    const{selecedCategory} = this.state
+    const { selecedCategory } = this.state;
+    const { cartQuantity } = this.props;
+
     const fitleData = data.filter((item) => item.category === selecedCategory);
+
     return (
       <div className="container">
         <div className="wrapper">
@@ -56,7 +56,7 @@ class Layout extends Component {
             <div className="logo">
               <Link to="/">
                 <h1>
-                  <img src="https://bizweb.dktcdn.net/100/422/602/themes/814220/assets/brand_image_2.png?1663380727397" />
+                  <img src="https://bizweb.dktcdn.net/100/422/602/themes/814220/assets/brand_image_2.png?1663380727397" alt="Logo" />
                 </h1>
               </Link>
             </div>
@@ -95,8 +95,11 @@ class Layout extends Component {
             {/* Cart Button Section */}
             <div className="button-cart">
               <button type="button">
-                <Link className  = "link-cart" to  = "/cart">GIỎ HÀNG</Link>
+                <Link className="link-cart" to="/cart">
+                  GIỎ HÀNG
+                </Link>
                 <FaShoppingCart />
+                {cartQuantity > 0 && <span className="cart-count">{cartQuantity}</span>}
               </button>
             </div>
 
@@ -138,4 +141,8 @@ class Layout extends Component {
   }
 }
 
-export default Layout;
+const mapStateToProps = (state) => ({
+  cartQuantity: selectCartQuantity(state),
+});
+
+export default connect(mapStateToProps)(Layout);
