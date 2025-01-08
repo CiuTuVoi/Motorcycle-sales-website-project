@@ -10,6 +10,7 @@ from api.thong_so_ky_thuat import router as thongsokythuat_router # Import route
 from api.thong_bao_phan_hoi import router as thongbaophanhoi_router # Import router từ thong_bao_phan_hoi.py
 from api.don_hang import router as donhang_router # Import router từ don_hang.py
 from api.anh_xe import router as anhxa_router # Import router từ anh_xe.py
+from api.gio_hang import router as giohang_router # Import router từ gio_hang.py
 
 import sys
 import os
@@ -30,3 +31,4 @@ app.include_router(thongsokythuat_router)
 app.include_router(thongbaophanhoi_router)
 app.include_router(donhang_router)
 app.include_router(anhxa_router)
+app.include_router(giohang_router)
