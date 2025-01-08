@@ -32,6 +32,8 @@ class NguoiDung(Base):
     # Thiết lập mối quan hệ ngược lại với thông báo
     thongBao = relationship('ThongBao', back_populates="nguoiDung")
     phanHoi = relationship('PhanHoi', back_populates="nguoiDung")
+    gioHang = relationship('GioHang', back_populates="nguoiDung")
+
 
 
 class SanPham(Base):
@@ -58,6 +60,8 @@ class SanPham(Base):
     sanPhamKhuyenMai = relationship('SanPhamKhuyenMai', back_populates="sanPham" ,uselist=False)
     # Thiết lập mối quan hệ ngược lại với ảnh xe
     anhXe = relationship('AnhXe', back_populates="sanPham")
+    # Thiết lập mối quan hệ ngược lại với giỏ hàng
+    gioHang = relationship('GioHang', back_populates="sanPham")
 
 class DanhGia(Base):
     __tablename__ = 'danh_gia'
@@ -123,7 +127,7 @@ class DonHang(Base):
     so_luong = Column(Integer)
     don_gia = Column(DECIMAL(15, 2))
     tong_tien = Column(DECIMAL(15,2))
-    trang_thai = Column(Enum('Dang_giao', 'Hoan_thanh', 'Da_huy', name = 'trang_thai'), default = 'Dang_giao', nullable=False)
+    trang_thai = Column(Enum('Dang_xu_ly', 'Hoan_thanh', 'Da_huy', name = 'trang_thai'), default = 'Dang_xu_ly', nullable=False)
     ngay_tao = Column(DateTime, default=func.now(), onupdate=func.now())
 
     nguoiDung = relationship('NguoiDung', back_populates="donHang")
@@ -196,5 +200,13 @@ class AnhXe(Base):
 
     sanPham = relationship('SanPham', back_populates="anhXe")
 
+class GioHang(Base):
+    __tablename__  = 'gio_hang'
+    ma_gio_hang = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    ma_nguoi_dung = Column(Integer, ForeignKey('nguoi_dung.ma_nguoi_dung'), index=True)
+    ma_san_pham = Column(Integer, ForeignKey('san_pham.ma_san_pham'), index=True)
+    so_luong = Column(Integer, default= 1, nullable=False)
+    ngay_them = Column(DateTime, default=func.now())
 
-
+    nguoiDung = relationship('NguoiDung', back_populates="gioHang")
+    sanPham = relationship('SanPham', back_populates="gioHang")
