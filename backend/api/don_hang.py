@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from decimal import Decimal
 from typing import Optional
 from sqlalchemy.orm import Session
-from models.models import DonHang, NguoiDung
+from models.models import DonHang, NguoiDung, ThongBao
 from enum import Enum
 from fastapi.security import OAuth2PasswordBearer
 import jwt
@@ -46,7 +46,16 @@ class DonHangCreate(BaseModel):
     class Config:
         from_attributes = True
 
-    
+
+# Tạo thông báo cho người dùng
+def create_thong_bao(ma_nguoi_dung: int, noi_dung: str, db: Session):
+    thong_bao = ThongBao(
+        ma_nguoi_dung=ma_nguoi_dung,
+        noi_dung=noi_dung,
+        loai_thong_bao="Riengtu",  # Thông báo riêng tư
+    )
+    db.add(thong_bao)
+    db.commit()
 
 # API: Lấy danh sách đơn hàng của người dùng
 @router.get("/donhang")
@@ -94,6 +103,10 @@ def create_donhang(
     db.add(new_donhang)
     db.commit()
     db.refresh(new_donhang)
+
+    # Gửi thông báo khi đơn hàng được tạo
+    create_thong_bao(ma_nguoi_dung, f"Đơn hàng của bạn đã được tạo thành công và đang xử lý.", db)
+    
     return DonHangCreate.from_orm(new_donhang)
 
 
@@ -119,6 +132,13 @@ def update_donhang(
 
     db.commit()
     db.refresh(donhang)
+
+    # Gửi thông báo về trạng thái đơn hàng sau khi cập nhật
+    if donhang.trang_thai == "Hoan_thanh":
+        create_thong_bao(ma_nguoi_dung, f"Đơn hàng của bạn đã được giao thành công.", db)
+    elif donhang.trang_thai == "Da_huy":
+        create_thong_bao(ma_nguoi_dung, f"Đơn hàng của bạn đã bị hủy.", db)
+
     return DonHangCreate.from_orm(donhang)
 
 # API: Xóa đơn hàng
@@ -139,4 +159,8 @@ def delete_donhang(
 
     db.delete(donhang)
     db.commit()
+
+    # Gửi thông báo khi đơn hàng bị hủy
+    create_thong_bao(ma_nguoi_dung, f"Đơn hàng của bạn đã bị hủy.", db)
+
     return {"message": "Đơn hàng đã được hủy thành công"}
