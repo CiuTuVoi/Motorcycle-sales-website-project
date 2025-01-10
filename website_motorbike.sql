@@ -508,23 +508,22 @@ INSERT INTO `gio_hang` (`ma_nguoi_dung`, `ma_san_pham`, `so_luong`) VALUES
 -- Table structure for table `thong_bao`
 --
 
-CREATE TABLE `thong_bao` (
-  `ma_thong_bao` int(11) NOT NULL,
-  `ma_nguoi_dung` int(11) NOT NULL,
-  `noi_dung` text DEFAULT NULL,
-  `da_doc` enum('đã đọc','chưa đọc') DEFAULT 'chưa đọc'
+CREATE TABLE thong_bao (
+  ma_thong_bao int(11) NOT NULL,
+  ma_nguoi_dung int(11) NOT NULL,
+  noi_dung text DEFAULT NULL,
+  da_doc enum('đã đọc','chưa đọc') DEFAULT 'chưa đọc',
+  loai_thong_bao enum('Riengtu', 'Khuyenmai') NOT NULL DEFAULT 'Riengtu'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
 -- Dumping data for table `thong_bao`
---
+INSERT INTO thong_bao (ma_thong_bao, ma_nguoi_dung, noi_dung, da_doc, loai_thong_bao) VALUES
+(1, 4, 'Dơn Hàng của bạn đã được sử lý', 'đã đọc', 'Riengtu'),
+(2, 4, 'Bạn đã thanh toán thành công', 'đã đọc', 'Riengtu'),
+(3, 4, 'Cảm ơn bạn đã ủng hộ', 'đã đọc', 'Riengtu'),
+(5, 5, 'Đơn Hàng của bạn đang được sử lý', 'chưa đọc', 'Riengtu'),
+(6, 4, 'Đơn hàng của bạn đang được sử lý', 'chưa đọc', 'Riengtu');
 
-INSERT INTO `thong_bao` (`ma_thong_bao`, `ma_nguoi_dung`, `noi_dung`, `da_doc`) VALUES
-(1, 4, 'Dơn Hàng của bạn đã được sử lý', 'đã đọc'),
-(2, 4, 'Bạn đã thanh toán thành công', 'đã đọc'),
-(3, 4, 'Cảm ơn bạn đã ủng hộ', 'đã đọc'),
-(5, 5, 'Đơn Hàng của bạn đang được sử lý', 'chưa đọc'),
-(6, 4, 'ĐƠn hàng của bạn đang được sử lý', 'chưa đọc');
 
 -- --------------------------------------------------------
 
