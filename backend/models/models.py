@@ -34,8 +34,6 @@ class NguoiDung(Base):
     phanHoi = relationship('PhanHoi', back_populates="nguoiDung")
     gioHang = relationship('GioHang', back_populates="nguoiDung")
 
-
-
 class SanPham(Base):
     __tablename__ = 'san_pham'
     ma_san_pham = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -172,9 +170,9 @@ class ThongBao(Base):
     ma_nguoi_dung = Column(Integer, ForeignKey('nguoi_dung.ma_nguoi_dung'))
     noi_dung = Column(String(255))
     da_doc = Column(Boolean, default=False)  # Kiểm tra nếu thông báo đã được đọc
+    loai_thong_bao = Column(Enum('Khuyenmai', 'Riengtu', name='loai_thong_bao'), default='Riengtu')  # Loại thông báo
 
     nguoiDung = relationship('NguoiDung', back_populates="thongBao")
-
 
 class PhanHoi(Base):
     __tablename__ = 'phan_hoi'
