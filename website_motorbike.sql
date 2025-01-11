@@ -27,6 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `danh_gia`
 --
 
+DROP TABLE IF EXISTS danh_gia;
 CREATE TABLE `danh_gia` (
   `ma_danh_gia` int(11) NOT NULL,
   `ma_san_pham` int(11) NOT NULL,
@@ -50,7 +51,7 @@ INSERT INTO `danh_gia` (`ma_danh_gia`, `ma_san_pham`, `ma_nguoi_dung`, `so_sao`,
 --
 -- Table structure for table `don_hang`
 --
-
+DROP TABLE IF EXISTS don_hang;
 CREATE TABLE `don_hang` (
   `ma_don_hang` int(11) NOT NULL,
   `ma_nguoi_dung` int(11) NOT NULL,
@@ -76,7 +77,7 @@ INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `ma_san_pham`, `so_luong
 --
 -- Table structure for table `kho_hang`
 --
-
+DROP TABLE IF EXISTS kho_hang;
 CREATE TABLE `kho_hang` (
   `ma_san_pham` int(11) NOT NULL,
   `so_luong` int(11) DEFAULT NULL
@@ -141,7 +142,7 @@ INSERT INTO `kho_hang` (`ma_san_pham`, `so_luong`) VALUES
 --
 -- Table structure for table `khuyen_mai`
 --
-
+DROP TABLE IF EXISTS khuyen_mai;
 CREATE TABLE `khuyen_mai` (
   `ma_khuyen_mai` int(11) NOT NULL,
   `ten_khuyen_mai` varchar(255) NOT NULL,
@@ -173,13 +174,14 @@ INSERT INTO `khuyen_mai` (`ma_khuyen_mai`, `ten_khuyen_mai`, `mo_ta`, `muc_giam`
 --
 -- Table structure for table `lich_su_giao_dich`
 --
-
+DROP TABLE IF EXISTS lich_su_giao_dich;
 CREATE TABLE `lich_su_giao_dich` (
   `ma_giao_dich` int(11) NOT NULL,
   `ma_don_hang` int(11) NOT NULL,
-  `loai_thanh_toan` enum('STK','TienMat') NOT NULL,
+  `ma_nguoi_dung` int(11) NOT NULL,
+  `loai_thanh_toan` enum('STK','TienMat') DEFAULT 'TienMat',
   `tong_tien` int(11) DEFAULT NULL,
-  `trang_thai_giao_hang` enum('DangGiao','HoanThanh','DaHuy') NOT NULL,
+  `trang_thai_giao_hang` enum('Hoan_thanh','Da_huy') NOT NULL,
   `thoi_gian_tao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -187,16 +189,16 @@ CREATE TABLE `lich_su_giao_dich` (
 -- Dumping data for table `lich_su_giao_dich`
 --
 
-INSERT INTO `lich_su_giao_dich` (`ma_giao_dich`, `ma_don_hang`, `loai_thanh_toan`, `tong_tien`, `trang_thai_giao_hang`, `thoi_gian_tao`) VALUES
-(1, 1, 'STK', 7093018, 'HoanThanh', '2025-01-05 07:05:53'),
-(2, 2, 'STK', 73921091, 'DangGiao', '2025-01-05 07:05:53');
+INSERT INTO `lich_su_giao_dich` (`ma_giao_dich`, `ma_don_hang`, `ma_nguoi_dung`, `loai_thanh_toan`, `tong_tien`, `trang_thai_giao_hang`, `thoi_gian_tao`) VALUES
+(1, 1, 4, 'STK', 7093018, 'Hoan_thanh', '2025-01-05 07:05:53'),
+(2, 2, 4, 'TienMat', 73921091, 'Hoan_thanh', '2025-01-05 07:05:53');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `loai_xe`
 --
-
+DROP TABLE IF EXISTS loai_xe;
 CREATE TABLE `loai_xe` (
   `ma_loai_xe` int(11) NOT NULL,
   `loai_xe` varchar(225) NOT NULL
@@ -219,7 +221,7 @@ INSERT INTO `loai_xe` (`ma_loai_xe`, `loai_xe`) VALUES
 --
 -- Table structure for table `mau_san_pham`
 --
-
+DROP TABLE IF EXISTS mau_san_pham;
 CREATE TABLE `mau_san_pham` (
   `ma_hinh_anh` int(11) NOT NULL,
   `ma_san_pham` int(11) NOT NULL,
@@ -326,7 +328,7 @@ INSERT INTO `mau_san_pham` (`ma_hinh_anh`, `ma_san_pham`, `mau_sac`, `anh_1`, `a
 --
 -- Table structure for table `nguoi_dung`
 --
-
+DROP TABLE IF EXISTS nguoi_dung;
 CREATE TABLE `nguoi_dung` (
   `ma_nguoi_dung` int(11) NOT NULL,
   `ten_dang_nhap` varchar(255) NOT NULL,
@@ -360,7 +362,7 @@ INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ten_dang_nhap`, `mat_khau`, `ho_ten`
 --
 -- Table structure for table `phan_hoi`
 --
-
+DROP TABLE IF EXISTS phan_hoi;
 CREATE TABLE `phan_hoi` (
   `ma_phan_hoi` int(11) NOT NULL,
   `ma_danh_gia` int(11) NOT NULL,
@@ -382,7 +384,7 @@ INSERT INTO `phan_hoi` (`ma_phan_hoi`, `ma_danh_gia`, `ma_nguoi_dung`, `noi_dung
 --
 -- Table structure for table `san_pham`
 --
-
+DROP TABLE IF EXISTS san_pham;
 CREATE TABLE `san_pham` (
   `ma_san_pham` int(11) NOT NULL,
   `ma_loai_xe` int(11) NOT NULL,
@@ -452,7 +454,7 @@ INSERT INTO `san_pham` (`ma_san_pham`, `ma_loai_xe`, `ten_san_pham`, `hang_xe`, 
 --
 -- Table structure for table `san_pham_khuyen_mai`
 --
-
+DROP TABLE IF EXISTS san_pham_khuyen_mai;
 CREATE TABLE `san_pham_khuyen_mai` (
   `ma_san_pham` int(11) NOT NULL,
   `ma_khuyen_mai` int(11) NOT NULL
@@ -479,27 +481,25 @@ INSERT INTO `san_pham_khuyen_mai` (`ma_san_pham`, `ma_khuyen_mai`) VALUES
 --
 -- Table structure for table `gio_hang`
 --
-
+DROP TABLE IF EXISTS gio_hang;
 CREATE TABLE `gio_hang` (
-    `ma_gio_hang` INT AUTO_INCREMENT PRIMARY KEY,
-    `ma_nguoi_dung` INT NOT NULL,
-    `ma_san_pham` INT NOT NULL,
+    `ma_gio_hang` int(11) NOT NULL,
+    `ma_nguoi_dung` int(11) NOT NULL,
+    `ma_san_pham` INT(11) NOT NULL,
     `so_luong` INT DEFAULT 1,
-    `ngay_them` timestamp NOT NULL DEFAULT current_timestamp(),
-    FOREIGN KEY (ma_nguoi_dung) REFERENCES nguoi_dung(ma_nguoi_dung),
-    FOREIGN KEY (ma_san_pham) REFERENCES san_pham(ma_san_pham)
+    `ngay_them` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `san_pham_khuyen_mai`
 --
 
-INSERT INTO `gio_hang` (`ma_nguoi_dung`, `ma_san_pham`, `so_luong`) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 3, 1),
-(4, 4, 1),
-(4, 10, 1);
+INSERT INTO `gio_hang` (`ma_gio_hang`, `ma_nguoi_dung`, `ma_san_pham`, `so_luong`) VALUES
+(1, 1, 1, 1),
+(2, 2, 2, 1),
+(3, 3, 3, 1),
+(4, 4, 4, 1),
+(5, 4, 10, 1);
 
 
 -- --------------------------------------------------------
@@ -507,7 +507,7 @@ INSERT INTO `gio_hang` (`ma_nguoi_dung`, `ma_san_pham`, `so_luong`) VALUES
 --
 -- Table structure for table `thong_bao`
 --
-
+DROP TABLE IF EXISTS thong_bao;
 CREATE TABLE thong_bao (
   ma_thong_bao int(11) NOT NULL,
   ma_nguoi_dung int(11) NOT NULL,
@@ -530,7 +530,7 @@ INSERT INTO thong_bao (ma_thong_bao, ma_nguoi_dung, noi_dung, da_doc, loai_thong
 --
 -- Table structure for table `thong_so_ky_thuat`
 --
-
+DROP TABLE IF EXISTS thong_so_ky_thuat;
 CREATE TABLE `thong_so_ky_thuat` (
   `ma_thong_so` int(11) NOT NULL,
   `ma_san_pham` int(11) NOT NULL,
@@ -647,7 +647,8 @@ ALTER TABLE `khuyen_mai`
 --
 ALTER TABLE `lich_su_giao_dich`
   ADD PRIMARY KEY (`ma_giao_dich`),
-  ADD KEY `ma_don_hang` (`ma_don_hang`);
+  ADD KEY `ma_don_hang` (`ma_don_hang`),
+  ADD KEY `ma_nguoi_dung` (`ma_nguoi_dung`);
 
 --
 -- Indexes for table `loai_xe`
@@ -703,6 +704,15 @@ ALTER TABLE `thong_bao`
 ALTER TABLE `thong_so_ky_thuat`
   ADD PRIMARY KEY (`ma_thong_so`),
   ADD KEY `ma_san_pham` (`ma_san_pham`);
+  
+--
+-- Indexes for table `gio_hang`
+--
+
+ALTER TABLE `gio_hang`
+  ADD PRIMARY KEY (`ma_gio_hang`),
+  ADD KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
+  ADD KEY `ma_san_pham` (`ma_san_pham`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -751,6 +761,12 @@ ALTER TABLE `thong_so_ky_thuat`
   MODIFY `ma_thong_so` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
+-- AUTO_INCREMENT for table `gio_hang`
+--
+ALTER TABLE `gio_hang`
+  MODIFY `ma_gio_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -778,8 +794,8 @@ ALTER TABLE `kho_hang`
 -- Constraints for table `lich_su_giao_dich`
 --
 ALTER TABLE `lich_su_giao_dich`
-  ADD CONSTRAINT `lich_su_giao_dich_ibfk_1` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`) ON DELETE CASCADE;
-
+  ADD CONSTRAINT `lich_su_giao_dich_ibfk_1` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_ma_nguoi_dung` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`) ON DELETE CASCADE;
 --
 -- Constraints for table `mau_san_pham`
 --
@@ -812,6 +828,13 @@ ALTER TABLE `san_pham_khuyen_mai`
 ALTER TABLE `thong_bao`
   ADD CONSTRAINT `fk_thong_bao` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`);
 
+--
+-- Constraints for table `gio_hang`
+--
+
+ALTER TABLE `gio_hang`
+  ADD CONSTRAINT `fk_nguoi_dung` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
+  ADD CONSTRAINT `fk_san_pham` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 --
 -- Constraints for table `thong_so_ky_thuat`
 --
