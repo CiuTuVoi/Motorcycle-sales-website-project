@@ -33,6 +33,7 @@ class NguoiDung(Base):
     thongBao = relationship('ThongBao', back_populates="nguoiDung")
     phanHoi = relationship('PhanHoi', back_populates="nguoiDung")
     gioHang = relationship('GioHang', back_populates="nguoiDung")
+    lichSuGiaoDich = relationship('LichSuGiaoDich', back_populates="nguoiDung")
 
 class SanPham(Base):
     __tablename__ = 'san_pham'
@@ -137,11 +138,13 @@ class LichSuGiaoDich(Base):
     __tablename__ = 'lich_su_giao_dich'
     ma_giao_dich = Column(Integer, primary_key=True, index=True, autoincrement=True)
     ma_don_hang = Column(Integer, ForeignKey('don_hang.ma_don_hang'))
-    loai_thanh_toan = Column(Enum('STK', 'TienMat', name = 'loai_thanh_toan'), nullable=False )
-    trang_thai_giao_hang = Column(Enum('DangGiao', 'HoanThanh', 'DaHuy', name = 'trang_thai_giao_hang'), nullable=False)
+    ma_nguoi_dung = Column(Integer, ForeignKey('nguoi_dung.ma_nguoi_dung'))
+    loai_thanh_toan = Column(Enum('STK', 'TienMat', name = 'loai_thanh_toan'), default = 'TienMat', nullable=False )
+    trang_thai_giao_hang = Column(Enum('Hoan_thanh', 'Da_huy', name = 'trang_thai_giao_hang'), nullable=False)
     thoi_gian_tao = Column(DateTime, default=func.now(), onupdate=func.now())
 
     donHang = relationship('DonHang', back_populates="lichSuGiaoDich")
+    nguoiDung = relationship('NguoiDung', back_populates="lichSuGiaoDich")
 
 class SanPhamKhuyenMai(Base):
     __tablename__ = 'san_pham_khuyen_mai'
