@@ -12,6 +12,7 @@ from api.don_hang import router as donhang_router # Import router từ don_hang.
 from api.anh_xe import router as anhxa_router # Import router từ anh_xe.py
 from api.gio_hang import router as giohang_router # Import router từ gio_hang.py
 from api.search import router as search_router # Import router từ search.py
+from api.cap_nhat_gia_khuyen_mai import router as capnhatgia_router # Import router từ cap_nhat_gia_khuyen_mai.py 
 
 import sys
 import os
@@ -34,3 +35,4 @@ app.include_router(donhang_router)
 app.include_router(anhxa_router)
 app.include_router(giohang_router)
 app.include_router(search_router)
+app.include_router(capnhatgia_router)
