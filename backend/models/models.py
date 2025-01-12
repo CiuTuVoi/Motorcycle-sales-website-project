@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey,Boolean, Text, DateTime, func, DECIMAL, Enum, JSON
+from sqlalchemy import Column, Integer, String, ForeignKey,Boolean, Text, Date, func, DECIMAL, Enum, JSON, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from models.database import Base
@@ -41,7 +41,8 @@ class SanPham(Base):
     ma_loai_xe = Column(Integer, ForeignKey('loai_xe.ma_loai_xe'))
     ten_san_pham = Column(String(255))
     hang_xe = Column(String(255))
-    gia = Column(Integer)
+    gia = Column(DECIMAL(15, 2), nullable=False)  # Giá gốc, không thể để trống
+    gia_khuyen_mai = Column(DECIMAL(15, 2), nullable=True)  # Giá khuyến mại, có thể để trống
     anh_dai_dien = Column(String(255))
     ngay_tao = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -160,8 +161,8 @@ class KhuyenMai(Base):
     ten_khuyen_mai = Column(String(255))
     mo_ta = Column(Text)
     muc_giam = Column(DECIMAL(10,2))
-    ngay_bat_dau = Column(DateTime)
-    ngay_ket_thuc = Column(DateTime)
+    ngay_bat_dau = Column(Date)
+    ngay_ket_thuc = Column(Date)
     ngay_tao = Column(DateTime, default=func.now(), onupdate=func.now())
 
     sanPhamKhuyenMai = relationship('SanPhamKhuyenMai', back_populates="khuyenMai")
