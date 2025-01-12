@@ -32,11 +32,13 @@ class ProductCreate(BaseModel):
     ma_loai_xe: int
     ten_san_pham: str
     hang_xe: str
-    gia: int
+    gia: float  # Giá gốc
+    gia_khuyen_mai: float | None = None  # Giá khuyến mại (có thể trống)
     anh_dai_dien: str
 
     class Config:
         from_attributes = True
+
 
 
 # API: Lấy danh sách sản phẩm (cho tất cả người dùng, không yêu cầu đăng nhập)
@@ -47,33 +49,32 @@ def get_products(db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Không tìm thấy sản phẩm")
     return products
 
+
 # API: Thêm sản phẩm mới (chỉ cho admin)
 @router.post("/products", response_model=ProductCreate)
 def create_product(
     product_create: ProductCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin"))  # Chỉ cho admin
 ):
     # Kiểm tra nếu sản phẩm đã tồn tại
-    existing_product = db.query(SanPham).filter(SanPham.ma_san_pham == product_create.ma_san_pham).first()
+    existing_product = db.query(SanPham).filter(SanPham.ten_san_pham == product_create.ten_san_pham).first()
     if existing_product:
         raise HTTPException(status_code=400, detail="Sản phẩm đã tồn tại")
 
-    # Tạo đối tượng Product mới từ dữ liệu nhận được
+    # Tạo sản phẩm mới
     new_product = SanPham(
         ma_loai_xe=product_create.ma_loai_xe,
         ten_san_pham=product_create.ten_san_pham,
         hang_xe=product_create.hang_xe,
         gia=product_create.gia,
-        anh_dai_dien=product_create.anh_dai_dien  # Lưu mảng tên hình ảnh vào cơ sở dữ liệu
+        gia_khuyen_mai=product_create.gia_khuyen_mai,
+        anh_dai_dien=product_create.anh_dai_dien
     )
 
-    # Lưu sản phẩm vào cơ sở dữ liệu
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
-
-    # Trả về sản phẩm mới tạo
     return ProductCreate.from_orm(new_product)
 
 
@@ -83,26 +84,23 @@ def update_product(
     product_id: int,
     product_update: ProductCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin"))  # Chỉ cho admin
 ):
-    # Tìm sản phẩm trong cơ sở dữ liệu
+    # Tìm sản phẩm
     product = db.query(SanPham).filter(SanPham.ma_san_pham == product_id).first()
-    
     if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-    
-    # Cập nhật thông tin sản phẩm
+        raise HTTPException(status_code=404, detail="Không tìm thấy sản phẩm")
+
+    # Cập nhật thông tin
     product.ma_loai_xe = product_update.ma_loai_xe
     product.ten_san_pham = product_update.ten_san_pham
     product.hang_xe = product_update.hang_xe
     product.gia = product_update.gia
+    product.gia_khuyen_mai = product_update.gia_khuyen_mai
     product.anh_dai_dien = product_update.anh_dai_dien
 
-    # Commit thay đổi vào cơ sở dữ liệu
     db.commit()
     db.refresh(product)
-
-    # Trả về sản phẩm sau khi cập nhật
     return ProductCreate.from_orm(product)
 
 
