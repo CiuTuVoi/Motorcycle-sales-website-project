@@ -20,14 +20,24 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 def verify_role(required_role: str):
     def role_checker(token: str = Depends(oauth2_scheme)):
         try:
+            # Giải mã token để lấy thông tin người dùng
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            
+            # Lấy vai trò từ token
             user_role = payload.get("role")
+            
+            if user_role is None:
+                raise HTTPException(status_code=401, detail="Không có vai trò trong token")
+            
+            # Kiểm tra vai trò người dùng
             if user_role != required_role:
-                raise HTTPException(status_code=403, detail="Access denied")
+                raise HTTPException(status_code=403, detail="Access denied: Không đủ quyền truy cập")
+        
         except jwt.ExpiredSignatureError:
             raise HTTPException(status_code=401, detail="Token đã hết hạn")
         except jwt.InvalidTokenError:
             raise HTTPException(status_code=401, detail="Token không hợp lệ")
+        
     return role_checker
 
 class VaiTro(str, Enum):
