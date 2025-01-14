@@ -1,21 +1,17 @@
-import Home from "./pages/home/Home.tsx";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-  Outlet,
-  Routes,
-} from "react-router-dom";
-import Users from "./pages/users/Users.tsx";
-import Products from "./pages/products/products";
+import Home from "./pages/home/Home";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import Users from "./pages/users/Users";
+import Products from "./pages/products/Products";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/Navbar";
 import Menu from "./components/menu/Menu";
 import Login from "./pages/login/Login";
 import "./styles/global.scss";
-import User from "./pages/user/User.tsx";
-import Product from "./pages/product/Product.tsx";
+import User from "./pages/user/User";
+import Product from "./pages/product/Product";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   const Layout = () => {
@@ -27,7 +23,9 @@ function App() {
             <Menu />
           </div>
           <div className="contentContainer">
-            <Outlet />
+            <QueryClientProvider client={queryClient}>
+              <Outlet />
+            </QueryClientProvider>
           </div>
         </div>
         <Footer />
@@ -45,12 +43,12 @@ function App() {
           element: <Home />,
         },
         {
-          path: "/products",
-          element: <Products />,
-        },
-        {
           path: "/users",
           element: <Users />,
+        },
+        {
+          path: "/products",
+          element: <Products />,
         },
         {
           path: "/users/:id",

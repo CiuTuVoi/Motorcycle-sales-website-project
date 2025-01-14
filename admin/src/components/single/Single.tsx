@@ -1,13 +1,13 @@
-import "./single.scss";
 import {
-  LineChart,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
+import "./single.scss";
 
 type Props = {
   id: number;
@@ -15,8 +15,8 @@ type Props = {
   title: string;
   info: object;
   chart?: {
-    dataKey: { name: string; color: string }[];
-    data: Object[];
+    dataKeys: { name: string; color: string }[];
+    data: object[];
   };
   activities?: { time: string; text: string }[];
 };
@@ -27,7 +27,7 @@ const Single = (props: Props) => {
       <div className="view">
         <div className="info">
           <div className="topInfo">
-            {props.img && <img src="props.img" alt="" />}
+            {props.img && <img src={props.img} alt="" />}
             <h1>{props.title}</h1>
             <button>Update</button>
           </div>
@@ -59,7 +59,7 @@ const Single = (props: Props) => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                {props.chart.dataKey.map((dataKey) => (
+                {props.chart.dataKeys.map((dataKey) => (
                   <Line
                     type="monotone"
                     dataKey={dataKey.name}
