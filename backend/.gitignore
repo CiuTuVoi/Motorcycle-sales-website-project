@@ -45,6 +45,3 @@ htmlcov/
 
 # Temporary files
 *.swp
-
-dump.rdb
-
