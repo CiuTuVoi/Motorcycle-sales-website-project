@@ -1,0 +1,220 @@
+.container {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  padding: 0;
+  margin: 0;
+
+  .container-content {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .product {
+    background-color: #fff;
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  .product-detail {
+    display: flex;
+    gap: 20px;
+
+    .main-slide {
+      width: 50%;
+      max-height: 400px;
+
+      .carousel .slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      img {
+        width: 100%;
+        object-fit: contain;
+        border-radius: 10px;
+      }
+    }
+
+    .content-wrapper {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      h3 {
+        font-size: 28px;
+        color: rgba(65, 88, 208, 1);;
+        font-weight: 600;
+      }
+
+      .price {
+        .new-price {
+          font-size: 24px;
+          color: red;
+          font-weight: bold;
+        }
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+        li {
+          font-size: 16px;
+          margin-top: 20px;
+          color: black;
+        }
+      }
+
+      .add-number {
+        margin-top: 20px;
+        list-style: none;
+        display: flex;
+        align-items: center;
+
+        .input-wrapper {
+          input {
+            width: 50px;
+            height: 35px;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 0 10px;
+            transition: border-color 0.3s;
+
+            &:focus {
+              outline: none;
+              border-color: rgba(65, 88, 208, 1);
+            }
+          }
+        }
+
+        button {
+          margin-top: 10px;
+          background-color: rgba(65, 88, 208, 1);
+          color: #fff;
+          padding: 10px;
+          font-size: 14px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.3s;
+
+          &:hover {
+            background-color: rgba(65, 88, 208, 0.8);
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  }
+
+  .review-container {
+    margin-top: 100px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    h3 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: rgba(65, 88, 208, 1);;
+    }
+
+    .review-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      .rating {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        label {
+          font-size: 16px;
+          color: #555;
+        }
+
+        .stars {
+          display: flex;
+          gap: 5px;
+
+          .star {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s;
+
+            &.active {
+              color: rgba(65, 88, 208, 1); /* Màu sao khi được chọn */
+              transform: scale(1.2);
+            }
+
+            &:hover {
+              color: rgba(65, 88, 208, 0.8); /* Màu sao khi hover */
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+
+      textarea {
+        width: 100%;
+        height: 120px;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        resize: none;
+        transition: border-color 0.3s;
+
+        &:focus {
+          outline: none;
+          border-color: rgba(65, 88, 208, 1);
+        }
+
+        &::placeholder {
+          color: #888;
+        }
+      }
+
+      button {
+        padding: 12px 20px;
+        font-size: 16px;
+        background-color: rgba(65, 88, 208, 1);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+
+        &:hover {
+          background-color: rgba(65, 88, 208, 0.8);
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  margin-top: 40px;
+  border-radius: 10px 10px 0 0;
+
+  p {
+    margin: 0;
+  }
+}

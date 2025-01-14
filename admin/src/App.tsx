@@ -35,7 +35,7 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/admin/",
       element: <Layout />,
       children: [
         {
