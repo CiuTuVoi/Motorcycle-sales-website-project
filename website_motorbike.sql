@@ -59,6 +59,7 @@ CREATE TABLE `don_hang` (
   `so_luong` int(11) DEFAULT NULL,
   `don_gia` decimal(15,2) DEFAULT NULL,
   `tong_tien` decimal(15,2) NOT NULL,
+  `phuong_thuc_thanh_toan` enum('Thanh_toan_tai_cua_hang', 'Thanh_toan_tai_nha_rieng') DEFAULT 'Thanh_toan_tai_cua_hang',
   `trang_thai` enum('Dang_xu_ly','Hoan_thanh','Da_huy') DEFAULT 'Dang_xu_ly',
   `ngay_tao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -67,10 +68,10 @@ CREATE TABLE `don_hang` (
 -- Dumping data for table `don_hang`
 --
 
-INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `ma_san_pham`, `so_luong`, `don_gia`, `tong_tien`, `trang_thai`, `ngay_tao`) VALUES
-(1, 4, 2, 1, 8344727.00, 7093018.00, 'Hoan_thanh', '2025-01-05 06:59:34'),
-(2, 4, 3, 2, 73921091.00, 118273746.00, 'Hoan_thanh', '2025-01-05 07:01:19'),
-(3, 5, 2, 1, 8344727.00, 7093018.00, 'Dang_xu_ly', '2025-01-05 07:02:06');
+INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `ma_san_pham`, `so_luong`, `don_gia`, `tong_tien`, `phuong_thuc_thanh_toan`, `trang_thai`, `ngay_tao`) VALUES
+(1, 4, 2, 1, 8344727.00, 7093018.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 06:59:34'),
+(2, 4, 3, 2, 73921091.00, 118273746.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:01:19'),
+(3, 5, 2, 1, 8344727.00, 7093018.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 07:02:06');
 
 -- --------------------------------------------------------
 
@@ -179,7 +180,7 @@ CREATE TABLE `lich_su_giao_dich` (
   `ma_giao_dich` int(11) NOT NULL,
   `ma_don_hang` int(11) NOT NULL,
   `ma_nguoi_dung` int(11) NOT NULL,
-  `loai_thanh_toan` enum('STK','TienMat') DEFAULT 'TienMat',
+  `loai_thanh_toan` enum('Thanh_toan_tai_cua_hang','Thanh_toan_tai_nha_rieng') DEFAULT 'Thanh_toan_tai_cua_hang',
   `tong_tien` int(11) DEFAULT NULL,
   `trang_thai_giao_hang` enum('Hoan_thanh','Da_huy') NOT NULL,
   `thoi_gian_tao` timestamp NOT NULL DEFAULT current_timestamp()
@@ -190,8 +191,8 @@ CREATE TABLE `lich_su_giao_dich` (
 --
 
 INSERT INTO `lich_su_giao_dich` (`ma_giao_dich`, `ma_don_hang`, `ma_nguoi_dung`, `loai_thanh_toan`, `tong_tien`, `trang_thai_giao_hang`, `thoi_gian_tao`) VALUES
-(1, 1, 4, 'STK', 7093018, 'Hoan_thanh', '2025-01-05 07:05:53'),
-(2, 2, 4, 'TienMat', 73921091, 'Hoan_thanh', '2025-01-05 07:05:53');
+(1, 1, 4, 'Thanh_toan_tai_cua_hang', 7093018, 'Hoan_thanh', '2025-01-05 07:05:53'),
+(2, 2, 4, 'Thanh_toan_tai_nha_rieng', 73921091, 'Hoan_thanh', '2025-01-05 07:05:53');
 
 -- --------------------------------------------------------
 
