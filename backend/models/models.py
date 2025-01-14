@@ -173,7 +173,7 @@ class ThongBao(Base):
     ma_thong_bao = Column(Integer, primary_key=True, index=True, autoincrement=True)
     ma_nguoi_dung = Column(Integer, ForeignKey('nguoi_dung.ma_nguoi_dung'))
     noi_dung = Column(String(255))
-    da_doc = Column(Boolean, default=False)  # Kiểm tra nếu thông báo đã được đọc
+    da_doc = Column(Enum('đã đọc', 'chưa đọc', name='da_doc'), default='chưa đọc') 
     loai_thong_bao = Column(Enum('Khuyenmai', 'Riengtu', name='loai_thong_bao'), default='Riengtu')  # Loại thông báo
 
     nguoiDung = relationship('NguoiDung', back_populates="thongBao")

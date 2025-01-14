@@ -523,8 +523,8 @@ INSERT INTO thong_bao (ma_thong_bao, ma_nguoi_dung, noi_dung, da_doc, loai_thong
 (1, 4, 'Dơn Hàng của bạn đã được sử lý', 'đã đọc', 'Riengtu'),
 (2, 4, 'Bạn đã thanh toán thành công', 'đã đọc', 'Riengtu'),
 (3, 4, 'Cảm ơn bạn đã ủng hộ', 'đã đọc', 'Riengtu'),
-(5, 5, 'Đơn Hàng của bạn đang được sử lý', 'chưa đọc', 'Riengtu'),
-(6, 4, 'Đơn hàng của bạn đang được sử lý', 'chưa đọc', 'Riengtu');
+(4, 5, 'Đơn Hàng của bạn đang được sử lý', 'chưa đọc', 'Riengtu'),
+(5, 4, 'Đơn hàng của bạn đang được sử lý', 'chưa đọc', 'Riengtu');
 
 
 -- --------------------------------------------------------
@@ -768,6 +768,8 @@ ALTER TABLE `thong_so_ky_thuat`
 ALTER TABLE `gio_hang`
   MODIFY `ma_gio_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
+ALTER TABLE `thong_bao`
+  MODIFY `ma_thong_bao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- Constraints for dumped tables
 --
