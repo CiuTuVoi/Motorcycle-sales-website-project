@@ -9,13 +9,15 @@ import DropdownMenu from "../DropdowMenu/dropoutMenu";
 import "./Header.scss";
 import { connect } from "react-redux";
 import { selectCartQuantity } from "../redux/cartSlice";
-
-const data = require("../../data/dataproduct.json");
+import { selectUserName, clearUserName } from "../redux/userSlide";
+import Cookies from "js-cookie"; // Để lưu trữ session
+import SearchComponent from "../search/SearchComponent";
 
 const blandItem = [
   { label: "Yamaha" },
   { label: "Honda" },
   { label: "Suzuki" },
+  { label: "Sym"}
 ];
 
 const blockvidision = [
@@ -31,22 +33,13 @@ const skin = [
 ];
 
 class Layout extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selecedCategory: "honda",
-    };
-  }
-
-  handleCategoryChange = (category) => {
-    this.setState({ selecedCategory: category });
+  handleLogout = () => {
+    Cookies.remove("access_token"); // Xóa token khi đăng xuất
+    this.props.clearUserName(); // Xóa trạng thái tên người dùng trong Redux
   };
 
   render() {
-    const { selecedCategory } = this.state;
-    const { cartQuantity } = this.props;
-
-    const fitleData = data.filter((item) => item.category === selecedCategory);
+    const { cartQuantity, userName } = this.props;
 
     return (
       <div className="container">
@@ -63,14 +56,7 @@ class Layout extends Component {
 
             {/* Search Section */}
             <div className="search">
-              <input
-                type="search"
-                placeholder="Tìm kiếm sản phẩm"
-                aria-label="search"
-              />
-              <div className="icon">
-                <FaSearch />
-              </div>
+              <SearchComponent/>
             </div>
 
             {/* Action Buttons Section */}
@@ -106,16 +92,30 @@ class Layout extends Component {
             {/* Favorites Button Section */}
             <div className="button-favorites">
               <button type="button">
+                <Link className="link-favorite" to="/favorite">
                 SP YÊU THÍCH
-                <FaHeart />
+                <i className="icon-favorite"><FaHeart /></i>
+                
+                </Link>
               </button>
             </div>
 
-            {/* Login/Signup */}
+            {/* Login/Logout Section */}
             <div className="login">
-              <Link to="/Login">Đăng nhập</Link>
-              <span> / </span>
-              <Link to="/Register">Đăng ký</Link>
+              {userName ? (
+                <>
+                  <span>Chào, {userName}</span>
+                  <button className="logout-button" onClick={this.handleLogout}>
+                    Đăng xuất
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/Login">Đăng nhập</Link>
+                  <span> / </span>
+                  <Link to="/Register">Đăng ký</Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -142,7 +142,12 @@ class Layout extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  cartQuantity: selectCartQuantity(state),
+  cartQuantity: selectCartQuantity(state), // Lấy số lượng giỏ hàng từ Redux
+  userName: selectUserName(state), // Lấy tên người dùng từ Redux
 });
 
-export default connect(mapStateToProps)(Layout);
+const mapDispatchToProps = {
+  clearUserName, // Action đăng xuất
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

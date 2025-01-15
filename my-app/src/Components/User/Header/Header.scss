@@ -14,14 +14,13 @@
 
       /* Logo Section */
       .logo {
-        h1{
-          img{
+        h1 {
+          img {
             width: 150px;
             transition: transform 0.3s ease-in-out;
 
-            &:hover{
+            &:hover {
               transform: scale(1);
-
             }
           }
         }
@@ -52,6 +51,31 @@
           transform: translateY(-50%);
           font-size: 18px;
           color: rgb(65, 88, 208);
+        }
+
+        /* Suggestions for Search */
+        .suggestions {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          max-height: 200px;
+          overflow-y: auto;
+          background-color: #fff;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          border-radius: 5px;
+          z-index: 10;
+
+          li {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+
+            &:hover {
+              background-color: #f5f5f5;
+            }
+          }
         }
       }
 
@@ -96,24 +120,23 @@
           color: #fff;
           cursor: pointer;
           font-size: 14px;
+          transition: transform 0.2s ease-in-out;
 
-          &:hover{
-            background-color: #fff;
-            color:rgb(65, 88, 208)
+          &:hover {
+            transform: scale(0.9);
+            background-color: rgb(65, 88, 208);
+            color: #fff;
           }
-          
         }
-        .link-cart{
+        .link-cart {
           color: #fff;
           text-decoration: none;
-          
-          
-          &:hover{
-            color:rgb(65, 88, 208);
-            
+
+          &:hover {
+            color: #fff;
           }
         }
-        .cart-count{
+        .cart-count {
           position: absolute;
           top: -10px;
           right: -10px;
@@ -128,10 +151,7 @@
           align-items: center;
           justify-content: center;
           box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-
-
         }
-        
       }
 
       /* Favorites Button Section */
@@ -140,18 +160,30 @@
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 20px;
+          padding: 10px 10px;
           border: 1.5px solid rgb(65, 88, 208);
           border-radius: 5px;
           background-color: rgb(65, 88, 208);
           color: #fff;
           cursor: pointer;
+          transition: transform 0.2s ease-in-out;
 
+          
           &:hover {
-            background-color: #fff;
+            transform: scale(0.9);
+            background-color: rgb(65, 88, 208);;
             color: rgb(65, 88, 208);
           }
         }
+        .link-favorite{
+          color: #fff;
+
+          .icon-favorite{
+            margin-left: 5px;
+            
+          }
+        }
+
       }
 
       /* Login/Signup Section */
@@ -183,51 +215,46 @@
       background-color: rgb(65, 88, 208);
       padding: 10px 0;
     }
-    
+
     .menu ul {
       display: flex;
       list-style: none;
       margin: 0;
       padding: 0;
-
-      
     }
-    .menu .no-drop{
+
+    .menu .no-drop {
       display: flex;
       text-align: center;
       justify-content: center;
       align-items: center;
 
-      li{
+      li {
         transition: transform 0.3s ease-in-out;
 
-        &:hover{
+        &:hover {
           transform: scale(1.2);
-  
         }
       }
-     
-
-      
     }
     .menu ul li {
       position: relative;
       margin: 0 15px;
     }
-    
+
     .menu ul li a {
       text-decoration: none;
       font-weight: bold;
       color: white;
       font-size: 16px;
       padding: 10px 15px;
-      transition: transform .3s ease-in-out;
+      transition: transform 0.3s ease-in-out;
     }
-    
+
     .menu ul li a:hover {
       transform: scale(1.2);
     }
-    
+
     .menu .dropdown-list {
       position: absolute;
       top: 100%;
@@ -239,24 +266,23 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       display: none;
     }
-    
+
     .menu .dropdown-list .dropdown-item {
       padding: 10px 20px;
     }
-    
+
     .menu .dropdown-list .dropdown-item a {
       color: white;
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    
+
     .menu .dropdown-list .dropdown-item a:hover {
-      color : red;
+      color: red;
     }
-    
+
     .menu .menu-item:hover .dropdown-list {
       display: block;
     }
-    
   }
 }

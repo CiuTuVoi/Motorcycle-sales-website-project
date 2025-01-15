@@ -1,0 +1,118 @@
+.product-card-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  
+    .product-card {
+      background-color: red;
+      border-radius: 10px;
+      max-width: 900px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+  
+      .product-img {
+        position: relative;
+        flex: 1;
+        background-color: #f9f9f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+  
+        img {
+          max-width: 100%;
+          max-height: 100%;
+          transition: transform 0.4s ease;
+  
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+  
+        .badge {
+          position: absolute;
+          top: 15px;
+          left: 15px;
+          background-color: red;
+          color: #fff;
+          font-size: 12px;
+          font-weight: bold;
+          padding: 5px 10px;
+          border-radius: 20px;
+          text-transform: uppercase;
+        }
+      }
+  
+      .product-detail {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+  
+        h3 {
+          color: #4160d0;
+          font-size: 24px;
+          margin-bottom: 10px;
+          line-height: 1.3;
+        }
+  
+        .price {
+          margin: 10px 0;
+  
+          .new-price {
+            font-size: 22px;
+            color: #e74c3c;
+            font-weight: bold;
+          }
+        }
+  
+        ul {
+          list-style: none;
+          margin: 15px 0;
+          padding: 0;
+  
+          li {
+            font-size: 16px;
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+  
+            &:before {
+              content: "🎁";
+              margin-right: 10px;
+            }
+          }
+        }
+  
+        button {
+          align-self: flex-start;
+          background-color: #4160d0;
+          color: #fff;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          font-size: 14px;
+          font-weight: bold;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+  
+          &:hover {
+            background-color: #2d4aac;
+          }
+  
+          a {
+            color: inherit;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+  

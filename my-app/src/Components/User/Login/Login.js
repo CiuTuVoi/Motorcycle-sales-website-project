@@ -1,121 +1,46 @@
-import { loginAPI } from "../../services/adminService";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import "./Login.scss";
+import { useDispatch } from "react-redux";
+import { setUserName } from "../redux/userSlide";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
-export default function Login() {
-  const [phoneEmail, setPhoneEmail] = useState("");
+const Login = () => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [showRegister, setShowRegister] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
-
-  const handleLoginSubmit = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-
-    if (!phoneEmail || !password) {
-      alert("Vui lòng điền đầy đủ thông tin!");
-      return;
-    }
-
-    try {
-      // Gọi API đăng nhập
-      let res = await loginAPI(email, password);
-      console.log("Response từ API:", res);
-
-      if (res && res.role === "admin") {
-        // Lưu trạng thái đăng nhập vào localStorage/sessionStorage
-        localStorage.setItem("isAdmin", true);
-
-        // Điều hướng đến trang Admin Dashboard
-        navigate("/admin");
-      } else if (res && res.role === "user") {
-        // Lưu trạng thái người dùng
-        localStorage.setItem("isUser", true);
-
-        // Điều hướng đến trang chính của người dùng
-        navigate("/");
-      } else {
-        alert("Tên đăng nhập hoặc mật khẩu không đúng!");
-      }
-    } catch (error) {
-      console.error("Lỗi đăng nhập:", error);
-      alert("Đăng nhập không thành công. Vui lòng thử lại!");
-    }
-  };
-
-  const handleRegisterSubmit = (e) => {
-    e.preventDefault();
-    console.log("Register with:", { name, phone, email, password });
+    // Giả lập đăng nhập thành công
+    const user = { name: username }; // Đây là dữ liệu trả về từ server
+    Cookies.set("access_token", "mock_token", { expires: 7 }); // Lưu token giả
+    dispatch(setUserName(user.name)); // Cập nhật Redux state
+    navigate("/"); // Chuyển hướng về trang chủ
   };
 
   return (
-    <div className="overlay">
-      <div className="modal-container">
-        <h2>{showRegister ? "ĐĂNG KÝ" : "ĐĂNG NHẬP"}</h2>
-        {!showRegister ? (
-          <form onSubmit={handleLoginSubmit}>
-            <input
-              type="text"
-              placeholder="Số điện thoại hoặc email *"
-              value={phoneEmail}
-              onChange={(e) => setPhoneEmail(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Mật khẩu *"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button type="submit" className="button">ĐĂNG NHẬP</button>
-            <p className="toggle-text">
-              Chưa có tài khoản?{" "}
-              <span onClick={() => setShowRegister(true)}>Đăng ký ngay</span>
-            </p>
-          </form>
-        ) : (
-          <form onSubmit={handleRegisterSubmit}>
-            <input
-              type="text"
-              placeholder="Họ tên *"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Số điện thoại *"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-            <input
-              type="email"
-              placeholder="Địa chỉ email *"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Mật khẩu *"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button type="submit" className="button">ĐĂNG KÝ</button>
-            <p className="toggle-text">
-              Đã có tài khoản?{" "}
-              <span onClick={() => setShowRegister(false)}>Đăng nhập</span>
-            </p>
-          </form>
-        )}
+    <form onSubmit={handleLogin}>
+      <h2>Đăng nhập</h2>
+      <div>
+        <label>Tên người dùng:</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
       </div>
-    </div>
+      <div>
+        <label>Mật khẩu:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+      <button type="submit">Đăng nhập</button>
+    </form>
   );
-}
+};
+
+export default Login;

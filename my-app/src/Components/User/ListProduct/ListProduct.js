@@ -4,32 +4,27 @@ import Layout from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { Link } from "react-router-dom";
 import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
+import { IoIosHeart } from "react-icons/io";
 import "./ListProduct.scss";
 
 const Honda = () => {
   useEffect(() => {
-    window.scrollTo(0, 0); // Đưa trang về đầu
+    window.scrollTo(0, 0); // Scroll to top of the page
   }, []);
-
-  const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrPage(page);
-      window.scroll(0, 0);
-    }
-  };
 
   const [products, setProducts] = useState([]); // Dữ liệu sản phẩm từ API
   const [selectedCategory, setSelectedCategory] = useState("Honda"); // Danh mục mặc định
   const [currPage, setCurrPage] = useState(1);
-  const itemsPerPage = 6; // Số lượng sản phẩm mỗi trang
+  const itemsPerPage = 6; // Số sản phẩm mỗi trang
   const [isLoading, setIsLoading] = useState(true); // Trạng thái loading
+  const [favoriteItems, setFavoriteItems] = useState([]); // Lưu các sản phẩm yêu thích
 
-  // Hàm lấy dữ liệu từ API
-  const fetchData = async (category) => {
+  // Lấy dữ liệu từ API
+  const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://127.0.0.1:8000/products`);
-      console.log("API Response:", response.data); // Log response
+      const response = await axios.get("http://127.0.0.1:8000/products");
+      console.log("API Response:", response.data); // Log phản hồi API
       setProducts(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -38,66 +33,68 @@ const Honda = () => {
     }
   };
 
-  // Lấy dữ liệu khi danh mục thay đổi
+  // Fetch dữ liệu khi component mount
   useEffect(() => {
-    fetchData(selectedCategory);
-  }, [selectedCategory]);
+    fetchData();
+
+    // Load sản phẩm yêu thích từ localStorage nếu có
+    const savedFavorites = JSON.parse(localStorage.getItem("favoriteItems")) || [];
+    setFavoriteItems(savedFavorites);
+  }, []);
+
+  // Thêm hoặc xóa sản phẩm vào yêu thích
+  const toggleFavorite = (item) => {
+    let updatedFavorites;
+    if (favoriteItems.some((fav) => fav.ma_san_pham === item.ma_san_pham)) {
+      updatedFavorites = favoriteItems.filter((fav) => fav.ma_san_pham !== item.ma_san_pham);
+    } else {
+      updatedFavorites = [...favoriteItems, item];
+    }
+    setFavoriteItems(updatedFavorites);
+
+    // Lưu danh sách yêu thích vào localStorage
+    localStorage.setItem("favoriteItems", JSON.stringify(updatedFavorites));
+  };
 
   // Lọc sản phẩm theo danh mục
   const filteredData = products.filter(
     (item) => item.hang_xe.toLowerCase() === selectedCategory.toLowerCase()
-  ); // Dữ liệu từ API đã được lọc sẵn
+  );
 
-  console.log("Products:", products);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // Lấy dữ liệu sản phẩm cho trang hiện tại
+  // Lấy các sản phẩm của trang hiện tại
   const startIndex = (currPage - 1) * itemsPerPage;
   const currData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-  // Hàm thay đổi danh mục sản phẩm
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-    setCurrPage(1); // Đưa về trang đầu tiên
+  // Chuyển trang
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrPage(page);
+      window.scrollTo(0, 0);
+    }
   };
 
-  // Hàm khi người dùng click vào sản phẩm
-  const handleImgClick = (item) => {
-    console.log("Clicked product:", item);
+  // Thay đổi danh mục sản phẩm
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    setCurrPage(1); // Đặt lại trang về 1
   };
 
   return (
     <div className="container">
-      {/* Header */}
       <div className="Header-list-product">
         <Layout />
       </div>
 
-      {/* Danh mục sản phẩm */}
       <div className="container-product">
         <div className="product-list-brand">
           <h2>DANH MỤC SẢN PHẨM</h2>
           <ul>
-            <li>
-              <button onClick={() => handleCategoryChange("Honda")}>
-                Xe máy Honda
-              </button>
-            </li>
-            <li>
-              <button onClick={() => handleCategoryChange("Yamaha")}>
-                Xe máy Yamaha
-              </button>
-            </li>
-            <li>
-              <button onClick={() => handleCategoryChange("Sym")}>
-                Xe máy Sym
-              </button>
-            </li>
-            <li>
-              <button onClick={() => handleCategoryChange("Suzuki")}>
-                Xe máy Suzuki
-              </button>
-            </li>
+            <li><button onClick={() => handleCategoryChange("Honda")}>Xe máy Honda</button></li>
+            <li><button onClick={() => handleCategoryChange("Yamaha")}>Xe máy Yamaha</button></li>
+            <li><button onClick={() => handleCategoryChange("Sym")}>Xe máy Sym</button></li>
+            <li><button onClick={() => handleCategoryChange("Suzuki")}>Xe máy Suzuki</button></li>
           </ul>
         </div>
 
@@ -115,7 +112,6 @@ const Honda = () => {
                   key={item.ma_san_pham}
                 >
                   <div
-                    onClick={() => handleImgClick(item)}
                     className="product-item"
                   >
                     <img
@@ -131,6 +127,19 @@ const Honda = () => {
                         currency: "VND",
                       }).format(item.gia)}
                     </span>
+
+                    {/* Biểu tượng yêu thích */}
+                    <i
+                      className={`favorate ${favoriteItems.some(
+                        (fav) => fav.ma_san_pham === item.ma_san_pham
+                      ) ? "active" : ""}`}
+                      onClick={(e) => {
+                        e.preventDefault(); // Ngăn hành động mặc định của liên kết
+                        toggleFavorite(item);
+                      }}
+                    >
+                      <IoIosHeart />
+                    </i>
                   </div>
                 </Link>
               ))}
@@ -181,7 +190,6 @@ const Honda = () => {
         </div>
       </div>
 
-      {/* Footer */}
       <div className="footer-wrapper">
         <Footer />
       </div>

@@ -1,0 +1,43 @@
+.best-selling-products {
+    padding: 20px;
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+  
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+  
+    .product-card {
+      width: 200px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+      .product-image {
+        height: 150px;
+        background-size: cover;
+        background-position: center;
+      }
+  
+      .product-info {
+        padding: 10px;
+        h5 {
+          font-size: 16px;
+          margin: 10px 0;
+          color:#fff;
+        }
+        p {
+          font-size: 14px;
+          color: #fff;
+        }
+      }
+    }
+  }
+  

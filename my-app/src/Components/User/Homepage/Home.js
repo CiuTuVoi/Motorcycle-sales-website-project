@@ -10,6 +10,9 @@ import "slick-carousel/slick/slick-theme.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import axios from "axios";
+import HotProduct from "../hotProduct/hotProduct";
+import { IoIosHeart } from "react-icons/io";
+// import BestSellingProducts from "../BestSellingProducts/BestSellingProducts";
 
 const slideImages = [
   {
@@ -74,57 +77,6 @@ const settingsHonda = {
   autoplaySpeed: 3000,
 };
 
-/*object-img-product-yamaha*/
-const SlideProductYamaha = [
-  {
-    title: "SH mode 125",
-    price: "57.132.000đ",
-    image:
-      "https://yamaha-motor.com.vn/wp/wp-content/uploads/2024/01/Jupiter-Mat-Grey_004-768x645.png",
-  },
-  {
-    title: "SH350i",
-    price: "151.190.000đ",
-    image:
-      "https://yamaha-motor.com.vn/wp/wp-content/uploads/2024/01/FreeGo-Black-Red-SMK-004-768x645.png",
-  },
-  {
-    title: "Vario 160",
-    price: "51.990.000đ",
-    image:
-      "https://yamaha-motor.com.vn/wp/wp-content/uploads/2024/01/Exciter-155-VVA-Cyan-ABS_004.png",
-  },
-  {
-    title: "SH160i/125i",
-    price: "73.921.091đ",
-    image:
-      "https://yamaha-motor.com.vn/wp/wp-content/uploads/2024/10/Ja-Std-2024-Red-Metallic-004-768x645.png",
-  },
-  {
-    title: "Winner X",
-    price: "46.160.000đ",
-    image:
-      "https://yamaha-motor.com.vn/wp/wp-content/uploads/2024/01/TMAX-560-004-1.png",
-  },
-  {
-    title: "Winner X",
-    price: "46.160.000đ",
-    image:
-      "https://yamaha-motor.com.vn/wp/wp-content/uploads/2024/01/Mask-Group-5821.png",
-  },
-];
-
-const settingsYamaha = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 6,
-  slidesToScroll: 3,
-  arrows: true,
-  autoplay: true,
-  autoplaySpeed: 1000,
-};
-
 const spanStyle = {
   background: "#efefef",
   color: "#000000",
@@ -181,6 +133,22 @@ const Home = () => {
 
   const [productHot, setProductHot] = useState(productHotData[0]);
 
+  const [favoriteItems, setFavoriteItems] = useState([]);
+  const toggleFavorite = (item) => {
+    let updatedFavorites;
+    if (favoriteItems.some((fav) => fav.ma_san_pham === item.ma_san_pham)) {
+      updatedFavorites = favoriteItems.filter(
+        (fav) => fav.ma_san_pham !== item.ma_san_pham
+      );
+    } else {
+      updatedFavorites = [...favoriteItems, item];
+    }
+    setFavoriteItems(updatedFavorites);
+
+    // Lưu danh sách yêu thích vào localStorage
+    localStorage.setItem("favoriteItems", JSON.stringify(updatedFavorites));
+  };
+
   return (
     <div className="container">
       <div className="Header-home">
@@ -210,6 +178,8 @@ const Home = () => {
       </div>
       <div className="border"> </div>
 
+      {/* <BestSellingProducts /> */}
+
       {/*slide-show-product-best-selling*/}
       <div className="product-slider">
         <Slide {...settings}>
@@ -230,36 +200,7 @@ const Home = () => {
 
       {/*HOTPRODUCT-CART-CONTAINER*/}
       <div className="product-slideshow">
-        <Slide {...settingProductHot}>
-          <div className="product-card-container" key={productHot.id}>
-            <div className="product-card">
-              <div className="product-img">
-                <img
-                  src={productHot.hinhAnh?.black || "default_image.jpg"}
-                  alt="product"
-                />
-                <div className="badge">HOT</div>
-              </div>
-              <div className="product-detail">
-                <h3>{productHot.tenXe}</h3>
-                <div className="price">
-                  {/* <p className="old-price">{index.gia}</p> */}
-                  <p className="new-price">{productHot.gia}</p>
-                </div>
-                <ul>
-                  <li>🎁 01 Nón bảo hiểm</li>
-                  <li>🎁 01 Khung biển số</li>
-                  <li>🎁 01 Móc khóa</li>
-                  <li>🎁 01 Túi vải</li>
-                  <li>🎁 01 Gói bảo dưỡng - bảo trì 5 năm</li>
-                </ul>
-                <button>
-                  <Link to="/viewProduct">MORE</Link>
-                </button>
-              </div>
-            </div>
-          </div>
-        </Slide>
+        <HotProduct />
       </div>
 
       {/* HONDAMENU */}
@@ -321,6 +262,24 @@ const Home = () => {
                       currency: "VND",
                     }).format(product.gia)}
                   </p>
+
+                  <i
+                    className={`favorate ${
+                      favoriteItems.some(
+                        (fav) => fav.ma_san_pham === product.ma_san_pham
+                      )
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={(e) => {
+                      e.preventDefault(); // Ngăn hành động mặc định của liên kết
+                      toggleFavorite(product);
+                    }}
+                  >
+                    <span className="icon-favorites">
+                      <IoIosHeart />
+                    </span>
+                  </i>
                 </div>
               </div>
             ))}

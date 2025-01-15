@@ -9,6 +9,8 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { addToCart } from "../redux/cartSlice";
 import "./ViewProduct.scss";
+import Cookies from "js-cookie";
+import Review from "../review/Review";
 
 const ViewProduct = () => {
   const [product, setProduct] = useState(null); // Sản phẩm
@@ -17,6 +19,9 @@ const ViewProduct = () => {
   const [rating, setRating] = useState(0); // Đánh giá
   const [quantity, setQuantity] = useState(1); // Số lượng mua
   const { ma_san_pham } = useParams();
+  const [reviewContent, setReviewContent] = useState("");
+  const [reviews, setReviews] = useState([]);
+
   const dispatch = useDispatch();
 
   // Hàm format key thông số kỹ thuật
@@ -26,19 +31,20 @@ const ViewProduct = () => {
       .replace(/(?:^|\s)\S/g, (a) => a.toUpperCase()); // Viết hoa chữ cái đầu mỗi từ
   };
 
+  // Lấy thông tin sản phẩm
   useEffect(() => {
     if (!ma_san_pham) {
       console.error("ma_san_pham is undefined");
       return;
     }
 
-    // Lấy thông tin sản phẩm
     axios
       .get(`http://127.0.0.1:8000/products/${ma_san_pham}`)
       .then((response) => setProduct(response.data))
-      .catch((error) => console.error("Error fetching product details:", error));
+      .catch((error) =>
+        console.error("Error fetching product details:", error)
+      );
 
-    // Lấy thông số kỹ thuật
     axios
       .get(`http://127.0.0.1:8000/thongso`)
       .then((response) => {
@@ -49,7 +55,6 @@ const ViewProduct = () => {
       })
       .catch((error) => console.error("Error fetching specifications:", error));
 
-    // Lấy hình ảnh
     axios
       .get(`http://127.0.0.1:8000/anhxe`)
       .then((response) => {
@@ -59,6 +64,23 @@ const ViewProduct = () => {
         setProductImg(images || []);
       })
       .catch((error) => console.error("Error fetching product images:", error));
+  }, [ma_san_pham]);
+
+  // Lấy danh sách đánh giá
+  const fetchReviews = () => {
+    axios
+      .get("http://127.0.0.1:8000/danhgia")
+      .then((response) => {
+        const productReviews = response.data.filter(
+          (review) => String(review.ma_san_pham) === String(ma_san_pham)
+        );
+        setReviews(productReviews);
+      })
+      .catch((error) => console.error("Error fetching reviews:", error));
+  };
+
+  useEffect(() => {
+    fetchReviews();
   }, [ma_san_pham]);
 
   // Xử lý thêm sản phẩm vào giỏ hàng
@@ -79,6 +101,48 @@ const ViewProduct = () => {
     message.success(`${product.ten_san_pham} đã được thêm vào giỏ hàng`);
   };
 
+  // Xử lý gửi đánh giá
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+
+    if (!rating) {
+      message.error("Vui lòng chọn số sao để đánh giá!");
+      return;
+    }
+
+    if (!reviewContent.trim()) {
+      message.error("Vui lòng nhập nội dung đánh giá!");
+      return;
+    }
+
+    const reviewData = {
+      ma_san_pham,
+      so_sao: rating,
+      nhan_xet: reviewContent,
+    };
+
+    const token = Cookies.get("token"); // Hoặc lấy từ cookie nếu sử dụng
+
+    axios
+      .post("http://127.0.0.1:8000/danhgia", reviewData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Gửi token trong header
+        },
+      })
+      .then(() => {
+        message.success("Đánh giá của bạn đã được gửi thành công!");
+        setRating(0); // Reset rating
+        setReviewContent(""); // Reset review content
+
+        // Tải lại danh sách đánh giá
+        fetchReviews();
+      })
+      .catch((error) => {
+        console.error("Error submitting review:", error);
+        message.error("Đã xảy ra lỗi khi gửi đánh giá.");
+      });
+  };
+
   if (!product) return <p>Không tìm thấy sản phẩm.</p>;
 
   return (
@@ -86,28 +150,23 @@ const ViewProduct = () => {
       <Header />
       <div className="container-content">
         <div className="product">
-          {/* Chi tiết sản phẩm */}
           <div className="product-detail">
             <Carousel className="main-slide">
-              {product?.anh_dai_dien ? (
-                Array.isArray(product.anh_dai_dien) ? (
-                  product.anh_dai_dien.map((image, index) => (
-                    <div key={`image-${index}`}>
-                      <img src={image} alt={product.ten_san_pham} />
-                    </div>
-                  ))
-                ) : (
-                  <div key="image-0">
+              {productImg.length > 0 ? (
+                productImg.map((item, index) => (
+                  <div key={`carousel-color-${index}`}>
                     <img
-                      src={product.anh_dai_dien}
-                      alt={product.ten_san_pham}
+                      src={item.anh_1} // Lấy ảnh đại diện (anh_1) cho mỗi màu
+                      alt={`Color ${index + 1}`}
+                      style={{ width: "100%", objectFit: "cover" }}
                     />
                   </div>
-                )
+                ))
               ) : (
                 <div>Hình ảnh sản phẩm không khả dụng.</div>
               )}
             </Carousel>
+
             <div className="content-wrapper">
               <h3>{product.ten_san_pham}</h3>
               <div className="price">
@@ -132,18 +191,21 @@ const ViewProduct = () => {
                   defaultValue={1}
                   onChange={(value) => setQuantity(value)}
                 />
-                <button onClick={handleAddToCart}>ADD TO CART</button>
+                <button onClick={handleAddToCart}>THÊM VÀO GIỎ</button>
               </div>
             </div>
           </div>
 
-          {/* Hình ảnh sản phẩm */}
+          {/*hình ảnh xe */}
           <h3 className="detail-specification">Hình ảnh xe</h3>
           <p className="line-specification"></p>
           <div className="productImage">
             <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
               {productImg.map((item, index) => (
-                <div key={`image-${item.ma_san_pham}-${index}`} style={{ textAlign: "center" }}>
+                <div
+                  key={`image-${item.ma_san_pham}-${index}`}
+                  style={{ textAlign: "center" }}
+                >
                   <div>
                     <img
                       src={item.anh_1}
@@ -163,15 +225,32 @@ const ViewProduct = () => {
                         objectFit: "cover",
                       }}
                     />
+                    <img
+                      src={item.anh_3}
+                      alt="Anh 2"
+                      style={{
+                        width: "200px",
+                        height: "200px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <img
+                      src={item.anh_4}
+                      alt="Anh 2"
+                      style={{
+                        width: "200px",
+                        height: "200px",
+                        objectFit: "cover",
+                      }}
+                    />
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Thông số kỹ thuật */}
           <h3 className="detail-specification">Thông số kỹ thuật</h3>
-          <p className="line-specification"></p>
+          <h1 className="line-specification"></h1>
           <div className="specification">
             {specification ? (
               <table className="specification-table">
@@ -192,32 +271,8 @@ const ViewProduct = () => {
             )}
           </div>
 
-          {/* Đánh giá sản phẩm */}
           <div className="review-container">
-            <h3>Viết đánh giá cho {product.ten_san_pham}</h3>
-            <form
-              className="review-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                message.success("Đánh giá của bạn đã được gửi thành công!");
-              }}
-            >
-              <div className="rating">
-                <label>Đánh giá của bạn *</label>
-                <div className="stars">
-                  {[...Array(5)].map((_, index) => (
-                    <span
-                      key={index}
-                      className={`star ${index < rating ? "filled" : ""}`}
-                      onClick={() => setRating(index + 1)}
-                    >
-                      ☆
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <button type="submit">Gửi đánh giá</button>
-            </form>
+            <Review maSanPham={ma_san_pham} />
           </div>
         </div>
       </div>
