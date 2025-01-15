@@ -37,27 +37,27 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Phân loại API
 # Nhóm Quản lý Người dùng
-app.include_router(user_router, prefix="/users", tags=["Quản Lý Người Dùng"])
-app.include_router(reset_password_router, prefix="/users", tags=["Quản Lý Người Dùng"])
+app.include_router(user_router, tags=["Quản Lý Người Dùng"])
+app.include_router(reset_password_router, tags=["Quản Lý Người Dùng"])
 
 # Nhóm Quản lý Sản phẩm
-app.include_router(product_router, prefix="/products", tags=["Quản Lý Sản Phẩm"])
-app.include_router(khohang_router, prefix="/products", tags=["Quản Lý Kho Hàng"])
-app.include_router(loaixe_router, prefix="/products", tags=["Quản Lý Loại Xe"])
-app.include_router(anhxe_router, prefix="/products", tags=["Quản Lý Ảnh Xe"])
-app.include_router(thongsokythuat_router, prefix="/products", tags=["Quản Lý Thông Số"])
-app.include_router(khuyenmai_router, prefix="/products", tags=["Quản Lý Khuyến Mại"])
-app.include_router(capnhatgiakhuyenmai_router, prefix="/products", tags=["Cập Nhật Giá Khuyến Mại"])
-app.include_router(sanphambanchay_router, prefix="/products", tags=["Phân Tích Sản Phẩm"])
+app.include_router(product_router, tags=["Quản Lý Sản Phẩm"])
+app.include_router(khohang_router, tags=["Quản Lý Kho Hàng"])
+app.include_router(loaixe_router, tags=["Quản Lý Loại Xe"])
+app.include_router(anhxe_router, tags=["Quản Lý Ảnh Xe"])
+app.include_router(thongsokythuat_router, tags=["Quản Lý Thông Số"])
+app.include_router(khuyenmai_router, tags=["Quản Lý Khuyến Mại"])
+app.include_router(capnhatgiakhuyenmai_router, tags=["Cập Nhật Giá Khuyến Mại"])
+app.include_router(sanphambanchay_router, tags=["Phân Tích Sản Phẩm"])
 
 # Nhóm Quản lý Đơn hàng
-app.include_router(donhang_router, prefix="/orders", tags=["Quản Lý Đơn Hàng"])
-app.include_router(giohang_router, prefix="/orders", tags=["Sản Phẩm Yêu Thích"])
+app.include_router(donhang_router, tags=["Quản Lý Đơn Hàng"])
+app.include_router(giohang_router, tags=["Sản Phẩm Yêu Thích"])
 
 # Nhóm Đánh giá và Phản hồi
-app.include_router(danhgia_router, prefix="/feedback", tags=["Đánh Giá Người Dùng"])
-app.include_router(thongbaophanhoi_router, prefix="/feedback", tags=["Thông Báo Người Dùng"])
+app.include_router(danhgia_router, tags=["Đánh Giá Người Dùng"])
+app.include_router(thongbaophanhoi_router, tags=["Thông Báo Người Dùng"])
 
 # Nhóm Tìm kiếm
-app.include_router(search_router, prefix="/search", tags=["Tìm kiếm Sản Phẩm"])
-app.include_router(searchnguoidung_router, prefix="/search", tags=["Tìm Kiếm Người Dùng"])
+app.include_router(search_router, tags=["Tìm kiếm Sản Phẩm"])
+app.include_router(searchnguoidung_router, tags=["Tìm Kiếm Người Dùng"])
