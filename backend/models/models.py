@@ -62,6 +62,8 @@ class SanPham(Base):
     anhXe = relationship('AnhXe', back_populates="sanPham")
     # Thiết lập mối quan hệ ngược lại với giỏ hàng
     gioHang = relationship('GioHang', back_populates="sanPham")
+    # Thiết lập mối quan hệ ngược lại với sản phẩm bán chạy
+    sanPhamBanChay = relationship('SanPhamBanChay', back_populates="sanPham")
 
 class DanhGia(Base):
     __tablename__ = 'danh_gia'
@@ -212,3 +214,17 @@ class GioHang(Base):
 
     nguoiDung = relationship('NguoiDung', back_populates="gioHang")
     sanPham = relationship('SanPham', back_populates="gioHang")
+
+
+class SanPhamBanChay(Base):
+    __tablename__ = 'san_pham_ban_chay'
+    id_ban_chay = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    ma_san_pham = Column(Integer, ForeignKey('san_pham.ma_san_pham'), index=True)
+    ten_san_pham = Column(String(255))
+    so_luong_ban = Column(Integer)
+    anh_dai_dien = Column(String(255))
+    thang = Column(Integer)
+    nam = Column(Integer)
+    ngay_cap_nhat = Column(DateTime, default=func.now(), onupdate=func.now())
+
+    sanPham = relationship('SanPham', back_populates="sanPhamBanChay")
