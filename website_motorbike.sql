@@ -27,7 +27,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `danh_gia`
 --
 
-DROP TABLE IF EXISTS danh_gia;
 CREATE TABLE `danh_gia` (
   `ma_danh_gia` int(11) NOT NULL,
   `ma_san_pham` int(11) NOT NULL,
@@ -51,7 +50,6 @@ INSERT INTO `danh_gia` (`ma_danh_gia`, `ma_san_pham`, `ma_nguoi_dung`, `so_sao`,
 --
 -- Table structure for table `don_hang`
 --
-DROP TABLE IF EXISTS don_hang;
 CREATE TABLE `don_hang` (
   `ma_don_hang` int(11) NOT NULL,
   `ma_nguoi_dung` int(11) NOT NULL,
@@ -69,16 +67,36 @@ CREATE TABLE `don_hang` (
 --
 
 INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `ma_san_pham`, `so_luong`, `don_gia`, `tong_tien`, `phuong_thuc_thanh_toan`, `trang_thai`, `ngay_tao`) VALUES
-(1, 4, 2, 1, 8344727.00, 7093018.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 06:59:34'),
-(2, 4, 3, 2, 73921091.00, 118273746.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:01:19'),
-(3, 5, 2, 1, 8344727.00, 7093018.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 07:02:06');
+(1, 4, 2, 1, 83447277.00, 83447277.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 06:59:34'),
+(2, 4, 3, 2, 73921091.00, 147842182.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:01:19'),
+(3, 5, 2, 1, 83447277.00, 83447277.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 07:02:06'),
+(4, 1, 3, 20, 73921091.00, 1478421820.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:10:00'),
+(5, 1, 7, 20, 92490000.00, 1849800000.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:15:00'),
+(6, 2, 12, 25, 42502909.00, 1062572725.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 07:20:00'),
+(7, 2, 18, 25, 56690000.00, 1417250000.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 07:25:00'),
+(8, 3, 22, 30, 52490000.00, 1574700000.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:30:00'),
+(9, 3, 28, 30, 36612000.00, 1098360000.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:35:00'),
+(10, 4, 33, 12, 18939273.00, 227271276.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:40:00'),
+(11, 4, 35, 12, 22032000.00, 264384000.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 07:45:00'),
+(12, 5, 38, 10, 87273818.00, 872738180.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 07:50:00'),
+(13, 5, 40, 10, 46160000.00, 461600000.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 07:55:00'),
+(14, 6, 3, 15, 73921091.00, 1108816365.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 08:00:00'),
+(15, 6, 7, 15, 92490000.00, 1387350000.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 08:05:00'),
+(16, 7, 12, 20, 42502909.00, 850058180.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 08:10:00'),
+(17, 7, 18, 20, 56690000.00, 1133800000.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 08:15:00'),
+(18, 8, 22, 20, 52490000.00, 1049800000.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 08:20:00'),
+(19, 8, 28, 20, 36612000.00, 732240000.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 08:25:00'),
+(20, 9, 33, 9, 18939273.00, 170453457.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 08:30:00'),
+(21, 9, 35, 9, 22032000.00, 198288000.00, 'Thanh_toan_tai_cua_hang', 'Dang_xu_ly', '2025-01-05 08:35:00'),
+(22, 10, 38, 9, 87273818.00, 785464362.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 08:40:00'),
+(23, 10, 40, 9, 46160000.00, 415440000.00, 'Thanh_toan_tai_cua_hang', 'Hoan_thanh', '2025-01-05 08:45:00');
+
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `kho_hang`
 --
-DROP TABLE IF EXISTS kho_hang;
 CREATE TABLE `kho_hang` (
   `ma_san_pham` int(11) NOT NULL,
   `so_luong` int(11) DEFAULT NULL
@@ -143,7 +161,6 @@ INSERT INTO `kho_hang` (`ma_san_pham`, `so_luong`) VALUES
 --
 -- Table structure for table `khuyen_mai`
 --
-DROP TABLE IF EXISTS khuyen_mai;
 CREATE TABLE `khuyen_mai` (
   `ma_khuyen_mai` int(11) NOT NULL,
   `ten_khuyen_mai` varchar(255) NOT NULL,
@@ -160,22 +177,21 @@ CREATE TABLE `khuyen_mai` (
 
 INSERT INTO `khuyen_mai` (`ma_khuyen_mai`, `ten_khuyen_mai`, `mo_ta`, `muc_giam`, `ngay_bat_dau`, `ngay_ket_thuc`, `ngay_tao`) VALUES
 (1, 'Giảm giá Tết Nguyên Đán', 'Khuyến mãi đặc biệt nhân dịp Tết Nguyên Đán, giảm giá 10% toàn bộ xe.', 10.00, '2025-01-10', '2025-01-31', '2025-01-05 06:48:46'),
-(2, 'Khuyến mãi hè 2025', 'Giảm giá mùa hè cho các dòng xe phân khối lớn.', 15.00, '2025-06-01', '2025-06-30', '2025-01-05 06:48:46'),
+(2, 'Khuyến mãi hè 2025', 'Giảm giá mùa hè cho các dòng xe phân khối lớn.', 15.00, '2025-02-01', '2025-06-30', '2025-01-05 06:48:46'),
 (3, 'Giảm giá khai trương', 'Ưu đãi khai trương cửa hàng mới, giảm 20% cho các mẫu xe tay ga.', 20.00, '2025-02-01', '2025-02-15', '2025-01-05 06:48:46'),
-(4, 'Khuyến mãi Black Friday', 'Giảm giá lớn Black Friday, áp dụng cho các dòng xe thể thao.', 25.00, '2025-11-25', '2025-11-30', '2025-01-05 06:48:46'),
-(5, 'Ưu đãi khách hàng thân thiết', 'Chương trình tri ân khách hàng thân thiết, giảm giá 5% khi mua lần thứ hai.', 5.00, '2025-03-01', '2025-03-31', '2025-01-05 06:48:46'),
-(6, 'Siêu giảm giá cuối năm', 'Khuyến mãi giảm giá cuối năm lên đến 30% cho xe phân khối lớn.', 30.00, '2025-12-01', '2025-12-31', '2025-01-05 06:48:46'),
-(7, 'Giảm giá sinh nhật', 'Ưu đãi giảm giá 12% nhân dịp sinh nhật cửa hàng.', 12.00, '2025-07-01', '2025-07-15', '2025-01-05 06:48:46'),
-(8, 'Khuyến mãi tháng 10', 'Giảm giá 8% toàn bộ sản phẩm trong tháng 10.', 8.00, '2025-10-01', '2025-10-31', '2025-01-05 06:48:46'),
-(9, 'Flash Sale 50%', 'Khuyến mãi giảm giá 50% chỉ trong 24 giờ!', 50.00, '2025-05-15', '2025-05-15', '2025-01-05 06:48:46'),
-(10, 'Ưu đãi mua xe trả góp', 'Giảm giá 10% khi mua xe trả góp với lãi suất 0%.', 10.00, '2025-08-01', '2025-08-31', '2025-01-05 06:48:46');
+(4, 'Khuyến mãi Black Friday', 'Giảm giá lớn Black Friday, áp dụng cho các dòng xe thể thao.', 25.00, '2025-02-25', '2025-11-30', '2025-01-05 06:48:46'),
+(5, 'Ưu đãi khách hàng thân thiết', 'Chương trình tri ân khách hàng thân thiết, giảm giá 5% khi mua lần thứ hai.', 5.00, '2025-02-01', '2025-03-31', '2025-01-05 06:48:46'),
+(6, 'Siêu giảm giá cuối năm', 'Khuyến mãi giảm giá cuối năm lên đến 30% cho xe phân khối lớn.', 30.00, '2025-02-01', '2025-12-31', '2025-01-05 06:48:46'),
+(7, 'Giảm giá sinh nhật', 'Ưu đãi giảm giá 12% nhân dịp sinh nhật cửa hàng.', 12.00, '2025-02-01', '2025-07-15', '2025-01-05 06:48:46'),
+(8, 'Khuyến mãi tháng 10', 'Giảm giá 8% toàn bộ sản phẩm trong tháng 10.', 8.00, '2025-02-01', '2025-10-31', '2025-01-05 06:48:46'),
+(9, 'Flash Sale 50%', 'Khuyến mãi giảm giá 50% chỉ trong 24 giờ!', 50.00, '2025-02-15', '2025-05-15', '2025-01-05 06:48:46'),
+(10, 'Ưu đãi mua xe trả góp', 'Giảm giá 10% khi mua xe trả góp với lãi suất 0%.', 10.00, '2025-02-01', '2025-08-31', '2025-01-05 06:48:46');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `lich_su_giao_dich`
 --
-DROP TABLE IF EXISTS lich_su_giao_dich;
 CREATE TABLE `lich_su_giao_dich` (
   `ma_giao_dich` int(11) NOT NULL,
   `ma_don_hang` int(11) NOT NULL,
@@ -191,15 +207,30 @@ CREATE TABLE `lich_su_giao_dich` (
 --
 
 INSERT INTO `lich_su_giao_dich` (`ma_giao_dich`, `ma_don_hang`, `ma_nguoi_dung`, `loai_thanh_toan`, `tong_tien`, `trang_thai_giao_hang`, `thoi_gian_tao`) VALUES
-(1, 1, 4, 'Thanh_toan_tai_cua_hang', 7093018, 'Hoan_thanh', '2025-01-05 07:05:53'),
-(2, 2, 4, 'Thanh_toan_tai_nha_rieng', 73921091, 'Hoan_thanh', '2025-01-05 07:05:53');
+(1, 1, 4, 'Thanh_toan_tai_cua_hang', 83447277.00, 'Hoan_thanh', '2025-01-05 07:05:53'),
+(2, 4, 1, 'Thanh_toan_tai_cua_hang', 1478421820.00, 'Hoan_thanh', '2025-01-05 07:15:00'),
+(3, 8, 3, 'Thanh_toan_tai_cua_hang', 1574700000.00, 'Hoan_thanh', '2025-01-05 07:30:00'),
+(4, 9, 3, 'Thanh_toan_tai_cua_hang', 1098360000.00, 'Hoan_thanh', '2025-01-05 07:35:00'),
+(5, 12, 5, 'Thanh_toan_tai_cua_hang', 872738180.00, 'Hoan_thanh', '2025-01-05 07:50:00'),
+(6, 16, 7, 'Thanh_toan_tai_cua_hang', 850058180.00, 'Hoan_thanh', '2025-01-05 08:10:00'),
+(7, 17, 7, 'Thanh_toan_tai_cua_hang', 1133800000.00, 'Hoan_thanh', '2025-01-05 08:15:00'),
+(8, 18, 8, 'Thanh_toan_tai_cua_hang', 1049800000.00, 'Hoan_thanh', '2025-01-05 08:20:00'),
+(9, 19, 8, 'Thanh_toan_tai_cua_hang', 732240000.00, 'Hoan_thanh', '2025-01-05 08:25:00'),
+(10, 22, 10, 'Thanh_toan_tai_cua_hang', 785464362.00, 'Hoan_thanh', '2025-01-05 08:40:00'),
+(11, 23, 10, 'Thanh_toan_tai_cua_hang', 415440000.00, 'Hoan_thanh', '2025-01-05 08:45:00'),
+(12, 2, 4, 'Thanh_toan_tai_cua_hang', 147842182.00, 'Hoan_thanh', '2025-01-05 08:45:00'),
+(13, 5, 1, 'Thanh_toan_tai_cua_hang', 1849800000.00, 'Hoan_thanh', '2025-01-05 08:45:00'),
+(14, 10, 4, 'Thanh_toan_tai_cua_hang', 227271276.00, 'Hoan_thanh', '2025-01-05 08:45:00'),
+(15, 14, 6, 'Thanh_toan_tai_cua_hang', 1108816365.00, 'Hoan_thanh', '2025-01-05 08:45:00');
+
+
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `loai_xe`
 --
-DROP TABLE IF EXISTS loai_xe;
+
 CREATE TABLE `loai_xe` (
   `ma_loai_xe` int(11) NOT NULL,
   `loai_xe` varchar(225) NOT NULL
@@ -222,7 +253,7 @@ INSERT INTO `loai_xe` (`ma_loai_xe`, `loai_xe`) VALUES
 --
 -- Table structure for table `mau_san_pham`
 --
-DROP TABLE IF EXISTS mau_san_pham;
+
 CREATE TABLE `mau_san_pham` (
   `ma_hinh_anh` int(11) NOT NULL,
   `ma_san_pham` int(11) NOT NULL,
@@ -329,7 +360,7 @@ INSERT INTO `mau_san_pham` (`ma_hinh_anh`, `ma_san_pham`, `mau_sac`, `anh_1`, `a
 --
 -- Table structure for table `nguoi_dung`
 --
-DROP TABLE IF EXISTS nguoi_dung;
+
 CREATE TABLE `nguoi_dung` (
   `ma_nguoi_dung` int(11) NOT NULL,
   `ten_dang_nhap` varchar(255) NOT NULL,
@@ -351,19 +382,25 @@ CREATE TABLE `nguoi_dung` (
 --
 
 INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ten_dang_nhap`, `mat_khau`, `ho_ten`, `tuoi`, `gioi_tinh`, `email`, `so_dien_thoai`, `dia_chi`, `vai_tro`, `trang_thai`, `ngay_tao`, `refresh_token`) VALUES
-(1, 'leductu_t67@hus.edu.vn', '123456', 'Lê Đức Tú', 20, 'Nam', 'leductu_t67@hus.edu.vn', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(1, 'leductu_t67@hus.edu.vn', '123456', 'Lê Đức Tú', 20, 'Nam', 'leductu_t67@hus.edu.vn', '0965814070', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
 (2, 'levungocanh_t67@hus.edu.vn', '123456', 'Lê Vũ Ngọc Anh', 20, 'Nam', 'levungocanh_t67@hus.edu.vn', '0965814070', 'Vinh Phuc', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
-(3, 'letu19082004@gmail.com', '123456', 'Lê Đức Tú 1', 40, 'Nữ', 'letu19082004@gmail.com', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
-(4, 'ldt19082004@gmail.com', '123456', 'Lê Đức Tú 2', 18, 'Nam', 'ldt19082004@gmail.com', '0965814070', 'Ha Noi', 'Admin', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(3, 'letu19082004@gmail.com', '123456', 'Lê Đức Tú 1', 40, 'Nữ', 'letu19082004@gmail.com', '0965814070', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(4, 'ldt19082004@gmail.com', '123456', 'Lê Đức Tú 2', 18, 'Nam', 'ldt19082004@gmail.com', '0965814070', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
 (5, 'luongduythai_t67@hus.edu.vn', '123456', 'Lường Duy Thái', 17, 'Nữ', 'luongduythai_t67@hus.edu.vn', '0965814070', 'Hoa Binh', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
-(6, 'dohungdang_t67@hus.edu.vn', '123456', 'Đỗ Hùng Đăng', 30, 'Nam', 'dohungdang_t67@hus.edu.vn', '0965814070', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL);
+(6, 'dohungdang_t67@hus.edu.vn', '123456', 'Đỗ Hùng Đăng', 30, 'Nam', 'dohungdang_t67@hus.edu.vn', '0965814070', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(7, 'hoangkhanhlinh@gmail.com', '123456', 'Hoàng Khánh Linh', 20, 'Nữ', 'hoangkhanhlinh@gmail.com', '0932154278', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(8, 'tranthibinh@gmail.com', '123456', 'Trần Thị Bình', 20, 'Nữ', 'tranthibinh@gmail.com', '0932125163', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(9, 'hoangquoctuan@gmail.com', '123456', 'Hoàng Quốc Tuấn', 25, 'Nam', 'hoangquoctuan@gmail.com', '0932256878', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(10, 'nguyenviethuong@gmail.com', '123456', 'Nguyễn Việt Hương', 20, 'Nữ', 'nguyenviethuong@gmail.com', '0932112444', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(11, 'dokimgiac@gmail.com', '123456', 'đỗ kim giác', 20, 'Nữ', 'dokimgiac@gmail.com', '0932122222', 'Hoa Binh', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL),
+(12, 'lekimtuyen@gmail.com', '123456', 'Lê Kim Tuyến', 20, 'Nữ', 'lekimtuyen@gmail.com', '0932178564', 'Ha Noi', 'User', 'HoatDong', '2024-12-03 06:52:53', NULL);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `phan_hoi`
 --
-DROP TABLE IF EXISTS phan_hoi;
+
 CREATE TABLE `phan_hoi` (
   `ma_phan_hoi` int(11) NOT NULL,
   `ma_danh_gia` int(11) NOT NULL,
@@ -385,7 +422,7 @@ INSERT INTO `phan_hoi` (`ma_phan_hoi`, `ma_danh_gia`, `ma_nguoi_dung`, `noi_dung
 --
 -- Table structure for table `san_pham`
 --
-DROP TABLE IF EXISTS san_pham;
+
 CREATE TABLE `san_pham` (
   `ma_san_pham` int(11) NOT NULL,
   `ma_loai_xe` int(11) NOT NULL,
@@ -456,7 +493,7 @@ INSERT INTO `san_pham` (`ma_san_pham`, `ma_loai_xe`, `ten_san_pham`, `hang_xe`, 
 --
 -- Table structure for table `san_pham_khuyen_mai`
 --
-DROP TABLE IF EXISTS san_pham_khuyen_mai;
+
 CREATE TABLE `san_pham_khuyen_mai` (
   `ma_san_pham` int(11) NOT NULL,
   `ma_khuyen_mai` int(11) NOT NULL
@@ -483,7 +520,7 @@ INSERT INTO `san_pham_khuyen_mai` (`ma_san_pham`, `ma_khuyen_mai`) VALUES
 --
 -- Table structure for table `gio_hang`
 --
-DROP TABLE IF EXISTS gio_hang;
+
 CREATE TABLE `gio_hang` (
     `ma_gio_hang` int(11) NOT NULL,
     `ma_nguoi_dung` int(11) NOT NULL,
@@ -509,30 +546,88 @@ INSERT INTO `gio_hang` (`ma_gio_hang`, `ma_nguoi_dung`, `ma_san_pham`, `so_luong
 --
 -- Table structure for table `thong_bao`
 --
-DROP TABLE IF EXISTS thong_bao;
-CREATE TABLE thong_bao (
-  ma_thong_bao int(11) NOT NULL,
-  ma_nguoi_dung int(11) NOT NULL,
-  noi_dung text DEFAULT NULL,
-  da_doc enum('đã đọc','chưa đọc') DEFAULT 'chưa đọc',
-  loai_thong_bao enum('Riengtu', 'Khuyenmai') NOT NULL DEFAULT 'Riengtu'
+
+CREATE TABLE `thong_bao` (
+  `ma_thong_bao` int(11) NOT NULL,
+  `ma_nguoi_dung` int(11) NOT NULL,
+  `noi_dung` text DEFAULT NULL,
+  `da_doc` enum('đã đọc','chưa đọc') DEFAULT 'chưa đọc',
+  `loai_thong_bao` enum('Riengtu', 'Khuyenmai') NOT NULL DEFAULT 'Riengtu'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table `thong_bao`
-INSERT INTO thong_bao (ma_thong_bao, ma_nguoi_dung, noi_dung, da_doc, loai_thong_bao) VALUES
-(1, 4, 'Dơn Hàng của bạn đã được sử lý', 'đã đọc', 'Riengtu'),
-(2, 4, 'Bạn đã thanh toán thành công', 'đã đọc', 'Riengtu'),
-(3, 4, 'Cảm ơn bạn đã ủng hộ', 'đã đọc', 'Riengtu'),
-(4, 5, 'Đơn Hàng của bạn đang được sử lý', 'chưa đọc', 'Riengtu'),
-(5, 4, 'Đơn hàng của bạn đang được sử lý', 'chưa đọc', 'Riengtu');
+-- Thông báo cho đơn hàng đang xử lý
+INSERT INTO `thong_bao` (`ma_thong_bao`, `ma_nguoi_dung`, `noi_dung`, `da_doc`, `loai_thong_bao`) VALUES
+(1, 4, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(2, 4, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(3, 5, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(4, 1, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(5, 1, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(6, 2, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(7, 2, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(8, 3, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(9, 3, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(10, 4, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(11, 4, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(12, 5, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(13, 5, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(14, 6, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(15, 6, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(16, 7, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(17, 7, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(18, 8, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(19, 8, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(20, 9, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(21, 9, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(22, 10, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu'),
+(23, 10, 'Đơn hàng của bạn đã được tạo thành công và đang xử lý', 'chưa đọc', 'Riengtu');
 
+-- Thông báo cho đơn hàng đã hoàn thành (Hoan_thanh)
+INSERT INTO `thong_bao` (`ma_thong_bao`, `ma_nguoi_dung`, `noi_dung`, `da_doc`, `loai_thong_bao`) VALUES
+(24, 4, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(25, 1, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(26, 3, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(27, 3, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(28, 5, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(29, 6, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(30, 7, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(31, 8, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(32, 8, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(33, 10, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu'),
+(34, 10, 'Đơn hàng của bạn đã được giao thành công', 'chưa đọc', 'Riengtu');
+
+
+
+CREATE TABLE `san_pham_ban_chay` (
+    `id_ban_chay` int(11) NOT NULL,
+    `ma_san_pham` int(11) NOT NULL,
+    `ten_san_pham` varchar(255),
+    `so_luong_ban` int(11),
+    `anh_dai_dien` varchar(255),
+    `thang` int(11),
+    `nam` int(11),
+    `ngay_cap_nhat` timestamp NOT NULL DEFAULT current_timestamp()
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `san_pham_ban_chay` (`id_ban_chay`, `ma_san_pham`, `ten_san_pham`, `so_luong_ban`, `anh_dai_dien`, `thang`, `nam`) VALUES
+(1, 3, 'SH125i Phiên bản Tiêu Chuẩn', 60, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/SH/SH%20125i%20Ti%C3%AAu%20Chu%E1%BA%A9n/Tr%E1%BA%AFng%20%C4%90en/1.png?raw=true', 1, 2025),
+(2, 7, 'SH160i Phiên bản Tiêu Chuẩn', 54,'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/SH/SH%20160i%20Ti%C3%AAu%20Chu%E1%BA%A9n/Tr%E1%BA%AFng%20%C4%90en/1.png?raw=true', 1, 2025),
+(3, 12, 'Air Blade 125 Cao Cấp', 50, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/Air%20Blade/125%20Cao%20C%E1%BA%A5p/B%E1%BA%A1c%20Xanh%20%C4%90en/1.png?raw=true', 1, 2025),
+(4, 18, 'Air Blade 160 Tiêu  Chuẩn', 48, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/Air%20Blade/160%20Ti%C3%AAu%20Chu%E1%BA%A9n/B%E1%BA%A1c%20%C4%90en/1.png?raw=true', 1, 2025),
+(5, 22, 'Vario 160 Cao Cấp', 44, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/Vario/Vario%20160%20Cao%20C%E1%BA%A5p/Xanh%20%C4%90en%20B%E1%BA%A1c/1.png?raw=true', 1, 2025),
+(6, 28, 'Vison Thể Thao', 39, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/Vison/Th%E1%BB%83%20Thao/X%C3%A1m%20%C4%90en/1.png?raw=true', 1, 2025),
+(7, 33, 'Wave Alpha Phiên Bản Cổ Điển', 36, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/Wave%20Alpha/C%E1%BB%95%20%C4%90i%E1%BB%83n/Xanh/1.png?raw=true', 1, 2025),
+(8, 35, 'Wave RSX Tiêu Chuẩn', 30, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/Wave%20RSX/Ti%C3%AAu%20Chu%E1%BA%A9n/%C4%90en/3j6CEz39256ttsRfjbF9.png?raw=true', 1, 2025),
+(9, 38, 'Super Cup Đặc Biệt', 29, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/Super%20Cup/%C4%90%E1%BA%B7c%20Bi%E1%BB%87t/%C4%90en/4mvfY4O7TXBSDullbfAZ.png?raw=true', 1, 2025),
+(10, 40, 'Winner X Tiêu Chuẩn', 20, 'https://github.com/CiuTuVoi/Motorcycle-sales-website-project/blob/Leader/%E1%BA%A2nh/Honda/Winer%20X/Ti%C3%AAu%20Chu%E1%BA%A9n/B%E1%BA%A1c%20%C4%90en/1.png?raw=true', 1, 2025);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `thong_so_ky_thuat`
 --
-DROP TABLE IF EXISTS thong_so_ky_thuat;
+
 CREATE TABLE `thong_so_ky_thuat` (
   `ma_thong_so` int(11) NOT NULL,
   `ma_san_pham` int(11) NOT NULL,
@@ -616,6 +711,8 @@ INSERT INTO `thong_so_ky_thuat` (`ma_thong_so`, `ma_san_pham`, `khoi_luong`, `DR
 -- Indexes for dumped tables
 --
 
+
+
 --
 -- Indexes for table `danh_gia`
 --
@@ -638,6 +735,10 @@ ALTER TABLE `don_hang`
 ALTER TABLE `kho_hang`
   ADD KEY `ma_san_pham` (`ma_san_pham`);
 
+
+ALTER TABLE `san_pham_ban_chay`
+  ADD PRIMARY KEY (`id_ban_chay`),
+  ADD KEY `ma_san_pham` (`ma_san_pham`);
 --
 -- Indexes for table `khuyen_mai`
 --
@@ -730,19 +831,23 @@ ALTER TABLE `danh_gia`
 -- AUTO_INCREMENT for table `don_hang`
 --
 ALTER TABLE `don_hang`
-  MODIFY `ma_don_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ma_don_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
+
+ALTER TABLE `san_pham_ban_chay`
+  MODIFY `id_ban_chay` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  
 --
 -- AUTO_INCREMENT for table `khuyen_mai`
 --
 ALTER TABLE `khuyen_mai`
-  MODIFY `ma_khuyen_mai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ma_khuyen_mai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `lich_su_giao_dich`
 --
 ALTER TABLE `lich_su_giao_dich`
-  MODIFY `ma_giao_dich` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ma_giao_dich` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `loai_xe`
@@ -754,7 +859,7 @@ ALTER TABLE `loai_xe`
 -- AUTO_INCREMENT for table `nguoi_dung`
 --
 ALTER TABLE `nguoi_dung`
-  MODIFY `ma_nguoi_dung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ma_nguoi_dung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `thong_so_ky_thuat`
@@ -769,7 +874,7 @@ ALTER TABLE `gio_hang`
   MODIFY `ma_gio_hang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 ALTER TABLE `thong_bao`
-  MODIFY `ma_thong_bao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ma_thong_bao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 --
 -- Constraints for dumped tables
 --
@@ -794,6 +899,8 @@ ALTER TABLE `don_hang`
 ALTER TABLE `kho_hang`
   ADD CONSTRAINT `kho_hang_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 
+ALTER TABLE `san_pham_ban_chay`
+  ADD CONSTRAINT `ma_san_pham_bk` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 --
 -- Constraints for table `lich_su_giao_dich`
 --
