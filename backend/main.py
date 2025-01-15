@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 from api.user import router as user_router  # Import router từ user.py
 from password.reset_password import router as reset_password_router # Import router từ reset_passwork.py
 from api.product import router as product_router # Import router từ product.py
@@ -14,11 +15,22 @@ from api.gio_hang import router as giohang_router # Import router từ gio_hang.
 from api.search import router as search_router # Import router từ search.py
 from api.cap_nhat_gia_khuyen_mai import router as capnhatgiakhuyenmai_router # Import router từ cap_nhat_gia_khuyen_mai.py 
 from api.search_nguoi_dung import router as searchnguoidung_router # Import router từ search_nguoi_dung.py
+from api.san_pham_ban_chay import router as sanphambanchay_router # Import router từ san_pham_ban_chay.py
 
 import sys
 import os
 
 app = FastAPI()
+
+# Cấu hình CORS để cho phép frontend kết nối đến backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # URL của frontend
+    allow_credentials=True,
+    allow_methods=["*"],  # Cho phép tất cả các phương thức HTTP
+    allow_headers=["*"],  # Cho phép tất cả các headers
+)
+
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,3 +50,4 @@ app.include_router(giohang_router)
 app.include_router(search_router)
 app.include_router(capnhatgiakhuyenmai_router)
 app.include_router(searchnguoidung_router)
+app.include_router(sanphambanchay_router)
