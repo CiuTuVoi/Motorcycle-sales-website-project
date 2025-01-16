@@ -1,41 +1,15 @@
-from fastapi import APIRouter, HTTPException, Depends, Security
+import jwt
+from fastapi import APIRouter, Depends, HTTPException, Security
+from fastapi.security import HTTPBearer
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models.models import ThongSoKyThuat
-from fastapi.security import OAuth2PasswordBearer
-import jwt
-from models.database import get_db
 
+from core.security import verify_role
+from models.database import get_db
+from models.models import ThongSoKyThuat
 
 router = APIRouter()
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# Middleware phân quyền
-def verify_role(required_role: str):
-    def role_checker(token: str = Depends(oauth2_scheme)):
-        try:
-            # Giải mã token để lấy thông tin người dùng
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            
-            # Lấy vai trò từ token
-            user_role = payload.get("role")
-            
-            if user_role is None:
-                raise HTTPException(status_code=401, detail="Không có vai trò trong token")
-            
-            # Kiểm tra vai trò người dùng
-            if user_role != required_role:
-                raise HTTPException(status_code=403, detail="Access denied: Không đủ quyền truy cập")
-        
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token đã hết hạn")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Token không hợp lệ")
-        
-    return role_checker
 
 # Schema thông số kỹ thuật
 class ThongSoCreate(BaseModel):
@@ -79,10 +53,14 @@ def get_thongso(db: Session = Depends(get_db)):
 def create_thongso(
     thongso_create: ThongSoCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Kiểm tra nếu id thông số đã tồn tại
-    existing_thongso = db.query(ThongSoKyThuat).filter(ThongSoKyThuat.ma_san_pham == thongso_create.ma_san_pham).first()
+    existing_thongso = (
+        db.query(ThongSoKyThuat)
+        .filter(ThongSoKyThuat.ma_san_pham == thongso_create.ma_san_pham)
+        .first()
+    )
     if existing_thongso:
         raise HTTPException(status_code=400, detail="Thông số đã tồn tại")
 
@@ -108,7 +86,7 @@ def create_thongso(
         moment_cuc_dai=thongso_create.moment_cuc_dai,
         dung_tich_xylanh=thongso_create.dung_tich_xylanh,
         duong_kich_x_hanh_trinh_pitong=thongso_create.duong_kich_x_hanh_trinh_pitong,
-        ty_so_nen=thongso_create.ty_so_nen
+        ty_so_nen=thongso_create.ty_so_nen,
     )
 
     # Lưu thông số vào cơ sở dữ liệu
@@ -126,14 +104,18 @@ def update_thongso(
     thongso_id: int,
     thongso_update: ThongSoCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Tìm thông số trong cơ sở dữ liệu
-    thongso = db.query(ThongSoKyThuat).filter(ThongSoKyThuat.ma_thong_so == thongso_id).first()
-    
+    thongso = (
+        db.query(ThongSoKyThuat)
+        .filter(ThongSoKyThuat.ma_thong_so == thongso_id)
+        .first()
+    )
+
     if not thongso:
         raise HTTPException(status_code=404, detail="Thông số không tìm thấy")
-    
+
     # Cập nhật thông tin thông số
     thongso.ma_san_pham = thongso_update.ma_san_pham
     thongso.khoi_luong = thongso_update.khoi_luong
@@ -154,9 +136,11 @@ def update_thongso(
     thongso.he_thong_khoi_dong = thongso_update.he_thong_khoi_dong
     thongso.moment_cuc_dai = thongso_update.moment_cuc_dai
     thongso.dung_tich_xylanh = thongso_update.dung_tich_xylanh
-    thongso.duong_kich_x_hanh_trinh_pitong = thongso_update.duong_kich_x_hanh_trinh_pitong
+    thongso.duong_kich_x_hanh_trinh_pitong = (
+        thongso_update.duong_kich_x_hanh_trinh_pitong
+    )
     thongso.ty_so_nen = thongso_update.ty_so_nen
-    
+
     # Commit thay đổi vào cơ sở dữ liệu
     db.commit()
     db.refresh(thongso)
@@ -170,12 +154,16 @@ def update_thongso(
 def delete_thongso(
     thongso_id: int,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
-    thongso = db.query(ThongSoKyThuat).filter(ThongSoKyThuat.ma_thong_so == thongso_id).first()
+    thongso = (
+        db.query(ThongSoKyThuat)
+        .filter(ThongSoKyThuat.ma_thong_so == thongso_id)
+        .first()
+    )
     if not thongso:
         raise HTTPException(status_code=404, detail="Thông số không tìm thấy")
-    
+
     db.delete(thongso)
     db.commit()
     return {"message": "Thông số đã được xóa thành công"}

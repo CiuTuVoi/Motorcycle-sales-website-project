@@ -1,52 +1,28 @@
-from fastapi import APIRouter, HTTPException, Depends, Security
-from pydantic import BaseModel
-from typing import List
-from rapidfuzz import fuzz
 import re
 from enum import Enum
-import jwt
+from typing import List
+
+from fastapi import APIRouter, Depends, HTTPException, Security
+from pydantic import BaseModel
+from rapidfuzz import fuzz
 from sqlalchemy.orm import Session
-from models.models import NguoiDung as NguoiDungModel
-from fastapi.security import OAuth2PasswordBearer
+
+from core.security import verify_role
 from models.database import get_db
+from models.models import NguoiDung as NguoiDungModel
 
 router = APIRouter()
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# Middleware phân quyền
-def verify_role(required_role: str):
-    def role_checker(token: str = Depends(oauth2_scheme)):
-        try:
-            # Giải mã token để lấy thông tin người dùng
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            
-            # Lấy vai trò từ token
-            user_role = payload.get("role")
-            
-            if user_role is None:
-                raise HTTPException(status_code=401, detail="Không có vai trò trong token")
-            
-            # Kiểm tra vai trò người dùng
-            if user_role != required_role:
-                raise HTTPException(status_code=403, detail="Access denied: Không đủ quyền truy cập")
-        
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token đã hết hạn")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Token không hợp lệ")
-        
-    return role_checker
 
 class VaiTro(str, Enum):
-    admin = 'Admin'
-    user = 'User'
+    admin = "Admin"
+    user = "User"
+
 
 class TrangThai(str, Enum):
-    hoatDong = 'HoatDong'
-    biKhoa = 'BiKhoa'
+    hoatDong = "HoatDong"
+    biKhoa = "BiKhoa"
+
 
 # Tạo base schema cho người dùng
 class NguoiDungBase(BaseModel):
@@ -57,7 +33,7 @@ class NguoiDungBase(BaseModel):
     so_dien_thoai: str
     dia_chi: str
     vai_tro: VaiTro
-    trang_thai: TrangThai 
+    trang_thai: TrangThai
 
 
 # Schema đọc dữ liệu sản phẩm
@@ -67,6 +43,7 @@ class NguoiDungSchema(NguoiDungBase):
     class Config:
         from_attributes = True
 
+
 def normalize_string(s: str) -> str:
     # Loại bỏ khoảng trắng và chuyển về chữ thường
     return re.sub(r"\s+", "", s).lower()
@@ -74,26 +51,30 @@ def normalize_string(s: str) -> str:
 
 # API Tìm kiếm người dùng cụ thể thông qua tên người dùng chỉ dành cho admin
 @router.get("/users/by_name/", response_model=NguoiDungSchema)
-def search_user_by_name(ten_nguoi_dung: str, 
-                        db: Session = Depends(get_db),
-                        _: str = Security(verify_role("Admin"))):
+def search_user_by_name(
+    ten_nguoi_dung: str,
+    db: Session = Depends(get_db),
+    _: str = Security(verify_role("Admin")),
+):
     # Làm sạch chuỗi nhập
     ten_nguoi_dung_clean = normalize_string(ten_nguoi_dung)
-    
+
     # Lấy tất cả người dùng trong cơ sở dữ liệu
     all_users = db.query(NguoiDungModel).all()
-    
+
     # Tìm người dùng khớp nhất bằng fuzzy matching
     best_match = None
     highest_score = 0
     for nguoidung in all_users:
-        user_normalized = normalize_string(nguoidung.ho_ten)  # Tìm kiếm theo họ tên người dùng
+        user_normalized = normalize_string(
+            nguoidung.ho_ten
+        )  # Tìm kiếm theo họ tên người dùng
         score = fuzz.partial_ratio(ten_nguoi_dung_clean, user_normalized)
         if score > highest_score and score > 80:  # Ngưỡng điểm tương đồng 80%
             best_match = nguoidung
             highest_score = score
-    
+
     if not best_match:
         raise HTTPException(status_code=404, detail="Không tìm thấy người dùng phù hợp")
-    
+
     return best_match

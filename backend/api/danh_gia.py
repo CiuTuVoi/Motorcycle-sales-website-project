@@ -1,27 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models.models import DanhGia, NguoiDung
-from fastapi.security import OAuth2PasswordBearer
-import jwt
-from models.database import get_db  # Hàm lấy session DB
 
+from core.security import extract_user_data
+from models.database import get_db  # Hàm lấy session DB
+from models.models import DanhGia, NguoiDung
 
 router = APIRouter()
-
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# Middleware giải mã token và lấy thông tin người dùng
-def extract_user_data(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload  # Trả về payload chứa thông tin người dùng
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token đã hết hạn")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Token không hợp lệ")
 
 
 # Schema: Đánh giá
@@ -33,11 +18,12 @@ class DanhGiaCreate(BaseModel):
     class Config:
         from_attributes = True
 
+
 # API Lấy danh sách đánh giá của người dùng
 @router.get("/danhgia")
 def get_danhgia(
     db: Session = Depends(get_db),
-    user_data: dict = Depends(extract_user_data)  # Lấy dữ liệu người dùng từ token
+    user_data: dict = Depends(extract_user_data),  # Lấy dữ liệu người dùng từ token
 ):
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")  # Lấy mã người dùng từ token
 
@@ -58,17 +44,24 @@ def get_danhgia(
         for dg in danhgia
     ]
 
+
 # API: Thêm đánh giá mới
-@router.post("/danhgia", response_model=DanhGiaCreate, dependencies=[Depends(extract_user_data)])
+@router.post(
+    "/danhgia", response_model=DanhGiaCreate, dependencies=[Depends(extract_user_data)]
+)
 def create_danhgia(
     danhgia_create: DanhGiaCreate,
     db: Session = Depends(get_db),
-    user_data: dict = Depends(extract_user_data)  # Truyền thông tin người dùng từ token
+    user_data: dict = Depends(
+        extract_user_data
+    ),  # Truyền thông tin người dùng từ token
 ):
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")  # Lấy mã người dùng từ token
 
     if not ma_nguoi_dung:
-        raise HTTPException(status_code=401, detail="Không tìm thấy mã người dùng trong token")
+        raise HTTPException(
+            status_code=401, detail="Không tìm thấy mã người dùng trong token"
+        )
 
     # Kiểm tra người dùng trong cơ sở dữ liệu
     user = db.query(NguoiDung).filter(NguoiDung.ma_nguoi_dung == ma_nguoi_dung).first()
@@ -89,13 +82,20 @@ def create_danhgia(
 
     return DanhGiaCreate.from_orm(new_danhgia)
 
+
 # API: Sửa đánh giá
-@router.put("/danhgia/{danhgia_id}", response_model=DanhGiaCreate, dependencies=[Depends(extract_user_data)])
+@router.put(
+    "/danhgia/{danhgia_id}",
+    response_model=DanhGiaCreate,
+    dependencies=[Depends(extract_user_data)],
+)
 def update_danhgia(
     danhgia_id: int,
     danhgia_update: DanhGiaCreate,
     db: Session = Depends(get_db),
-    user_data: dict = Depends(extract_user_data)  # Truyền thông tin người dùng từ token
+    user_data: dict = Depends(
+        extract_user_data
+    ),  # Truyền thông tin người dùng từ token
 ):
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
 
@@ -118,12 +118,15 @@ def update_danhgia(
 
     return DanhGiaCreate.from_orm(danhgia)
 
+
 # API: Xóa đánh giá
 @router.delete("/danhgia/{danhgia_id}", dependencies=[Depends(extract_user_data)])
 def delete_danhgia(
     danhgia_id: int,
     db: Session = Depends(get_db),
-    user_data: dict = Depends(extract_user_data)  # Truyền thông tin người dùng từ token
+    user_data: dict = Depends(
+        extract_user_data
+    ),  # Truyền thông tin người dùng từ token
 ):
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
 

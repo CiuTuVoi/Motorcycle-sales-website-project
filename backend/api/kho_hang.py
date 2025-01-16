@@ -1,41 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends, Security
+from fastapi import APIRouter, Depends, HTTPException, Security
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models.models import KhoHang
-from fastapi.security import OAuth2PasswordBearer
-import jwt
-from models.database import get_db
 
+from core.security import verify_role
+from models.database import get_db
+from models.models import KhoHang
 
 router = APIRouter()
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# Middleware phân quyền
-def verify_role(required_role: str):
-    def role_checker(token: str = Depends(oauth2_scheme)):
-        try:
-            # Giải mã token để lấy thông tin người dùng
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            
-            # Lấy vai trò từ token
-            user_role = payload.get("role")
-            
-            if user_role is None:
-                raise HTTPException(status_code=401, detail="Không có vai trò trong token")
-            
-            # Kiểm tra vai trò người dùng
-            if user_role != required_role:
-                raise HTTPException(status_code=403, detail="Access denied: Không đủ quyền truy cập")
-        
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token đã hết hạn")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Token không hợp lệ")
-        
-    return role_checker
 
 # Schema sản phẩm
 class KhohangCreate(BaseModel):
@@ -48,7 +20,9 @@ class KhohangCreate(BaseModel):
 
 # API: Lấy danh sách kho hàng (chỉ cho admin)
 @router.get("/khohang")
-def get_khohang(db: Session = Depends(get_db), _: str = Security(verify_role("Admin"))):  # Kiểm tra role admin
+def get_khohang(
+    db: Session = Depends(get_db), _: str = Security(verify_role("Admin"))
+):  # Kiểm tra role admin
     khohang = db.query(KhoHang).all()
     if not khohang:
         raise HTTPException(status_code=404, detail="Không tìm thấy số lượng kho hàng")
@@ -60,18 +34,20 @@ def get_khohang(db: Session = Depends(get_db), _: str = Security(verify_role("Ad
 def create_khohang(
     khohang_create: KhohangCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Kiểm tra nếu sản phẩm đã tồn tại
-    existing_khohang = db.query(KhoHang).filter(KhoHang.ma_san_pham == khohang_create.ma_san_pham).first()
+    existing_khohang = (
+        db.query(KhoHang)
+        .filter(KhoHang.ma_san_pham == khohang_create.ma_san_pham)
+        .first()
+    )
     if existing_khohang:
         raise HTTPException(status_code=400, detail="Trùng sản phẩm")
 
     # Tạo đối tượng kho hàng mới từ dữ liệu nhận được
     new_khohang = KhoHang(
-        ma_san_pham=khohang_create.ma_san_pham,
-        so_luong=khohang_create.so_luong
-        
+        ma_san_pham=khohang_create.ma_san_pham, so_luong=khohang_create.so_luong
     )
 
     # Lưu số lượng vào cơ sở dữ liệu
@@ -89,18 +65,16 @@ def update_khohang(
     khohang_id: int,
     khohang_update: KhohangCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Tìm sản phẩm trong cơ sở dữ liệu
     khohang = db.query(KhoHang).filter(KhoHang.ma_san_pham == khohang_id).first()
-    
+
     if not khohang:
         raise HTTPException(status_code=404, detail="KhoHang not found")
-    
+
     # Cập nhật thông tin sản phẩm
     khohang.so_luong = khohang_update.so_luong
-    
-    
 
     # Commit thay đổi vào cơ sở dữ liệu
     db.commit()
@@ -115,12 +89,12 @@ def update_khohang(
 def delete_khohang(
     khohang_id: int,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     khohang = db.query(KhoHang).filter(KhoHang.ma_san_pham == khohang_id).first()
     if not khohang:
         raise HTTPException(status_code=404, detail="Kho Hang not found")
-    
+
     db.delete(khohang)
     db.commit()
     return {"message": "Kho Hang deleted successfully"}

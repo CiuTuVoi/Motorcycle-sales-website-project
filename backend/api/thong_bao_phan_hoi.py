@@ -1,62 +1,64 @@
-from fastapi import APIRouter, HTTPException, Depends, Request
-from pydantic import BaseModel
 from enum import Enum
-from sqlalchemy.orm import Session
-from models.models import DanhGia, ThongBao, PhanHoi, NguoiDung, KhuyenMai
-from fastapi.security import OAuth2PasswordBearer
+
 import jwt
+from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.security import HTTPBearer
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+from core.security import get_current_user
+from core.security import verify_role
 from models.database import get_db
+from models.models import DanhGia, KhuyenMai, NguoiDung, PhanHoi, ThongBao
 
 router = APIRouter()
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# Middleware phân quyền
-def verify_role(required_role: str):
-    def role_checker(token: str = Depends(oauth2_scheme)):
-        try:
-            # Giải mã token để lấy thông tin người dùng
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            
-            # Lấy vai trò từ token
-            user_role = payload.get("role")
-            
-            if user_role is None:
-                raise HTTPException(status_code=401, detail="Không có vai trò trong token")
-            
-            # Kiểm tra vai trò người dùng
-            if user_role != required_role:
-                raise HTTPException(status_code=403, detail="Access denied: Không đủ quyền truy cập")
-        
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token đã hết hạn")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Token không hợp lệ")
-        
-    return role_checker
 
 # Schema cho tạo phản hồi
 class PhanHoiCreate(BaseModel):
     ma_danh_gia: int  # Mã đánh giá mà phản hồi liên quan
-    noi_dung: str      # Nội dung phản hồi
+    noi_dung: str  # Nội dung phản hồi
 
 
 class TrangThaiThongBao(str, Enum):
-    khuyenMai = 'Khuyenmai'
-    riengTu = 'Riengtu'
+    khuyenMai = "Khuyenmai"
+    riengTu = "Riengtu"
+
+
+class DaDoc(str, Enum):
+    daDoc = "đã đọc"
+    chuaDoc = "chưa đọc"
 
 # Schema cho thông báo
 class ThongBaoRead(BaseModel):
     ma_thong_bao: int
     ma_nguoi_dung: int
     noi_dung: str
-    da_doc: bool
-    loai_thong_bao: TrangThaiThongBao = TrangThaiThongBao.riengTu # mặc định là riêng tư
+    da_doc: DaDoc = DaDoc.chuaDoc
+    loai_thong_bao: TrangThaiThongBao = (
+        TrangThaiThongBao.riengTu
+    )  # mặc định là riêng tư
 
     class Config:
         from_attributes = True
+
+
+# API : lấy ra thông báo của người dùng
+@router.get("/thongbao")
+def get_thongbao(
+    db: Session = Depends(get_db), user: NguoiDung = Depends(get_current_user)
+):
+    if user is None:
+        raise HTTPException(status_code=401, detail="Người dùng không hợp lệ")
+
+    ma_nguoi_dung = user.ma_nguoi_dung  # Lấy từ đối tượng người dùng trong cơ sở dữ liệu
+    thongbao_list = (
+        db.query(ThongBao).filter(ThongBao.ma_nguoi_dung == ma_nguoi_dung).all()
+    )
+
+    if not thongbao_list:
+        raise HTTPException(status_code=404, detail="Không tìm thấy thông báo")
+
+    return [ThongBaoRead.from_orm(dh) for dh in thongbao_list]
 
 
 # API: Tạo phản hồi và gửi thông báo
@@ -64,7 +66,7 @@ class ThongBaoRead(BaseModel):
 def create_phan_hoi(
     phan_hoi: PhanHoiCreate,
     db: Session = Depends(get_db),
-    user_data: dict = Depends(verify_role)  # Lấy dữ liệu người dùng từ token
+    user_data: dict = Depends(verify_role),  # Lấy dữ liệu người dùng từ token
 ):
     # Lấy mã người dùng từ token
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
@@ -72,7 +74,9 @@ def create_phan_hoi(
         raise HTTPException(status_code=403, detail="Người dùng không xác thực.")
 
     # 1. Kiểm tra xem đánh giá có tồn tại không
-    danh_gia = db.query(DanhGia).filter(DanhGia.ma_danh_gia == phan_hoi.ma_danh_gia).first()
+    danh_gia = (
+        db.query(DanhGia).filter(DanhGia.ma_danh_gia == phan_hoi.ma_danh_gia).first()
+    )
     if not danh_gia:
         raise HTTPException(status_code=404, detail="Đánh giá không tồn tại.")
 
@@ -80,7 +84,7 @@ def create_phan_hoi(
     new_phan_hoi = PhanHoi(
         ma_danh_gia=phan_hoi.ma_danh_gia,
         ma_nguoi_dung=ma_nguoi_dung,  # Dùng mã người dùng từ token
-        noi_dung=phan_hoi.noi_dung
+        noi_dung=phan_hoi.noi_dung,
     )
     db.add(new_phan_hoi)
     db.commit()
@@ -91,7 +95,7 @@ def create_phan_hoi(
     new_thong_bao = ThongBao(
         ma_nguoi_dung=danh_gia.ma_nguoi_dung,  # Người nhận thông báo là chủ của đánh giá
         noi_dung=noi_dung_thong_bao,
-        loai_thong_bao="Riengtu"  # Loại thông báo là trả lời bình luận
+        loai_thong_bao="Riengtu",  # Loại thông báo là trả lời bình luận
     )
     db.add(new_thong_bao)
     db.commit()
@@ -99,12 +103,13 @@ def create_phan_hoi(
 
     return new_thong_bao
 
+
 # API: Tạo phản hồi khi chủ đánh giá phản hồi lại
 @router.post("/phan-hoi/rep/", response_model=ThongBaoRead)
 def reply_to_phan_hoi(
     phan_hoi: PhanHoiCreate,
     db: Session = Depends(get_db),
-    user_data: dict = Depends(verify_role)  # Lấy dữ liệu người dùng từ token
+    user_data: dict = Depends(verify_role),  # Lấy dữ liệu người dùng từ token
 ):
     # Lấy mã người dùng từ token
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
@@ -112,7 +117,9 @@ def reply_to_phan_hoi(
         raise HTTPException(status_code=403, detail="Người dùng không xác thực.")
 
     # 1. Kiểm tra xem đánh giá có tồn tại không
-    danh_gia = db.query(DanhGia).filter(DanhGia.ma_danh_gia == phan_hoi.ma_danh_gia).first()
+    danh_gia = (
+        db.query(DanhGia).filter(DanhGia.ma_danh_gia == phan_hoi.ma_danh_gia).first()
+    )
     if not danh_gia:
         raise HTTPException(status_code=404, detail="Đánh giá không tồn tại.")
 
@@ -120,7 +127,7 @@ def reply_to_phan_hoi(
     new_phan_hoi = PhanHoi(
         ma_danh_gia=phan_hoi.ma_danh_gia,
         ma_nguoi_dung=ma_nguoi_dung,  # Dùng mã người dùng từ token
-        noi_dung=phan_hoi.noi_dung
+        noi_dung=phan_hoi.noi_dung,
     )
     db.add(new_phan_hoi)
     db.commit()
@@ -131,7 +138,7 @@ def reply_to_phan_hoi(
     new_thong_bao = ThongBao(
         ma_nguoi_dung=danh_gia.ma_nguoi_dung,  # Người nhận thông báo là chủ của phản hồi ban đầu
         noi_dung=noi_dung_thong_bao,
-        loai_thong_bao="Riengtu"  # Loại thông báo là trả lời phản hồi
+        loai_thong_bao="Riengtu",  # Loại thông báo là trả lời phản hồi
     )
     db.add(new_thong_bao)
     db.commit()
@@ -139,21 +146,26 @@ def reply_to_phan_hoi(
 
     return new_thong_bao
 
+
 @router.post("/tao_thong_bao_khuyen_mai")
 async def tao_thong_bao_khuyen_mai(khuyen_mai_id: int, db: Session = Depends(get_db)):
     # Lấy thông tin khuyến mãi từ bảng KhuyenMai
-    khuyen_mai = db.query(KhuyenMai).filter(KhuyenMai.ma_khuyen_mai == khuyen_mai_id).first()
+    khuyen_mai = (
+        db.query(KhuyenMai).filter(KhuyenMai.ma_khuyen_mai == khuyen_mai_id).first()
+    )
 
     if not khuyen_mai:
         raise HTTPException(status_code=404, detail="Khuyến mãi không tồn tại")
 
     # Tạo thông báo khuyến mãi cho tất cả người dùng
-    nguoi_dung_list = db.query(NguoiDung).filter(NguoiDung.trang_thai == 'HoatDong').all()
+    nguoi_dung_list = (
+        db.query(NguoiDung).filter(NguoiDung.trang_thai == "HoatDong").all()
+    )
     for nguoi_dung in nguoi_dung_list:
         thong_bao = ThongBao(
             ma_nguoi_dung=nguoi_dung.ma_nguoi_dung,
             noi_dung=f"Chương trình khuyến mãi: {khuyen_mai.ten_khuyen_mai} - {khuyen_mai.mo_ta}",
-            loai_thong_bao='Khuyenmai'  # Thông báo khuyến mãi
+            loai_thong_bao="Khuyenmai",  # Thông báo khuyến mãi
         )
         db.add(thong_bao)
 
@@ -163,7 +175,9 @@ async def tao_thong_bao_khuyen_mai(khuyen_mai_id: int, db: Session = Depends(get
 
 @router.patch("/thong_bao/{ma_thong_bao}", response_model=ThongBaoRead)
 async def mark_notification_as_read(
-    ma_thong_bao: int, db: Session = Depends(get_db), user_data: dict = Depends(verify_role)
+    ma_thong_bao: int,
+    db: Session = Depends(get_db),
+    user_data: dict = Depends(verify_role),
 ):
     # Lấy mã người dùng từ token
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
@@ -177,7 +191,9 @@ async def mark_notification_as_read(
 
     # Kiểm tra nếu người dùng có quyền đánh dấu thông báo là đã đọc (chủ sở hữu thông báo)
     if thong_bao.ma_nguoi_dung != ma_nguoi_dung:
-        raise HTTPException(status_code=403, detail="Không có quyền đánh dấu thông báo này.")
+        raise HTTPException(
+            status_code=403, detail="Không có quyền đánh dấu thông báo này."
+        )
 
     # Cập nhật trạng thái đã đọc của thông báo
     thong_bao.da_doc = True

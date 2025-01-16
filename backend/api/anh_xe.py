@@ -1,41 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends, Security
+import jwt
+from fastapi import APIRouter, Depends, HTTPException, Security
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models.models import AnhXe
-from fastapi.security import OAuth2PasswordBearer
-import jwt
+from core.security import verify_role
 from models.database import get_db
-
+from models.models import AnhXe
 
 router = APIRouter()
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# Middleware phân quyền
-def verify_role(required_role: str):
-    def role_checker(token: str = Depends(oauth2_scheme)):
-        try:
-            # Giải mã token để lấy thông tin người dùng
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            
-            # Lấy vai trò từ token
-            user_role = payload.get("role")
-            
-            if user_role is None:
-                raise HTTPException(status_code=401, detail="Không có vai trò trong token")
-            
-            # Kiểm tra vai trò người dùng
-            if user_role != required_role:
-                raise HTTPException(status_code=403, detail="Access denied: Không đủ quyền truy cập")
-        
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token đã hết hạn")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Token không hợp lệ")
-        
-    return role_checker
 
 # Schema sản phẩm
 class AnhxeCreate(BaseModel):
@@ -58,15 +30,18 @@ def get_anhxe(db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Không tìm thấy ảnh nào")
     return anhxe
 
+
 # API: Thêm ảnh cho xe mới (chỉ cho admin)
 @router.post("/anhxe", response_model=AnhxeCreate)
 def create_anhxe(
     anhxe_create: AnhxeCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Kiểm tra nếu ảnh đã tồn tại
-    existing_anhxe = db.query(AnhXe).filter(AnhXe.ma_hinh_anh == anhxe_create.ma_hinh_anh).first()
+    existing_anhxe = (
+        db.query(AnhXe).filter(AnhXe.ma_hinh_anh == anhxe_create.ma_hinh_anh).first()
+    )
     if existing_anhxe:
         raise HTTPException(status_code=400, detail="Ảnh đã tồn tại")
 
@@ -77,7 +52,7 @@ def create_anhxe(
         anh_1=anhxe_create.anh_1,
         anh_2=anhxe_create.anh_2,
         anh_3=anhxe_create.anh_3,
-        anh_4=anhxe_create.anh_4
+        anh_4=anhxe_create.anh_4,
     )
 
     # Lưu ảnh vào cơ sở dữ liệu
@@ -95,14 +70,14 @@ def update_anhxe(
     anhxe_id: int,
     anhxe_update: AnhxeCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Tìm hình ảnh trong cơ sở dữ liệu
     anhxe = db.query(AnhXe).filter(AnhXe.ma_hinh_anh == anhxe_id).first()
-    
+
     if not anhxe:
         raise HTTPException(status_code=404, detail="Images not found")
-    
+
     # Cập nhật thông tin ảnh xe
     anhxe.ma_san_pham = anhxe_update.ma_san_pham
     anhxe.mau_sac = anhxe_update.mau_sac
@@ -124,12 +99,12 @@ def update_anhxe(
 def delete_anhxe(
     anhxe_id: int,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
-    anhxe = db.query(AnhXe).filter(AnhXe.ma_hinh_anh ==anhxe_id).first()
+    anhxe = db.query(AnhXe).filter(AnhXe.ma_hinh_anh == anhxe_id).first()
     if not anhxe:
         raise HTTPException(status_code=404, detail="Images not found")
-    
+
     db.delete(anhxe)
     db.commit()
     return {"message": "Images deleted successfully"}

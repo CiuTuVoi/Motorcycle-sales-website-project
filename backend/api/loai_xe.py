@@ -1,41 +1,15 @@
-from fastapi import APIRouter, HTTPException, Depends, Security
+import jwt
+from fastapi import APIRouter, Depends, HTTPException, Security
+from fastapi.security import HTTPBearer
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models.models import LoaiXe
-from fastapi.security import OAuth2PasswordBearer
-import jwt
-from models.database import get_db
 
+from core.security import verify_role
+from models.database import get_db
+from models.models import LoaiXe
 
 router = APIRouter()
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-# Middleware phân quyền
-def verify_role(required_role: str):
-    def role_checker(token: str = Depends(oauth2_scheme)):
-        try:
-            # Giải mã token để lấy thông tin người dùng
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            
-            # Lấy vai trò từ token
-            user_role = payload.get("role")
-            
-            if user_role is None:
-                raise HTTPException(status_code=401, detail="Không có vai trò trong token")
-            
-            # Kiểm tra vai trò người dùng
-            if user_role != required_role:
-                raise HTTPException(status_code=403, detail="Access denied: Không đủ quyền truy cập")
-        
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token đã hết hạn")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Token không hợp lệ")
-        
-    return role_checker
 
 # Schema loại xe
 class LoaixeCreate(BaseModel):
@@ -59,18 +33,17 @@ def get_loaixe(db: Session = Depends(get_db)):
 def create_loaixe(
     loaixe_create: LoaixeCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Kiểm tra nếu sản phẩm đã tồn tại
-    existing_loaixe = db.query(LoaiXe).filter(LoaiXe.ma_loai_xe == loaixe_create.ma_loai_xe).first()
+    existing_loaixe = (
+        db.query(LoaiXe).filter(LoaiXe.ma_loai_xe == loaixe_create.ma_loai_xe).first()
+    )
     if existing_loaixe:
         raise HTTPException(status_code=400, detail="Trùng loại xe")
 
     # Tạo đối tượng loại xe mới từ dữ liệu nhận được
-    new_loaixe = LoaiXe(
-        loai_xe=loaixe_create.loai_xe
-        
-    )
+    new_loaixe = LoaiXe(loai_xe=loaixe_create.loai_xe)
 
     # Lưu Loại xe vào cơ sở dữ liệu
     db.add(new_loaixe)
@@ -87,18 +60,16 @@ def update_loaixe(
     loaixe_id: int,
     loaixe_update: LoaixeCreate,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Tìm sản phẩm trong cơ sở dữ liệu
     loaixe = db.query(LoaiXe).filter(LoaiXe.ma_loai_xe == loaixe_id).first()
-    
+
     if not loaixe:
         raise HTTPException(status_code=404, detail="Loai Xe not found")
-    
+
     # Cập nhật thông tin sản phẩm
     loaixe.loai_xe = loaixe_update.loai_xe
-    
-    
 
     # Commit thay đổi vào cơ sở dữ liệu
     db.commit()
@@ -113,12 +84,12 @@ def update_loaixe(
 def delete_loaixe(
     loaixe_id: int,
     db: Session = Depends(get_db),
-    _: str = Security(verify_role("Admin"))  # Kiểm tra role admin
+    _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     loaixe = db.query(LoaiXe).filter(LoaiXe.ma_loai_xe == loaixe_id).first()
     if not loaixe:
-        raise HTTPException(status_code=404, detail= "Loai Xe not found")
-    
+        raise HTTPException(status_code=404, detail="Loai Xe not found")
+
     db.delete(loaixe)
     db.commit()
     return {"message": "Loai Xe deleted successfully"}
