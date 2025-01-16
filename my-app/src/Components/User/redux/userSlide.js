@@ -1,20 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// Tạo slice cho user
 const userSlice = createSlice({
-  name: 'user',
+  name: 'user', // Tên slice
   initialState: {
-    userName: null,
+    tendangnhap: null, // Trạng thái ban đầu
   },
   reducers: {
+    // Action để cập nhật tên người dùng
     setUserName: (state, action) => {
-      state.userName = action.payload; // Cập nhật tên người dùng
+      state.tendangnhap = action.payload; // Nhận payload từ action và cập nhật state
     },
+    // Action để xóa tên người dùng
     clearUserName: (state) => {
-      state.userName = null; // Xóa tên người dùng
+      state.tendangnhap = null; // Reset state về null
     },
   },
 });
 
+// Export actions
 export const { setUserName, clearUserName } = userSlice.actions;
-export const selectUserName = (state) => state.user.userName; // Selector
+
+// Selector để lấy tên người dùng từ state
+export const selectUserName = (state) => state.user?.tendangnhap ?? null; // Đảm bảo không bị lỗi
+
+// Export reducer để sử dụng trong store
 export default userSlice.reducer;

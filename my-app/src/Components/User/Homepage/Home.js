@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import "./Home.scss";
 import { AiOutlineRight } from "react-icons/ai";
 import { SiHonda, SiYamahamotorcorporation } from "react-icons/si";
@@ -13,6 +13,7 @@ import axios from "axios";
 import HotProduct from "../hotProduct/hotProduct";
 import { IoIosHeart } from "react-icons/io";
 // import BestSellingProducts from "../BestSellingProducts/BestSellingProducts";
+
 
 const slideImages = [
   {
@@ -130,30 +131,71 @@ const Home = () => {
     };
     fetchData();
   }, []); // Đảm bảo chỉ gọi 1 lần khi component mount
+  
 
   const [productHot, setProductHot] = useState(productHotData[0]);
 
-  const [favoriteItems, setFavoriteItems] = useState([]);
-  const toggleFavorite = (item) => {
-    let updatedFavorites;
-    if (favoriteItems.some((fav) => fav.ma_san_pham === item.ma_san_pham)) {
-      updatedFavorites = favoriteItems.filter(
-        (fav) => fav.ma_san_pham !== item.ma_san_pham
-      );
-    } else {
-      updatedFavorites = [...favoriteItems, item];
-    }
-    setFavoriteItems(updatedFavorites);
+  // Tải danh sách yêu thích từ localStorage khi ứng dụng khởi động
 
-    // Lưu danh sách yêu thích vào localStorage
-    localStorage.setItem("favoriteItems", JSON.stringify(updatedFavorites));
-  };
+  const [favoriteItems, setFavoriteItems] = useState([])
+useEffect(() => {
+  const savedFavorites = JSON.parse(localStorage.getItem("favoriteItems")) || [];
+  setFavoriteItems(savedFavorites);
+}, []);
+
+// Hàm toggle yêu thích
+const toggleFavorite = (item) => {
+  const isFavorite = favoriteItems.some(
+    (fav) => fav.ma_san_pham === item.ma_san_pham
+  );
+  let updatedFavorites;
+
+  if (isFavorite) {
+    // Loại bỏ sản phẩm khỏi danh sách yêu thích
+    updatedFavorites = favoriteItems.filter(
+      (fav) => fav.ma_san_pham !== item.ma_san_pham
+    );
+  } else {
+    // Thêm sản phẩm vào danh sách yêu thích
+    updatedFavorites = [...favoriteItems, item];
+  }
+
+  setFavoriteItems(updatedFavorites);
+  localStorage.setItem("favoriteItems", JSON.stringify(updatedFavorites));
+};
+
+  const [promotions, setPromotions] = useState(null)
+
+  useEffect(() => {
+      fetch("http://127.0.0.1:8000/khuyenmai")
+        .then((response) => response.json())
+        .then((data) => {
+          // Tìm khuyến mãi có mã là 1
+          const promo = data.find((item) => item.ma_khuyen_mai === 1);
+          setPromotions(promo); // Lưu lại khuyến mãi này
+        })
+        .catch((error) => console.error("Error fetching promotions:", error));
+    }, []);
+  
+    if (!promotions) {
+      return <p>Đang tải dữ liệu...</p>;
+    }
+
+    const discount = (price) =>{
+      if(promotions && promotions.muc_giam){
+        return price - (price * promotions.muc_giam) / 100
+      }
+      return price
+
+    }
+  
 
   return (
     <div className="container">
       <div className="Header-home">
         <Header />
       </div>
+
 
       {/* Slide Show Section */}
       <div className="slide-show">
@@ -172,6 +214,8 @@ const Home = () => {
           ))}
         </Slide>
       </div>
+
+      
       {/*best-selling-products */}
       <div className="best-selling-products">
         <h1>SẢN PHẨM BÁN CHẠY</h1>
@@ -261,10 +305,19 @@ const Home = () => {
                       style: "currency",
                       currency: "VND",
                     }).format(product.gia)}
+                  </p >
+                  <p className="new-price">
+                    {new Intl.NumberFormat("vi-VN",{
+                      style: "currency",
+                      currency: "VND",
+                    }
+                    
+                    ).format(discount(product.gia))}
+
                   </p>
 
                   <i
-                    className={`favorate ${
+                    className={`favorite-btn ${
                       favoriteItems.some(
                         (fav) => fav.ma_san_pham === product.ma_san_pham
                       )

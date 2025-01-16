@@ -1,28 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { Input, message } from "antd";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./Review.scss";
 
 const Review = ({ maSanPham }) => {
-  const [rating, setRating] = useState(0); // Đánh giá sao
-  const [reviewContent, setReviewContent] = useState(""); // Nội dung đánh giá
-  const [reviews, setReviews] = useState([]); // Danh sách đánh giá
-  const [loadingReviews, setLoadingReviews] = useState(true); // Trạng thái tải
-  const [username, setUsername] = useState(""); // Tên người dùng
+  const [rating, setRating] = useState(0);
+  const [reviewContent, setReviewContent] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+  const [username, setUsername] = useState("");
+  const [product, setProduct] = useState(null);
 
-  // Kiểm tra token đăng nhập
-  const token = Cookies.get("token");
+  const token = localStorage.getItem("access_token");
+  const ten_dang_nhap = localStorage.getItem("tendangnhap")
 
-  // Nếu không có token, yêu cầu người dùng đăng nhập
   useEffect(() => {
     if (token) {
-      const userNameFromCookie = Cookies.get("username");
+      const userNameFromCookie = localStorage.getItem("ten_dang_nhap");
       setUsername(userNameFromCookie || "Người dùng");
+    } else {
     }
   }, [token]);
 
-  // Lấy danh sách đánh giá
+  useEffect(() => {
+    if (!maSanPham) {
+      console.error("maSanPham is undefined");
+      return;
+    }
+    axios
+      .get(`http://127.0.0.1:8000/products/${maSanPham}`)
+      .then((response) => {
+        if (response.data) {
+          setProduct(response.data);
+        } else {
+          console.error("No product data received from API");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching product details:", error);
+      });
+  }, [maSanPham]);
+
   const fetchReviews = () => {
     setLoadingReviews(true);
     axios
@@ -41,17 +59,11 @@ const Review = ({ maSanPham }) => {
     if (maSanPham) fetchReviews();
   }, [maSanPham]);
 
-  // Xử lý gửi đánh giá
   const handleReviewSubmit = (e) => {
     e.preventDefault();
 
-    if (!rating) {
-      message.error("Vui lòng chọn số sao để đánh giá!");
-      return;
-    }
-
-    if (!reviewContent.trim()) {
-      message.error("Vui lòng nhập nội dung đánh giá!");
+    if (!rating || !reviewContent.trim()) {
+      message.error("Vui lòng chọn số sao và nhập nội dung đánh giá!");
       return;
     }
 
@@ -61,11 +73,6 @@ const Review = ({ maSanPham }) => {
       nhan_xet: reviewContent,
     };
 
-    if (!token) {
-      message.error("Bạn chưa đăng nhập. Vui lòng đăng nhập để gửi đánh giá.");
-      return;
-    }
-
     axios
       .post("http://127.0.0.1:8000/danhgia", reviewData, {
         headers: {
@@ -74,9 +81,9 @@ const Review = ({ maSanPham }) => {
       })
       .then(() => {
         message.success("Đánh giá của bạn đã được gửi thành công!");
-        setRating(0); // Reset rating
-        setReviewContent(""); // Reset review content
-        fetchReviews(); // Tải lại đánh giá
+        setRating(0);
+        setReviewContent("");
+        fetchReviews();
       })
       .catch((error) => {
         console.error("Error submitting review:", error);
@@ -88,7 +95,6 @@ const Review = ({ maSanPham }) => {
       });
   };
 
-  // Nếu không có token, yêu cầu người dùng đăng nhập
   if (!token) {
     return (
       <div className="review-container">
@@ -99,7 +105,10 @@ const Review = ({ maSanPham }) => {
 
   return (
     <div className="review-container">
-      <h3>Chào {username}, viết đánh giá của bạn:</h3>
+      <h3>
+        Chào {ten_dang_nhap}, viết đánh giá của bạn cho{" "}
+        {product ? product.ten_san_pham : "sản phẩm này"}
+      </h3>
       <form className="review-form" onSubmit={handleReviewSubmit}>
         <div className="rating">
           <label>Đánh giá của bạn *</label>
@@ -149,7 +158,7 @@ const Review = ({ maSanPham }) => {
             </div>
           ))
         ) : (
-          <p>Chưa có đánh giá nào.</p>
+          <p>Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
         )}
       </div>
     </div>

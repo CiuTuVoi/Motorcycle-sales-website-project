@@ -1,87 +1,83 @@
-.register-container {
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 30px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: left;
-}
+// SCSS cho form đăng ký (kích thước nhỏ hơn)
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$error-color: #e74c3c;
+$input-border-color: #ccc;
+$input-focus-color: #2980b9;
 
-.register-container h2 {
-  text-align: center;
-  font-size: 1.8rem;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.register-form {
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-group label {
-  font-size: 1rem;
-  color: #555;
-}
-
-.form-group input {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-  border-color: #2e7d32; /* Xanh lá nhấn mạnh */
-  outline: none;
-}
-
-.radio-group {
-  display: flex;
-  gap: 10px;
-}
-
-.radio-group label {
-  font-size: 1rem;
-  color: #333;
-  display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 5px;
+  height: 100vh;
+  margin: 0;
 }
 
-.register-button {
+form {
+  background: #ffffff;
+  padding: 1.5rem; // Giảm padding
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 320px; // Giảm chiều rộng tối đa
   width: 100%;
-  padding: 12px;
-  background-color: rgba(65, 88, 208, 1);
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: background-color 0.3s;
-}
 
-.register-button:hover {
-  background-color: rgba(65, 88, 208, 1);
-}
-
-@media (max-width: 768px) {
-  .register-container {
-      padding: 20px;
+  h2 {
+    margin-bottom: 1rem; // Giảm khoảng cách
+    color: $primary-color;
+    text-align: center;
+    font-size: 1.5rem; // Giảm kích thước font
   }
 
-  .register-button {
-      font-size: 0.9rem;
+  label {
+    display: block;
+    margin-bottom: 0.4rem; // Giảm khoảng cách
+    font-weight: bold;
+    color: #333;
+    font-size: 0.9rem; // Giảm kích thước font
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 0.6rem; // Giảm padding
+    margin-bottom: 0.8rem; // Giảm khoảng cách giữa các trường
+    border: 1px solid $input-border-color;
+    border-radius: 4px;
+    font-size: 0.9rem; // Giảm kích thước font
+
+    &:focus {
+      border-color: $input-focus-color;
+      outline: none;
+      box-shadow: 0 0 4px $input-focus-color;
+    }
+  }
+
+  button {
+    background: $primary-color;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem; // Giảm padding
+    border-radius: 4px;
+    font-size: 0.9rem; // Giảm kích thước font
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: darken($primary-color, 10%);
+    }
+  }
+
+  p {
+    text-align: center;
+    margin-top: 0.8rem; // Giảm khoảng cách
+    font-size: 0.85rem; // Giảm kích thước font
+    color: $secondary-color;
+
+    &.error {
+      color: $error-color;
+    }
   }
 }

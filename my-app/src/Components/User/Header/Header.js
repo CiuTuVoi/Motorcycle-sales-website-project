@@ -2,40 +2,48 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { FaSearch, FaFacebookF, FaPhone, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
-import "react-slideshow-image/dist/styles.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import DropdownMenu from "../DropdowMenu/dropoutMenu";
 import "./Header.scss";
 import { connect } from "react-redux";
 import { selectCartQuantity } from "../redux/cartSlice";
 import { selectUserName, clearUserName } from "../redux/userSlide";
-import Cookies from "js-cookie"; // Để lưu trữ session
 import SearchComponent from "../search/SearchComponent";
 
-const blandItem = [
-  { label: "Yamaha" },
-  { label: "Honda" },
-  { label: "Suzuki" },
-  { label: "Sym"}
+const brandItems = [
+  { label: "Yamaha", link: "/yamaha" },
+  { label: "Honda", link: "/honda" },
+  { label: "Suzuki", link: "/suzuki" },
+  { label: "Sym", link: "/sym" },
 ];
 
-const blockvidision = [
-  { label: "200cc" },
-  { label: "300cc" },
-  { label: "1000cc" },
+const blockDivision = [
+  { label: "200cc", link: "/200cc" },
+  { label: "300cc", link: "/300cc" },
+  { label: "1000cc", link: "/1000cc" },
 ];
 
-const skin = [
-  { label: "Mũ bảo hiểm" },
-  { label: "Áo giáp" },
-  { label: "Chân phanh" },
+const accessories = [
+  { label: "Mũ bảo hiểm", link: "/helmet" },
+  { label: "Áo giáp", link: "/armor" },
+  { label: "Chân phanh", link: "/brake" },
 ];
 
 class Layout extends Component {
-  handleLogout = () => {
-    Cookies.remove("access_token"); // Xóa token khi đăng xuất
-    this.props.clearUserName(); // Xóa trạng thái tên người dùng trong Redux
+  handleLogout = async () => {
+    try {
+      // Gửi yêu cầu logout đến server nếu cần
+      await fetch("http://127.0.0.1:8000/logout", { method: "POST" });
+
+      // Xóa thông tin đăng nhập trên client
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("tendangnhap");
+
+      // Xóa thông tin đăng nhập trong Redux
+      this.props.clearUserName();
+    } catch (error) {
+      console.error("Đăng xuất thất bại:", error);
+      alert("Đã xảy ra lỗi khi đăng xuất. Vui lòng thử lại.");
+    }
   };
 
   render() {
@@ -49,14 +57,17 @@ class Layout extends Component {
             <div className="logo">
               <Link to="/">
                 <h1>
-                  <img src="https://bizweb.dktcdn.net/100/422/602/themes/814220/assets/brand_image_2.png?1663380727397" alt="Logo" />
+                  <img
+                    src="https://png.pngtree.com/png-clipart/20230513/original/pngtree-motorbike-line-art-logo-design-png-image_9160404.png"
+                    alt="Logo"
+                  />
                 </h1>
               </Link>
             </div>
 
             {/* Search Section */}
             <div className="search">
-              <SearchComponent/>
+              <SearchComponent />
             </div>
 
             {/* Action Buttons Section */}
@@ -93,9 +104,10 @@ class Layout extends Component {
             <div className="button-favorites">
               <button type="button">
                 <Link className="link-favorite" to="/favorite">
-                SP YÊU THÍCH
-                <i className="icon-favorite"><FaHeart /></i>
-                
+                  SP YÊU THÍCH
+                  <i className="icon-favorite">
+                    <FaHeart />
+                  </i>
                 </Link>
               </button>
             </div>
@@ -104,7 +116,7 @@ class Layout extends Component {
             <div className="login">
               {userName ? (
                 <>
-                  <span>Chào, {userName}</span>
+                  <span className="user_name">Hello {userName}</span>
                   <button className="logout-button" onClick={this.handleLogout}>
                     Đăng xuất
                   </button>
@@ -130,9 +142,9 @@ class Layout extends Component {
                   <Link to="/gioi-thieu">GIỚI THIỆU</Link>
                 </li>
               </div>
-              <DropdownMenu title="HÃNG XE" items={blandItem} />
-              <DropdownMenu title="PHÂN KHỐI" items={blockvidision} />
-              <DropdownMenu title="PHỤ KIỆN" items={skin} />
+              <DropdownMenu title="HÃNG XE" items={brandItems} />
+              <DropdownMenu title="PHÂN KHỐI" items={blockDivision} />
+              <DropdownMenu title="PHỤ KIỆN" items={accessories} />
             </ul>
           </div>
         </div>
@@ -142,12 +154,12 @@ class Layout extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  cartQuantity: selectCartQuantity(state), // Lấy số lượng giỏ hàng từ Redux
-  userName: selectUserName(state), // Lấy tên người dùng từ Redux
+  cartQuantity: selectCartQuantity(state),
+  userName: selectUserName(state),
 });
 
 const mapDispatchToProps = {
-  clearUserName, // Action đăng xuất
+  clearUserName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

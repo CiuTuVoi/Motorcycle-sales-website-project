@@ -13,7 +13,7 @@
 
     /* Slide Show Section */
     .slide-show {
-        margin-top: 133px;
+        margin-top: 200px;
         width: 100%;
         height: auto;
         position: relative;
@@ -294,7 +294,7 @@
     /* SLIDE-PRODUCT-HONDA*/
     .slide-product-honda {
         .product-container {
-            height: 280px;
+            height: 330px;
             width: 220px;
             margin-top: 20px;
             border: 1px soid #d9534f;
@@ -332,10 +332,38 @@
             }
 
             .product-price {
-                font-size: 18px;
-                color: red;
-                font-weight: bold;
-            }
+            display: block;
+            font-size: 16px;
+            text-decoration: line-through;
+            color: #999;
+            padding: 10px;
+          }
+
+          .new-price {
+            display: block;
+            font-size: 18px;
+            color: red;
+            padding: 0 10px 10px;
+            font-weight: bold;
+          }
+          .favorite-btn {
+            margin-left: 210px;
+            margin-bottom: 150px;
+            border: none;
+            background: transparent;
+            
+            color: gray;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+          }
+          
+          .favorite-btn.active {
+            color: red;
+          }
+          
+          
+          
             
         }
     }

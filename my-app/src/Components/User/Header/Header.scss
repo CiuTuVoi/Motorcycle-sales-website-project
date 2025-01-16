@@ -15,8 +15,9 @@
       /* Logo Section */
       .logo {
         h1 {
+          position: relative;
           img {
-            width: 150px;
+            width:100px;
             transition: transform 0.3s ease-in-out;
 
             &:hover {
@@ -200,9 +201,24 @@
           }
         }
 
-        span {
-          color: rgb(65, 88, 208);
+        .user_name {
+          color: red;
           font-size: 16px;
+        }
+
+        .logout-button{
+          background-color: rgb(65, 88, 208);
+          color: #fff;
+          border: none;
+          padding: 5px;
+          margin-left: 10px;
+          border-radius: 5px;
+          transition: transform 0.3s ease-in-out;
+
+          &:hover{
+            transform: scale(0.9);
+
+          }
         }
       }
     }

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
 import { IoIosHeart } from "react-icons/io";
 import "./ListProduct.scss";
+import Promotions from "../Promotions/Promotions";
 
 const Honda = () => {
   useEffect(() => {
@@ -18,17 +19,25 @@ const Honda = () => {
   const itemsPerPage = 6; // Số sản phẩm mỗi trang
   const [isLoading, setIsLoading] = useState(true); // Trạng thái loading
   const [favoriteItems, setFavoriteItems] = useState([]); // Lưu các sản phẩm yêu thích
+  const [promotion, setPromotion] = useState(null); // Khuyến mãi hiện tại
 
-  // Lấy dữ liệu từ API
+  // Lấy dữ liệu sản phẩm và khuyến mãi
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get("http://127.0.0.1:8000/products");
-      console.log("API Response:", response.data); // Log phản hồi API
-      setProducts(response.data);
+
+      // Fetch sản phẩm
+      const productResponse = await axios.get("http://127.0.0.1:8000/products");
+      setProducts(productResponse.data);
+
+      // Fetch khuyến mãi
+      const promotionResponse = await axios.get("http://127.0.0.1:8000/khuyenmai");
+      const promo = promotionResponse.data.find(item => item.ma_khuyen_mai === 1);
+      setPromotion(promo);
+
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching data:", error);
       setIsLoading(false);
     }
   };
@@ -61,6 +70,7 @@ const Honda = () => {
     (item) => item.hang_xe.toLowerCase() === selectedCategory.toLowerCase()
   );
 
+  // Tính tổng số trang
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Lấy các sản phẩm của trang hiện tại
@@ -81,6 +91,14 @@ const Honda = () => {
     setCurrPage(1); // Đặt lại trang về 1
   };
 
+  // Áp dụng giảm giá cho sản phẩm
+  const applyDiscount = (price) => {
+    if (promotion && promotion.muc_giam) {
+      return price - (price * promotion.muc_giam) / 100;
+    }
+    return price;
+  };
+
   return (
     <div className="container">
       <div className="Header-list-product">
@@ -96,6 +114,9 @@ const Honda = () => {
             <li><button onClick={() => handleCategoryChange("Sym")}>Xe máy Sym</button></li>
             <li><button onClick={() => handleCategoryChange("Suzuki")}>Xe máy Suzuki</button></li>
           </ul>
+          <span>
+            <Promotions/>
+          </span>
         </div>
 
         {/* Danh sách sản phẩm */}
@@ -111,9 +132,7 @@ const Honda = () => {
                   to={`/viewProduct/${item.ma_san_pham}`}
                   key={item.ma_san_pham}
                 >
-                  <div
-                    className="product-item"
-                  >
+                  <div className="product-item">
                     <img
                       src={item.anh_dai_dien}
                       alt={item.ten_san_pham}
@@ -126,6 +145,13 @@ const Honda = () => {
                         style: "currency",
                         currency: "VND",
                       }).format(item.gia)}
+                    </span>
+                    <span className="new-price">
+                    {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(applyDiscount(item.gia))}
+
                     </span>
 
                     {/* Biểu tượng yêu thích */}

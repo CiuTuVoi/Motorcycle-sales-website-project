@@ -7,6 +7,7 @@ import Footers from "../Footer/Footer";
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  console.log("thông tin sản phẩm", cart)
   const dispatch = useDispatch();
 
   const calculateTotal = () => {
@@ -15,14 +16,11 @@ const Cart = () => {
       .toLocaleString();
   };
 
-  // Default image for invalid or missing URLs
-  const defaultImage = "/images/default.png";
-
   return (
     <div>
-      <Header />
+      <Header/>
       <div className="cart-container">
-        <h2 className="cart-title">Giỏ Hàng</h2>
+        <h2>Giỏ Hàng</h2>
         {cart.length === 0 ? (
           <p className="empty-cart">Giỏ hàng của bạn đang trống.</p>
         ) : (
@@ -43,17 +41,9 @@ const Cart = () => {
                   <tr key={item.ma_san_pham}>
                     <td>
                       <img
-                        src={
-                          item.anh_dai_dien && item.anh_dai_dien.startsWith("http")
-                            ? item.anh_dai_dien
-                            : defaultImage
-                        }
-                        alt={item.ten_san_pham || "Sản phẩm"}
+                        src={item.anh_dai_dien}
+                        alt={item.ten_san_pham}
                         className="cart-item-image"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = defaultImage;
-                        }}
                       />
                     </td>
                     <td>{item.ten_san_pham}</td>
@@ -63,8 +53,9 @@ const Cart = () => {
                     <td>
                       <button
                         className="btn-remove"
-                        onClick={() => dispatch(removeFromCart(item.ma_san_pham))}
-                        aria-label={`Xóa sản phẩm ${item.ten_san_pham}`}
+                        onClick={() =>
+                          dispatch(removeFromCart(item.ma_san_pham))
+                        }
                       >
                         Xóa
                       </button>
@@ -80,18 +71,15 @@ const Cart = () => {
               <button
                 className="btn-clear"
                 onClick={() => dispatch(clearCart())}
-                aria-label="Xóa tất cả sản phẩm"
               >
                 Xóa Tất Cả
               </button>
-              <button className="btn-checkout" aria-label="Thanh toán">
-                Thanh Toán
-              </button>
+              <button className="btn-checkout">Thanh Toán</button>
             </div>
           </div>
         )}
       </div>
-      <Footers />
+      <Footers/>
     </div>
   );
 };

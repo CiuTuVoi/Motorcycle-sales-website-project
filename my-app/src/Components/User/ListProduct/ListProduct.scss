@@ -15,6 +15,7 @@
     gap: 20px;
     padding: 20px;
 
+    /* Sidebar Danh mục */
     .product-list-brand {
       width: 20%;
       background-color: #fff;
@@ -26,7 +27,6 @@
         font-size: 20px;
         margin-bottom: 20px;
         color: rgba(65, 88, 208, 1);
-
       }
 
       ul {
@@ -68,10 +68,13 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 20px;
-        width: 95%;
+        width: 100%;
 
+        /* Sản phẩm */
         .product-item {
-          height: 320px;
+          position: relative;
+          height: 380px;
+          
           background-color: #fff;
           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
           border-radius: 10px;
@@ -90,10 +93,9 @@
             object-fit: cover;
           }
 
-        
           .product-name {
-            font-size: 18px;
-            color: #333;
+            font-size: 17px;
+            color: rgba(65, 88, 208, 1);
             padding: 10px;
             font-weight: bold;
           }
@@ -106,27 +108,33 @@
 
           .price {
             display: block;
+            font-size: 16px;
+            text-decoration: line-through;
+            color: #999;
+            padding: 10px;
+          }
+
+          .new-price {
+            display: block;
             font-size: 18px;
             color: red;
-            padding: 10px;
+            padding: 0 10px 10px;
             font-weight: bold;
           }
 
           .favorate {
             position: absolute;
+            top: 10px;
+            right: 10px;
             cursor: pointer;
             font-size: 30px;
             color: #ccc;
             transition: color 0.3s ease;
-            margin-left: 200px;
-            margin-top: -30px;
-            
+
+            &.active {
+              color: red; /* Màu đỏ khi sản phẩm được yêu thích */
+            }
           }
-          
-          .favorate.active {
-            color: red; /* Màu đỏ khi sản phẩm được yêu thích */
-          }
-          
         }
       }
 
@@ -140,8 +148,6 @@
 
       /* Phân trang */
       .pagination-wrapper {
-
-        list-style: none;
         width: 100%;
         display: flex;
         justify-content: center;
@@ -191,6 +197,7 @@
   }
 }
 
+/* Liên kết */
 a {
   text-decoration: none;
 
