@@ -1,7 +1,7 @@
 from decimal import Decimal
 from enum import Enum
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Security
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from models.database import get_db
@@ -53,6 +53,22 @@ def create_thong_bao(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Lỗi khi tạo thông báo: {str(e)}")
+
+
+# API: lấy danh sách toàn bộ đơn hàng của admin
+@router.get("/donhang_all")
+def get_all_donhang(
+    db: Session = Depends(get_db), _: str = Security(verify_role("Admin"))
+):
+    # Truy vấn toàn bộ đơn hàng từ cơ sở dữ liệu
+    donhang_list = db.query(DonHang).all()
+
+    # Kiểm tra nếu không có đơn hàng
+    if not donhang_list:
+        raise HTTPException(status_code=404, detail="Không tìm thấy đơn hàng nào")
+
+    # Trả về danh sách đơn hàng sau khi chuyển đổi qua schema
+    return [DonHangCreate.from_orm(dh) for dh in donhang_list]
 
 
 # API: Lấy danh sách đơn hàng của người dùng
