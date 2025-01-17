@@ -1,6 +1,8 @@
 import { GridColDef } from "@mui/x-data-grid";
 import "./add.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Cookies from "js-cookie";
+import React, { useState } from "react";
 
 type Props = {
   slug: string;
@@ -9,40 +11,48 @@ type Props = {
 };
 
 const Add = (props: Props) => {
-  // TEST THE API
+  const [formValues, setFormValues] = useState({
+    ten_san_pham: "",
+    ma_loai_xe: "",
+    hang_xe: "",
+    gia: "",
+    gia_khuyen_mai: "",
+    anh_dai_dien: "",
+  });
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
-    mutationFn: () => {
-      return fetch(`http://localhost:8800/api/${props.slug}s`, {
-        method: "post",
+  const addProduct = useMutation({
+    mutationFn: (newProduct: typeof formValues) => {
+      return fetch("http://localhost:8000/products", {
+        method: "POST",
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("access_token")}`,
         },
-        body: JSON.stringify({
-          id: 111,
-          img: "",
-          lastName: "Hello",
-          firstName: "Test",
-          email: "testme@gmail.com",
-          phone: "123 456 789",
-          createdAt: "01.02.2023",
-          verified: true,
-        }),
+        body: JSON.stringify(newProduct),
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([`all${props.slug}s`]);
+      queryClient.invalidateQueries([`all${props.slug}`]);
     },
   });
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+  
+    setFormValues({
+      ...formValues,
+      [name]: name === "ma_loai_xe" || name === "gia" || name === "gia_khuyen_mai"
+        ? value === "" ? "" : Number(value) // Chuyển đổi sang số
+        : value,
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    //add new item
-    mutation.mutate();
+    console.log("Dữ liệu gửi đi:", formValues);
+    addProduct.mutate(formValues);
     props.setOpen(false);
   };
 
@@ -54,15 +64,67 @@ const Add = (props: Props) => {
         </span>
         <h1>Add new {props.slug}</h1>
         <form onSubmit={handleSubmit}>
-          {props.columns
-            .filter((item) => item.field !== "id" && item.field !== "img")
-            .map((column) => (
-              <div className="item">
-                <label>{column.headerName}</label>
-                <input type={column.type} placeholder={column.field} />
-              </div>
-            ))}
-          <button>Send</button>
+        <div className="item">
+            <label>Mã loại xe</label>
+            <input
+              type="number"
+              name="ma_loai_xe"
+              value={formValues.ma_loai_xe}
+              onChange={handleChange}
+              placeholder="Mã loại xe"
+            />
+          </div>
+          <div className="item">
+            <label>Ảnh đại diện</label>
+            <input
+              type="text"
+              name="anh_dai_dien"
+              value={formValues.anh_dai_dien}
+              onChange={handleChange}
+              placeholder="URL ảnh đại diện"
+            />
+          </div>
+          <div className="item">
+            <label>Tên sản phẩm</label>
+            <input
+              type="text"
+              name="ten_san_pham"
+              value={formValues.ten_san_pham}
+              onChange={handleChange}
+              placeholder="Tên sản phẩm"
+            />
+          </div>
+          <div className="item">
+          <label>Hãng Xe:</label>
+          <input
+            type="text"
+            name="hang_xe"
+            value={formValues.hang_xe}
+            onChange={handleChange}
+            placeholder="Hãng xe"
+            />
+          </div>
+          <div className="item">
+            <label>Giá</label>
+            <input
+              type="number"
+              name="gia"
+              value={formValues.gia}
+              onChange={handleChange}
+              placeholder="Giá sản phẩm"
+            />
+          </div>
+          <div className="item">
+            <label>Giá khuyến mãi</label>
+            <input
+              type="number"
+              name="gia_khuyen_mai"
+              value={formValues.gia_khuyen_mai}
+              onChange={handleChange}
+              placeholder="Giá khuyến mãi"
+            />
+          </div>
+          <button type="submit">Gửi</button>
         </form>
       </div>
     </div>

@@ -1,84 +1,106 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Products.scss";
-import DataTable from "../../components/dataTable/DataTable";
+import DataTableProducts from "../../components/dataTableProducts/DataTableProducts";
 import Add from "../../components/add/Add";
 import { GridColDef } from "@mui/x-data-grid";
-import { products } from "../../data";
-// import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 90 },
+  { field: "ma_san_pham", headerName: "IDP", width: 1 },
   {
-    field: "img",
-    headerName: "Image",
-    width: 100,
-    renderCell: (params) => {
-      return <img src={params.row.img || "/noavatar.png"} alt="" />;
-    },
+    field: "ma_loai_xe",
+    headerName: "Mã Loại Xe",
+    type: "number",
+    width: 90,
   },
   {
-    field: "title",
+    field: "anh_dai_dien",
+    headerName: "Ảnh Đại Diện",
+    width: 150,
+    renderCell: (params) => (
+      <img src={params.value} alt="Product" style={{ width: "100px", height: "auto" }} />
+    ),
+  },
+  {
+    field: "ten_san_pham",
     type: "string",
-    headerName: "Title",
+    headerName: "Tên Sản Phẩm",
     width: 250,
   },
   {
-    field: "color",
+    field: "hang_xe",
     type: "string",
-    headerName: "Color",
-    width: 150,
+    headerName: "Hãng Xe",
+    width: 80,
   },
   {
-    field: "price",
-    type: "string",
-    headerName: "Price",
-    width: 200,
+    field: "gia",
+    type: "number",
+    headerName: "Giá",
+    width: 110,
   },
   {
-    field: "producer",
-    headerName: "Producer",
-    type: "string",
-    width: 200,
+    field: "gia_khuyen_mai",
+    type: "number",
+    headerName: "Giá Khuyến Mãi",
+    width: 120,
   },
   {
-    field: "createdAt",
-    headerName: "Created At",
-    width: 200,
+    field: "ngay_tao",
+    headerName: "Ngày Tạo",
+    width: 160,
     type: "string",
-  },
-  {
-    field: "inStock",
-    headerName: "In Stock",
-    width: 150,
-    type: "boolean",
   },
 ];
 
 const Products = () => {
   const [open, setOpen] = useState(false);
+  const [products, setProducts] = useState<any[]>([]); 
+  const [isLoading, setIsLoading] = useState(true); 
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  // TEST THE API
-
-  // const { isLoading, data } = useQuery({
-  //   queryKey: ["allproducts"],
-  //   queryFn: () =>
-  //     fetch("http://localhost:8800/api/products").then((res) => res.json()),
-  // });
+  useEffect(() => {
+    const token = Cookies.get("access_token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+  
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/products/1")
+      .then((response) => {
+        setProducts(response.data);
+        setIsLoading(false); 
+      })
+      .catch((err) => {
+        setError("Lỗi khi tải sản phẩm: " + err.message);
+        setIsLoading(false);
+      });
+  }, []); 
 
   return (
     <div className="products">
       <div className="info">
         <h1>Products</h1>
-        <button onClick={() => setOpen(true)}>Add New Products</button>
+        <button onClick={() => setOpen(true)}>Thêm sản phẩm</button>
       </div>
-      <DataTable slug="products" columns={columns} rows={products} />
-      {/* TEST THE API */}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : ( 
+        <DataTableProducts 
+          slug="products" 
+          columns={columns} 
+          rows={products} 
+          getRowId={(row) => row.ma_san_pham}
+        />
+      )}
 
-      {/* {isLoading ? (
-        "Loading..."
-      ) : (
-        <DataTable slug="products" columns={columns} rows={data} />
-      )} */}
       {open && <Add slug="product" columns={columns} setOpen={setOpen} />}
     </div>
   );

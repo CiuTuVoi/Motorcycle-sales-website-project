@@ -1,22 +1,28 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import "./dataTable.scss";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 
 type Props = {
   columns: GridColDef[];
   rows: object[];
   slug: string;
+  getRowId?: (row: any) => any;
 };
 
 const DataTable = (props: Props) => {
-  // TEST THE API
-
   const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (id: number) => {
-      return fetch(`http://localhost:8800/api/${props.slug}/${id}`, {
-        method: "delete",
+
+  const lockMutation = useMutation({
+    mutationFn: (params: { userId: number }) => {
+      return fetch(`http://localhost:8000/users/${params.userId}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Cookies.get("access_token")}`, 
+        },
+        body: JSON.stringify({ status_update: "BiKhoa" }),
       });
     },
     onSuccess: () => {
@@ -24,23 +30,85 @@ const DataTable = (props: Props) => {
     },
   });
 
-  const handDelete = (id: number) => {
-    //delete the item
-    mutation.mutate(id);
+  const unlockMutation = useMutation({
+    mutationFn: (params: { userId: number }) => {
+      return fetch(`http://localhost:8000/users/${params.userId}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Cookies.get("access_token")}`, 
+        },
+        body: JSON.stringify({ status_update: "HoatDong" }), 
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([`all${props.slug}`]); // Lấy lại dữ liệu sau khi thay đổi
+    },
+  });
+
+  const roleMutation = useMutation({
+    mutationFn: (params: { userId: number; newRole: string }) => {
+      return fetch(`http://localhost:8000/users/${params.userId}/role`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Cookies.get("access_token")}`,
+        },
+        body: JSON.stringify({ role_update: params.newRole }),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([`all${props.slug}`]);
+    },
+  });
+
+  const handleLock = (userId: number) => {
+    lockMutation.mutate({ userId });
+  };
+
+  const handleUnlock = (userId: number) => {
+  unlockMutation.mutate({ userId });
+};
+
+  const handleRoleChange = (userId: number, role: string) => {
+    roleMutation.mutate({ userId, newRole: role });
   };
 
   const actionColumn: GridColDef = {
     field: "action",
     headerName: "Action",
-    width: 200,
+    width: 140,
     renderCell: (params) => {
+      const isLocked = params.row.trang_thai === "BiKhoa";
+
       return (
         <div className="action">
-          <Link to={`/${props.slug}/${params.row.id}`}>
+          {/* <Link to={`/${props.slug}/${params.row.ma_nguoi_dung}`}>
             <img src="/view.svg" alt="" />
-          </Link>
-          <div className="delete" onClick={() => handDelete(params.row.id)}>
-            <img src="/delete.svg" alt="" />
+          </Link> */}
+          <div
+            className={`lock ${isLocked ? "locked" : ""}`}
+            onClick={() => handleLock(params.row.ma_nguoi_dung)}
+          >
+            <img src="/lock.svg" alt="" />
+          </div>
+          <div
+          className={`unlock ${!isLocked ? "unlocked" : ""}`}
+          onClick={() => handleUnlock(params.row.ma_nguoi_dung)}
+        >
+          <img src="/unlock.svg" alt="" />
+        </div>
+          <div
+            className="upRole"
+            onClick={() => handleRoleChange(params.row.ma_nguoi_dung, "Admin")}
+          >
+            <img src="/uprole.svg" alt="" />
+          </div>
+          <div
+            className="downRole"
+            onClick={() => handleRoleChange(params.row.ma_nguoi_dung, "User")}
+          >
+            <img src="/downrole.svg" alt="" />
           </div>
         </div>
       );
@@ -68,11 +136,11 @@ const DataTable = (props: Props) => {
           },
         }}
         pageSizeOptions={[5]}
-        checkboxSelection
         disableRowSelectionOnClick
         disableColumnFilter
         disableDensitySelector
         disableColumnSelector
+        getRowId={props.getRowId}
       />
     </div>
   );

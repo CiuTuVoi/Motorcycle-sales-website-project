@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate thay vì useHistory
 import "./home.scss";
 import ChartBox from "../../components/chartBox/ChartBox";
 import TopBox from "../../components/topBox/TopBox";
@@ -12,8 +14,18 @@ import {
 import BarChartBox from "../../components/barChartBox/BarChartBox";
 import PieChartBox from "../../components/pieChartBox/PieChartBox";
 import BigChartBox from "../../components/bigChartBox/BigChartBox";
+import Cookies from "js-cookie";
 
 const Home = () => {
+  const navigate = useNavigate(); // Sử dụng useNavigate thay vì useHistory
+
+  useEffect(() => {
+    const token = Cookies.get("access_token")
+    if (!token) {
+      navigate("/login"); // Chuyển hướng đến trang login nếu không có token
+    }
+  }, [navigate]); // Lưu ý rằng bạn cần thêm navigate vào dependency array
+
   return (
     <div className="home">
       <div className="box box1">

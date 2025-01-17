@@ -18,6 +18,7 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    position: relative;
 
     .icon {
       @include sm {
@@ -26,23 +27,74 @@
     }
 
     .notification {
-      position: relative;
+      position: relative; /* Đảm bảo span nằm trong .notification */
+      cursor: pointer; /* Thêm con trỏ để chỉ ra rằng có thể bấm vào icon */
+    }
 
-      span {
-        background-color: red;
-        color: white;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
+    .notification span {
+      background-color: red;
+      color: white;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    /* Popup thông báo */
+    .notification-popup {
+      position: absolute;
+      top: 40px; /* Điều chỉnh khoảng cách popup từ icon */
+      right: 0;
+      width: 300px;
+      background-color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      z-index: 1000;
+      padding: 10px;
+      max-height: 400px;
+      overflow-y: auto;
+      visibility: hidden; 
+      opacity: 0; 
+      transition: visibility 0s, opacity 0.5s linear; /* Cập nhật hiệu ứng chuyển động */
+    
+      &.visible {
+        visibility: visible;
+        opacity: 1;
       }
     }
+
+      /* Styling nội dung thông báo */
+      .notification-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .notification-item {
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 4px;
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+
+        &.read {
+          background-color: #e0e0e0;
+        }
+
+        &.unread {
+          background-color: #f7f7f7;
+        }
+      }
+    }
+
     .user {
       display: flex;
       align-items: center;
@@ -55,5 +107,20 @@
         object-fit: cover;
       }
     }
+
+    .logout-btn {
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+      margin-left: 20px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #ff1a1a;
+      }
+    }
   }
-}
