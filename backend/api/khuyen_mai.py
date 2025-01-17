@@ -68,6 +68,7 @@ def create_khuyenmai(
 
 
 # API: Sửa khuyến mại (chỉ cho admin)
+# API: Sửa khuyến mại (chỉ cho admin)
 @router.put("/khuyenmai/{khuyenmai_id}", response_model=KhuyenmaiCreate)
 def update_khuyenmai(
     khuyenmai_id: int,
@@ -84,10 +85,10 @@ def update_khuyenmai(
         raise HTTPException(status_code=404, detail="Khuyen Mai not found")
 
     # Cập nhật thông tin khuyến mại
-    khuyenmai.ten_khuyen_mai = (khuyenmai_update.ten_khuyen_mai,)
-    khuyenmai.mo_ta = (khuyenmai_update.mo_ta,)
-    khuyenmai.muc_giam = (khuyenmai_update.muc_giam,)
-    khuyenmai.ngay_bat_dau = (khuyenmai_update.ngay_bat_dau,)
+    khuyenmai.ten_khuyen_mai = khuyenmai_update.ten_khuyen_mai
+    khuyenmai.mo_ta = khuyenmai_update.mo_ta
+    khuyenmai.muc_giam = khuyenmai_update.muc_giam
+    khuyenmai.ngay_bat_dau = khuyenmai_update.ngay_bat_dau
     khuyenmai.ngay_ket_thuc = khuyenmai_update.ngay_ket_thuc
 
     # Commit thay đổi vào cơ sở dữ liệu

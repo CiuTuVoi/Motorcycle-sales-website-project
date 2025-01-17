@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-
+from core.security import extract_user_data
 from core.security import verify_role
 from models.database import get_db
 from models.models import GioHang, NguoiDung, SanPham
@@ -21,7 +21,7 @@ class GiohangCreate(BaseModel):
 # API: Lấy danh sách giỏ hàng của người dùng
 @router.get("/giohang")
 def get_giohang(
-    db: Session = Depends(get_db), user_data: dict = Depends(verify_role("User"))
+    db: Session = Depends(get_db), user_data: dict = Depends(extract_user_data)
 ):
     """
     API này dùng để lấy danh sách sản phẩm mà người dùng đã thêm vào giỏ hàng
@@ -42,7 +42,7 @@ def get_giohang(
 def create_giohang(
     giohang_create: GiohangCreate,
     db: Session = Depends(get_db),
-    user_data: dict = Depends(verify_role("User")),  # user_data chứa payload từ token
+    user_data: dict = Depends(extract_user_data),  # user_data chứa payload từ token
 ):
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
     if not ma_nguoi_dung:
@@ -89,24 +89,24 @@ def create_giohang(
 
 
 # API: Xóa sản phẩm trong giỏ hàng
-@router.delete("/giohang/{giohang_id}")
-def delete_giohang(
-    giohang_id: int,
+@router.delete("/giohang/sanpham/{ma_san_pham}")
+def delete_sanpham_from_giohang(
+    ma_san_pham: int,
     db: Session = Depends(get_db),
-    user_data: dict = Depends(verify_role("User")),
+    user_data: dict = Depends(extract_user_data),
 ):
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
     giohang = (
         db.query(GioHang)
         .filter(
-            GioHang.ma_gio_hang == giohang_id, GioHang.ma_nguoi_dung == ma_nguoi_dung
+            GioHang.ma_san_pham == ma_san_pham, GioHang.ma_nguoi_dung == ma_nguoi_dung
         )
         .first()
     )
 
     if not giohang:
         raise HTTPException(
-            status_code=404, detail="Không có sản phẩm cần xóa trong giỏ"
+            status_code=404, detail="Không có sản phẩm cần xóa trong giỏ hàng"
         )
 
     db.delete(giohang)

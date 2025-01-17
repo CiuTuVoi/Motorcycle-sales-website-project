@@ -132,7 +132,7 @@ def login(request: LoginRequest, response: Response, db: Session = Depends(get_d
         secure=True,
         samesite="lax",
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "tendangnhap" : user.ho_ten }
 
 
 # API: Lấy thông tin người dùng, bao gồm role
@@ -185,7 +185,7 @@ def refresh_token(
         secure=True,
         samesite="lax",
     )
-    return {"access_token": new_access_token, "token_type": "bearer"}
+    return {"access_token": new_access_token, "token_type": "bearer", "tendangnhap" : user.ho_ten}
 
 
 # API: Logout tài khoản người dùng

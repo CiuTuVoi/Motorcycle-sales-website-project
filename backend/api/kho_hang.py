@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Security
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from typing import List
 
 from core.security import verify_role
 from models.database import get_db
@@ -19,7 +20,7 @@ class KhohangCreate(BaseModel):
 
 
 # API: Lấy danh sách kho hàng (chỉ cho admin)
-@router.get("/khohang")
+@router.get("/khohang", response_model=List[KhohangCreate])
 def get_khohang(
     db: Session = Depends(get_db), _: str = Security(verify_role("Admin"))
 ):  # Kiểm tra role admin
@@ -29,7 +30,7 @@ def get_khohang(
     return khohang
 
 
-# API: Thêm sản số lượng  (chỉ cho admin)
+# API: Thêm sản phẩm và số lượng (chỉ cho admin)
 @router.post("/khohang", response_model=KhohangCreate)
 def create_khohang(
     khohang_create: KhohangCreate,
@@ -68,10 +69,10 @@ def update_khohang(
     _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
     # Tìm sản phẩm trong cơ sở dữ liệu
-    khohang = db.query(KhoHang).filter(KhoHang.ma_san_pham == khohang_id).first()
+    khohang = db.query(KhoHang).filter(KhoHang.id == khohang_id).first()
 
     if not khohang:
-        raise HTTPException(status_code=404, detail="KhoHang not found")
+        raise HTTPException(status_code=404, detail="Kho Hang not found")
 
     # Cập nhật thông tin sản phẩm
     khohang.so_luong = khohang_update.so_luong
@@ -91,7 +92,7 @@ def delete_khohang(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
-    khohang = db.query(KhoHang).filter(KhoHang.ma_san_pham == khohang_id).first()
+    khohang = db.query(KhoHang).filter(KhoHang.id == khohang_id).first()
     if not khohang:
         raise HTTPException(status_code=404, detail="Kho Hang not found")
 

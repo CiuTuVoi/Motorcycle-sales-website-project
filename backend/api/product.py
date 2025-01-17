@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Security
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from typing import List
 
 from core.security import verify_role
 from models.database import get_db
@@ -23,7 +24,7 @@ class ProductCreate(BaseModel):
 
 
 # API: Lấy danh sách sản phẩm (cho tất cả người dùng, không yêu cầu đăng nhập)
-@router.get("/products")
+@router.get("/products", response_model=List[ProductCreate])
 def get_products(db: Session = Depends(get_db)):
     """
     API này dùng để lấy ra toàn bộ sản phẩm xe 
@@ -81,7 +82,7 @@ def update_product(
     API này dùng để sửa sản phẩm
     """
     # Tìm sản phẩm
-    product = db.query(SanPham).filter(SanPham.ma_san_pham == product_id).first()
+    product = db.query(SanPham).filter(SanPham.id == product_id).first()  # Sửa từ ma_san_pham thành id
     if not product:
         raise HTTPException(status_code=404, detail="Không tìm thấy sản phẩm")
 
@@ -108,7 +109,7 @@ def delete_product(
     """
     API này dùng để xóa sản phẩm
     """
-    product = db.query(SanPham).filter(SanPham.ma_san_pham == product_id).first()
+    product = db.query(SanPham).filter(SanPham.id == product_id).first()  # Sửa từ ma_san_pham thành id
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
 
