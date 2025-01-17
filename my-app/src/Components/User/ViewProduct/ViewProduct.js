@@ -39,7 +39,7 @@ const ViewProduct = () => {
     }
 
     axios
-      .get(`http://127.0.0.1:8000/products/${ma_san_pham}`)
+      .get(`http://127.0.0.1:8000/products/${ma_san_pham}`) 
       .then((response) => setProduct(response.data))
       .catch((error) =>
         console.error("Error fetching product details:", error)

@@ -8,12 +8,13 @@ import { connect } from "react-redux";
 import { selectCartQuantity } from "../redux/cartSlice";
 import { selectUserName, clearUserName } from "../redux/userSlide";
 import SearchComponent from "../search/SearchComponent";
+import NotificationBell from "../NotificationBell/NotificationBell";
 
 const brandItems = [
-  { label: "Yamaha", link: "/yamaha" },
-  { label: "Honda", link: "/honda" },
-  { label: "Suzuki", link: "/suzuki" },
-  { label: "Sym", link: "/sym" },
+  { label: "Yamaha", link: "/listproduct" },
+  { label: "Honda", link: "/listproduct" },
+  { label: "Suzuki", link: "/listproduct" },
+  { label: "Sym", link: "/listproduct" },
 ];
 
 const blockDivision = [
@@ -110,6 +111,10 @@ class Layout extends Component {
                   </i>
                 </Link>
               </button>
+            </div>
+
+            <div className="notificationbell">
+              <NotificationBell/>
             </div>
 
             {/* Login/Logout Section */}

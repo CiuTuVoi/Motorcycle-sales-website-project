@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Login.scss'; // Import file SCSS
 
 const Login = () => {
   const [tenDangNhap, setTenDangNhap] = useState('');
   const [matKhau, setMatKhau] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  
+  const navigate = useNavigate('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,18 +15,14 @@ const Login = () => {
       const response = await axios.post('http://localhost:8000/login', {
         ten_dang_nhap: tenDangNhap,
         mat_khau: matKhau,
-        
       });
-      console.log("dữ liệu từ api", response)
-      const { access_token } = response.data;
-      const {ten_dang_nhap} = response.data;
+      console.log("Dữ liệu từ API:", response);
+      const { access_token, ten_dang_nhap } = response.data;
 
-
-      // Lưu token vào localStorage hoặc cookies
+      // Lưu token và tên đăng nhập vào localStorage
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('tendangnhap', ten_dang_nhap);
 
-      
       // Chuyển hướng sau khi đăng nhập
       navigate('/');
       window.location.reload();
@@ -36,65 +31,46 @@ const Login = () => {
     }
   };
 
-
-  
-
   return (
-    <div style={styles.container}>
+    <div className="login-container">
       <h2>Đăng Nhập</h2>
-      {error && <p style={styles.error}>{error}</p>}
+      {error && <p className="error">{error}</p>}
       <form onSubmit={handleLogin}>
-        <div style={styles.inputGroup}>
-          <label>Tên đăng nhập:</label>
+        <div className="input-group">
+          <label>Nhập email</label>
           <input
             type="text"
             value={tenDangNhap}
             onChange={(e) => setTenDangNhap(e.target.value)}
+            placeholder='email'
             required
+            autoComplete="off"
           />
         </div>
-        <div style={styles.inputGroup}>
-          <label>Mật khẩu:</label>
+        <div className="input-group">
+        <label>Nhập mật khẩu</label>
           <input
             type="password"
             value={matKhau}
             onChange={(e) => setMatKhau(e.target.value)}
+            placeholder='Mật khẩu'
+            autoComplete="off"
+
             required
           />
         </div>
-        <button type="submit" style={styles.button}>
+        <button type="submit" className="button">
           Đăng nhập
         </button>
       </form>
+      <p className="register-link">
+        Chưa có tài khoản?{' '}
+        <span onClick={() => navigate('/register')} className="link">
+          Đăng ký
+        </span>
+      </p>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: '400px',
-    margin: '0 auto',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-    textAlign: 'center',
-  },
-  inputGroup: {
-    marginBottom: '15px',
-  },
-  button: {
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    padding: '10px 15px',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-  error: {
-    color: 'red',
-    marginBottom: '10px',
-  },
 };
 
 export default Login;

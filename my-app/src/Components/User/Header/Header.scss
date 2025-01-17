@@ -1,23 +1,25 @@
 .container {
   .wrapper {
-    position: relative;
+    position: fixed;
     width: 100%;
     z-index: 1000;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    top: 0;
 
     .inner-wrapper {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 20px;
+      margin-top: -20px;
 
       /* Logo Section */
       .logo {
         h1 {
           position: relative;
+
           img {
-            width:100px;
+            width: 100px;
             transition: transform 0.3s ease-in-out;
 
             &:hover {
@@ -110,6 +112,7 @@
       /* Cart Button Section */
       .button-cart {
         position: relative;
+
         button {
           display: flex;
           align-items: center;
@@ -129,6 +132,7 @@
             color: #fff;
           }
         }
+
         .link-cart {
           color: #fff;
           text-decoration: none;
@@ -137,6 +141,7 @@
             color: #fff;
           }
         }
+
         .cart-count {
           position: absolute;
           top: -10px;
@@ -169,21 +174,29 @@
           cursor: pointer;
           transition: transform 0.2s ease-in-out;
 
-          
+
           &:hover {
             transform: scale(0.9);
-            background-color: rgb(65, 88, 208);;
+            background-color: rgb(65, 88, 208);
+            ;
             color: rgb(65, 88, 208);
           }
         }
-        .link-favorite{
+
+        .link-favorite {
           color: #fff;
 
-          .icon-favorite{
+          .icon-favorite {
             margin-left: 5px;
-            
+
           }
         }
+
+      }
+
+      .notificationbell {
+        position: fixed;
+
 
       }
 
@@ -206,7 +219,7 @@
           font-size: 16px;
         }
 
-        .logout-button{
+        .logout-button {
           background-color: rgb(65, 88, 208);
           color: #fff;
           border: none;
@@ -215,7 +228,7 @@
           border-radius: 5px;
           transition: transform 0.3s ease-in-out;
 
-          &:hover{
+          &:hover {
             transform: scale(0.9);
 
           }
@@ -253,6 +266,7 @@
         }
       }
     }
+
     .menu ul li {
       position: relative;
       margin: 0 15px;

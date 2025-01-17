@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import './Register.scss'
+import './Register.scss';
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -35,52 +35,57 @@ const RegisterForm = () => {
   };
 
   return (
-    <div>
-      <h2>Đăng Ký Tài Khoản</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Tên đăng nhập:
+    <div className="register-container">
+      <h2 className="register-title">Đăng Ký Tài Khoản</h2>
+      <form className="register-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label className="form-label">Tên đăng nhập:</label>
           <input
+            className="form-input"
             type="text"
             name="ten_dang_nhap"
             value={formData.ten_dang_nhap}
             onChange={handleChange}
             required
           />
-        </label>
-        <label>
-          Mật khẩu:
+        </div>
+        <div className="form-group">
+          <label className="form-label">Mật khẩu:</label>
           <input
+            className="form-input"
             type="password"
             name="mat_khau"
             value={formData.mat_khau}
             onChange={handleChange}
             required
           />
-        </label>
-        <label>
-          Họ tên:
+        </div>
+        <div className="form-group">
+          <label className="form-label">Họ tên:</label>
           <input
+            className="form-input"
             type="text"
             name="ho_ten"
             value={formData.ho_ten}
             onChange={handleChange}
             required
           />
-        </label>
-        <label>
-          Tuổi:
+        </div>
+        <div className="form-group">
+          <label className="form-label">Tuổi:</label>
           <input
+            className="form-input"
             type="number"
             name="tuoi"
             value={formData.tuoi}
             onChange={handleChange}
             required
           />
-        </label>
-        <label>
-          Giới tính:
+        </div>
+        <div className="form-group">
+          <label className="form-label">Giới tính:</label>
           <select
+            className="form-select"
             name="gioi_tinh"
             value={formData.gioi_tinh}
             onChange={handleChange}
@@ -88,40 +93,43 @@ const RegisterForm = () => {
             <option value="Nam">Nam</option>
             <option value="Nu">Nữ</option>
           </select>
-        </label>
-        <label>
-          Email:
+        </div>
+        <div className="form-group">
+          <label className="form-label">Email:</label>
           <input
+            className="form-input"
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
           />
-        </label>
-        <label>
-          Số điện thoại:
+        </div>
+        <div className="form-group">
+          <label className="form-label">Số điện thoại:</label>
           <input
+            className="form-input"
             type="text"
             name="so_dien_thoai"
             value={formData.so_dien_thoai}
             onChange={handleChange}
             required
           />
-        </label>
-        <label>
-          Địa chỉ:
+        </div>
+        <div className="form-group">
+          <label className="form-label">Địa chỉ:</label>
           <input
+            className="form-input"
             type="text"
             name="dia_chi"
             value={formData.dia_chi}
             onChange={handleChange}
             required
           />
-        </label>
-        <button type="submit">Đăng Ký</button>
+        </div>
+        <button className="form-button" type="submit">Đăng Ký</button>
       </form>
-      {message && <p>{message}</p>}
+      {message && <p className={`form-message ${message.includes('thành công') ? 'success' : 'error'}`}>{message}</p>}
     </div>
   );
 };

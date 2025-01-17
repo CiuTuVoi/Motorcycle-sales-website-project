@@ -71,12 +71,6 @@ const HotProductCartContainer = () => {
   return (
     <div className="product-slideshow">
       {/* Banner giảm giá */}
-      {promotion6 && (
-        <div className="promotion-banner">
-          <h2>🎉 Ưu đãi đặc biệt: {promotion6.ten_khuyen_mai} 🎉</h2>
-          <p>{promotion6.mo_ta}</p>
-        </div>
-      )}
 
       {/* Danh sách sản phẩm */}
       {products.length > 0 ? (
@@ -95,17 +89,22 @@ const HotProductCartContainer = () => {
                   <h3>{product.ten_san_pham}</h3>
                   <div className="price">
                     {product.gia_cu && (
-                      <p className="old-price">{product.gia.toLocaleString()} VND</p>
+                      <p className="old-price">
+                        {product.gia.toLocaleString()} VND
+                      </p>
                     )}
-                    <p className="new-price">{applyDiscount(product.gia).toLocaleString()} VND</p>
+                    <p className="new-price">
+                      {applyDiscount(product.gia).toLocaleString()} VND
+                    </p>
                   </div>
-                  <ul>
-                    <li>🎁 01 Nón bảo hiểm</li>
-                    <li>🎁 01 Khung biển số</li>
-                    <li>🎁 01 Móc khóa</li>
-                    <li>🎁 01 Túi vải</li>
-                    <li>🎁 01 Gói bảo dưỡng - bảo trì 5 năm</li>
-                  </ul>
+                  {promotion6 && (
+                    <div className="promotion-banner">
+                      <h2>
+                        🎉 Ưu đãi đặc biệt: {promotion6.ten_khuyen_mai} 🎉
+                      </h2>
+                      <p>{promotion6.mo_ta}</p>
+                    </div>
+                  )}
                   <button>
                     <Link to={`/viewProduct/${product.ma_san_pham}`}>MORE</Link>
                   </button>
