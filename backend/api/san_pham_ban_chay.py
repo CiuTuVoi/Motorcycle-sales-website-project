@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 import os
-import redis
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy import func, extract
 from sqlalchemy.orm import Session
@@ -8,26 +7,6 @@ from datetime import datetime
 from models.models import SanPham, DonHang, SanPhamBanChay
 from models.database import get_db
 from pydantic import BaseModel
-
-# Đọc cấu hình Redis từ .env
-REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
-REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
-REDIS_DB = int(os.getenv("REDIS_DB", 0))
-
-# Tạo Redis client
-redis_client = redis.Redis(
-    host=REDIS_HOST,
-    port=REDIS_PORT,
-    db=REDIS_DB,
-    decode_responses=True  # Đảm bảo dữ liệu trả về ở dạng chuỗi
-)
-
-# Kiểm tra kết nối
-try:
-    redis_client.ping()
-    print("Redis connected successfully!")
-except redis.ConnectionError as e:
-    print(f"Redis connection failed: {e}")
 
 router = APIRouter()
 
@@ -44,23 +23,8 @@ def update_san_pham_ban_chay(request: UpdateSanPhamBanChayRequest, db: Session =
     """
     thang = request.thang
     nam = request.nam
-    cache_key = f"san_pham_ban_chay_{nam}_{thang}"
 
-    # Kiểm tra Redis Cache
-    cached_data = redis_client.get(cache_key)
-    if cached_data:
-        return {"source": "cache", "data": cached_data}
-
-    # Kiểm tra trong Redis
-    cached_data = redis_client.get(cache_key)
-    if cached_data:
-        return {
-            "thang": thang,
-            "nam": nam,
-            "san_pham_ban_chay": eval(cached_data),
-        }
-
-    # Nếu không có trong Redis, truy vấn cơ sở dữ liệu
+    # Truy vấn cơ sở dữ liệu để lấy danh sách sản phẩm bán chạy
     san_pham_ban = (
         db.query(
             DonHang.ma_san_pham,
@@ -108,7 +72,7 @@ def update_san_pham_ban_chay(request: UpdateSanPhamBanChayRequest, db: Session =
 
     db.commit()
 
-    # Lưu danh sách vào Redis
+    # Tạo danh sách phản hồi
     san_pham_ban_list = [
         {
             "ma_san_pham": sp.ma_san_pham,
@@ -118,7 +82,6 @@ def update_san_pham_ban_chay(request: UpdateSanPhamBanChayRequest, db: Session =
         }
         for sp in san_pham_ban
     ]
-    redis_client.setex(cache_key, 7200, str(san_pham_ban_list))  # TTL 2 giờ
 
     # Trả về danh sách sản phẩm bán chạy
     return {
