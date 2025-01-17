@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: my_web
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456  # Mật khẩu root của MySQL
+      MYSQL_DATABASE: website_motorbike  # Tên cơ sở dữ liệu bạn muốn kết nối
+    ports:
+      - "3306:3306"  # Mở cổng 3306 cho MySQL
+    networks:
+      - app-network
+    volumes:
+      - ban_xe_mysql-data:/var/lib/mysql  # Sử dụng volume đã tồn tại
+      - ./mysql/init:/docker-entrypoint-initdb.d  # Thêm dòng này để tự động chạy SQL scripts
+
+  backend:
+    image: backend  # Sử dụng image backend của bạn
+    container_name: web_ban_xe_container
+    build:
+      context: ./backend  # Xây dựng từ thư mục backend
+    volumes:
+      - ./src:/app/src  # Mount thư mục mã nguồn từ máy tính vào container
+    ports:
+      - "8000:8000"  # Mở cổng 8000 để truy cập ứng dụng từ máy chủ
+    environment:
+      DB_HOST: mysql  # Tên service MySQL trong Docker Compose
+      DB_PORT: 3306  # Cổng MySQL
+      DB_USER: root  # Tên người dùng MySQL
+      DB_PASSWORD: 123456  # Mật khẩu MySQL
+      DB_NAME: website_motorbike  # Tên cơ sở dữ liệu bạn muốn kết nối
+    depends_on:
+      - mysql  # Đảm bảo MySQL được khởi động trước backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  ban_xe_mysql-data:  # Tái sử dụng volume dữ liệu MySQL đã có
