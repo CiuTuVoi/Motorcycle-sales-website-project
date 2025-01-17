@@ -21,9 +21,19 @@ class ProductCreate(BaseModel):
     class Config:
         from_attributes = True
 
+# API để hiện chi tiết sản phẩm theo từng mã sản phẩm
+@router.get("/products/{product_id}")
+def get_products(db: Session = Depends(get_db)):
+    """
+    API này dùng để lấy ra toàn bộ sản phẩm xe 
+    """
+    products = db.query(SanPham).all()
+    if not products:
+        raise HTTPException(status_code=404, detail="Không tìm thấy sản phẩm")
+    return products
 
 # API: Lấy danh sách sản phẩm (cho tất cả người dùng, không yêu cầu đăng nhập)
-@router.get("/products/{product_id}")
+@router.get("/products")
 def get_products(db: Session = Depends(get_db)):
     """
     API này dùng để lấy ra toàn bộ sản phẩm xe 
