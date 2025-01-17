@@ -39,6 +39,9 @@ def get_lichsugiaodich(
     page: int = 1,
     page_size: int = 10,
 ):
+    """
+    API này dùng để lấy ra các đơn hàng mà mình đã mua or đã hủy đối với người dùng
+    """
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
     if not ma_nguoi_dung:
         raise HTTPException(

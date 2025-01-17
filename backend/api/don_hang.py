@@ -1,18 +1,14 @@
 from decimal import Decimal
 from enum import Enum
 from typing import Optional
-
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import types  # Sửa lại import Decimal
 from sqlalchemy.orm import Session
-from core.security import get_current_user
-from core.security import verify_role
-from models.database import get_db  # Hàm lấy session DB
-from models.models import DonHang, KhoHang, NguoiDung, ThongBao
+from models.database import get_db
+from models.models import DonHang, KhoHang, NguoiDung, ThongBao, SanPham
+from core.security import get_current_user, verify_role
 
 router = APIRouter()
-
 
 # Enum trạng thái đơn hàng
 class TrangThaiEnum(str, Enum):
@@ -25,9 +21,7 @@ class DonHangCreate(BaseModel):
     ma_nguoi_dung: Optional[int] = None
     ma_san_pham: int
     so_luong: int
-    don_gia: Decimal = Field(
-        ..., gt=0, description="Đơn giá của sản phẩm, phải lớn hơn 0"
-    )
+    don_gia: Optional[Decimal] = None
     tong_tien: Optional[Decimal] = None
     trang_thai: TrangThaiEnum = TrangThaiEnum.dangXuLy
 
@@ -35,15 +29,14 @@ class DonHangCreate(BaseModel):
         from_attributes = True
 
     # Tính toán tổng tiền
-    def calculate_total(self):
-        self.tong_tien = self.don_gia * self.so_luong
+    def calculate_total(self, don_gia: Decimal):
+        self.tong_tien = don_gia * self.so_luong
 
 
 # Sửa create_thong_bao để đảm bảo logic
 def create_thong_bao(
     ma_nguoi_dung: int, noi_dung: str, loai_thong_bao: str, db: Session
 ):
-    # Kiểm tra giá trị của loai_thong_bao có hợp lệ không
     if loai_thong_bao not in ["Khuyenmai", "Riengtu"]:
         raise HTTPException(status_code=400, detail="Loại thông báo không hợp lệ")
 
@@ -51,7 +44,7 @@ def create_thong_bao(
         ma_nguoi_dung=ma_nguoi_dung,
         noi_dung=noi_dung,
         loai_thong_bao=loai_thong_bao,
-        da_doc="chưa đọc",  # Mặc định là chưa đọc
+        da_doc="chưa đọc",
     )
     try:
         db.add(thong_bao)
@@ -67,7 +60,7 @@ def create_thong_bao(
 def get_donhang(
     db: Session = Depends(get_db), user: NguoiDung = Depends(get_current_user)
 ):
-    ma_nguoi_dung = user.ma_nguoi_dung  # Lấy từ đối tượng người dùng trong cơ sở dữ liệu
+    ma_nguoi_dung = user.ma_nguoi_dung
     donhang_list = (
         db.query(DonHang).filter(DonHang.ma_nguoi_dung == ma_nguoi_dung).all()
     )
@@ -83,10 +76,15 @@ def get_donhang(
 def create_donhang(
     donhang_create: DonHangCreate,
     db: Session = Depends(get_db),
-    user_data: dict = Depends(verify_role("User")),
+    user: NguoiDung = Depends(get_current_user),  # Lấy thông tin người dùng đã đăng nhập
 ):
-    ma_nguoi_dung = user_data.get("ma_nguoi_dung")
+    """
+    API này dùng để tạo một đơn hàng mới.
+    """
+    # Lấy ma_nguoi_dung từ đối tượng người dùng đã đăng nhập
+    ma_nguoi_dung = user.ma_nguoi_dung
 
+    # Kiểm tra xem người dùng có tồn tại không
     if not db.query(NguoiDung).filter(NguoiDung.ma_nguoi_dung == ma_nguoi_dung).first():
         raise HTTPException(status_code=404, detail="Người dùng không tồn tại")
 
@@ -99,17 +97,30 @@ def create_donhang(
     if not kho_hang or kho_hang.so_luong < donhang_create.so_luong:
         raise HTTPException(status_code=400, detail="Số lượng trong kho không đủ")
 
-    # Tính toán tổng tiền
-    donhang_create.calculate_total()
+    # Lấy thông tin sản phẩm từ bảng SanPham
+    san_pham = db.query(SanPham).filter(SanPham.ma_san_pham == donhang_create.ma_san_pham).first()
+    if not san_pham:
+        raise HTTPException(status_code=404, detail="Sản phẩm không tồn tại")
 
-    donhang_data = donhang_create.dict()
-    donhang_data.pop("ma_nguoi_dung", None)
+    # Kiểm tra xem có giá khuyến mãi hay không
+    don_gia = san_pham.gia_khuyen_mai if san_pham.gia_khuyen_mai is not None else san_pham.gia
+    donhang_create.don_gia = don_gia  # Lấy đơn giá (gia hoặc gia_khuyen_mai) của sản phẩm
+
+    # Tính toán tổng tiền
+    donhang_create.calculate_total(donhang_create.don_gia)
+
+    # Thiết lập trạng thái mặc định cho đơn hàng
+    donhang_create.trang_thai = TrangThaiEnum.dangXuLy
 
     # Tạo đối tượng DonHang
+    donhang_data = donhang_create.dict()
+    donhang_data.pop("ma_nguoi_dung", None)  # Không cần truyền "ma_nguoi_dung" từ client
     new_donhang = DonHang(**donhang_data, ma_nguoi_dung=ma_nguoi_dung)
+
+    # Thêm đơn hàng vào cơ sở dữ liệu
     db.add(new_donhang)
 
-    # Trừ số lượng trong kho
+    # Cập nhật số lượng sản phẩm trong kho
     kho_hang.so_luong -= donhang_create.so_luong
     db.commit()
     db.refresh(new_donhang)
@@ -122,6 +133,7 @@ def create_donhang(
         db,
     )
 
+    # Trả về đơn hàng mới
     return DonHangCreate.from_orm(new_donhang)
 
 
@@ -146,7 +158,16 @@ def update_donhang(
     if not donhang:
         raise HTTPException(status_code=404, detail="Không tìm thấy đơn hàng")
 
-    donhang_update.calculate_total()
+    # Lấy thông tin sản phẩm từ kho hàng
+    kho_hang = db.query(KhoHang).filter(KhoHang.ma_san_pham == donhang.ma_san_pham).first()
+    if not kho_hang:
+        raise HTTPException(status_code=404, detail="Sản phẩm không tồn tại trong kho")
+
+    # Kiểm tra giá của sản phẩm trong kho
+    san_pham = db.query(SanPham).filter(SanPham.ma_san_pham == donhang.ma_san_pham).first()
+    if san_pham:
+        don_gia = san_pham.gia_khuyen_mai if san_pham.gia_khuyen_mai is not None else san_pham.gia
+        donhang_update.calculate_total(don_gia)
 
     donhang_update_data = donhang_update.dict()
     donhang_update_data.pop("ma_nguoi_dung", None)
@@ -165,7 +186,6 @@ def update_donhang(
         create_thong_bao(ma_nguoi_dung, f"Đơn hàng của bạn đã bị hủy.", "Riengtu", db)
 
     return DonHangCreate.from_orm(donhang)
-
 
 # API: Xóa đơn hàng
 @router.delete("/donhang/{donhang_id}")
@@ -186,7 +206,6 @@ def delete_donhang(
     if not donhang:
         raise HTTPException(status_code=404, detail="Không tìm thấy đơn hàng")
 
-    # Nếu trạng thái là Dang_xu_ly, trả lại số lượng vào kho
     if donhang.trang_thai == "Dang_xu_ly":
         kho_hang = (
             db.query(KhoHang).filter(KhoHang.ma_san_pham == donhang.ma_san_pham).first()

@@ -56,6 +56,9 @@ def search_user_by_name(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("Admin")),
 ):
+    """
+    API này dùng để tìm kiếm người dùng thông qua tên, chỉ dành cho admin
+    """
     # Làm sạch chuỗi nhập
     ten_nguoi_dung_clean = normalize_string(ten_nguoi_dung)
 

@@ -39,6 +39,9 @@ class UpdateSanPhamBanChayRequest(BaseModel):
 # API lấy và cập nhật sản phẩm bán chạy
 @router.post("/update_san_pham_ban_chay/")
 def update_san_pham_ban_chay(request: UpdateSanPhamBanChayRequest, db: Session = Depends(get_db)):
+    """
+    API này dùng để cập nhật sản phẩm bán chạy theo tháng
+    """
     thang = request.thang
     nam = request.nam
     cache_key = f"san_pham_ban_chay_{nam}_{thang}"

@@ -85,6 +85,9 @@ def is_phone_number(ten_dang_nhap: str) -> bool:
 # API: Đăng nhập và lấy token
 @router.post("/login", status_code=status.HTTP_200_OK)
 def login(request: LoginRequest, response: Response, db: Session = Depends(get_db)):
+    """
+    API này sẽ tạo access token và refresh token
+    """
     user = None
     if is_email(request.ten_dang_nhap):
         user = (
@@ -146,6 +149,9 @@ def get_user_info(current_user: dict = Depends(get_current_user)):
 def refresh_token(
     response: Response, db: Session = Depends(get_db), refresh_token: str = Cookie(None)
 ):
+    """
+    API này sẽ giải mã refresh token và trả về access token mới
+    """
     if not refresh_token:
         raise HTTPException(status_code=401, detail="No refresh token provided")
 
@@ -187,6 +193,9 @@ def refresh_token(
 def logout(
     response: Response, db: Session = Depends(get_db), refresh_token: str = Cookie(None)
 ):
+    """
+    API này để thoát tài khoản và xóa refresh token khỏi cơ sở dữ liệu
+    """
     if refresh_token:
         try:
             payload = decode_token(refresh_token)
@@ -206,6 +215,9 @@ def logout(
 # API đăng ký người dùng mới
 @router.post("/dangky", status_code=status.HTTP_201_CREATED)
 def register(user: UserCreate, db: Session = Depends(get_db)):
+    """
+    API này dùng để tạo tài khoản mới
+    """
     # Kiểm tra tên đăng nhập trùng lặp
     existing_user = (
         db.query(NguoiDung)
@@ -255,6 +267,9 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 def read_users_me(
     current_user: NguoiDung = Depends(get_current_user), db: Session = Depends(get_db)
 ):
+    """
+    API này dùng để xem toàn bộ thông tin tài khoản người dùng chỉ dùng cho admin
+    """
     if current_user.vai_tro != "Admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -272,8 +287,14 @@ def read_users_me(
 
     return [
         {
+            "ho_ten": user.ho_ten,
+            "tuoi": user.tuoi,
+            "gioi_tinh" : user.gioi_tinh,
             "email": user.email,
+            "so_dien_thoai" : user.so_dien_thoai,
             "role": user.vai_tro,
+            "dia_chi" : user.dia_chi,
+            "trang_thai" : user.trang_thai,
             "ma_nguoi_dung": user.ma_nguoi_dung,
         }
         for user in users
@@ -288,6 +309,9 @@ def update_user_status(
     current_user: NguoiDung = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    """
+    API này dùng để thay đổi trạng thái của người dùng chỉ dành cho admin
+    """
     if current_user.vai_tro != "Admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -323,6 +347,9 @@ def update_user_role(
     current_user: NguoiDung = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    """
+    API này dùng để thay đổi vai trò của người dùng chỉ dành cho admin
+    """
     if current_user.vai_tro != "Admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

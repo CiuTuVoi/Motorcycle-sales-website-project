@@ -42,6 +42,9 @@ class ThongSoCreate(BaseModel):
 # API: Lấy danh sách thông số kỹ thuật không cần đăng nhập
 @router.get("/thongso")
 def get_thongso(db: Session = Depends(get_db)):
+    """
+    API này dùng để lấy ra tất cả thông số
+    """
     thongso = db.query(ThongSoKyThuat).all()
     if not thongso:
         raise HTTPException(status_code=404, detail="Không tìm thấy thông số")
@@ -55,6 +58,9 @@ def create_thongso(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
+    """
+    API này dùng để thêm thông số kỹ thuật mới
+    """
     # Kiểm tra nếu id thông số đã tồn tại
     existing_thongso = (
         db.query(ThongSoKyThuat)
@@ -106,6 +112,9 @@ def update_thongso(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
+    """
+    API này dùng để sửa thông số
+    """
     # Tìm thông số trong cơ sở dữ liệu
     thongso = (
         db.query(ThongSoKyThuat)
@@ -156,6 +165,9 @@ def delete_thongso(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
+    """
+    API này dùng để xóa thông số xe
+    """
     thongso = (
         db.query(ThongSoKyThuat)
         .filter(ThongSoKyThuat.ma_thong_so == thongso_id)

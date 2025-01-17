@@ -25,6 +25,9 @@ def get_danhgia(
     db: Session = Depends(get_db),
     user_data: dict = Depends(extract_user_data),  # Lấy dữ liệu người dùng từ token
 ):
+    """
+    API này dùng để xem các đánh giá của người dùng đối với từng người dùng
+    """
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")  # Lấy mã người dùng từ token
 
     # Lấy danh sách đánh giá của người dùng
@@ -56,6 +59,9 @@ def create_danhgia(
         extract_user_data
     ),  # Truyền thông tin người dùng từ token
 ):
+    """
+    API này dùng để tạo đánh giá mới cho sản phẩm đối với người dùng
+    """
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")  # Lấy mã người dùng từ token
 
     if not ma_nguoi_dung:

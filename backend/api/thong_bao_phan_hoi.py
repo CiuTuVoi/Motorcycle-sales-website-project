@@ -1,7 +1,7 @@
 from enum import Enum
 
 import jwt
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Security
 from fastapi.security import HTTPBearer
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -47,6 +47,9 @@ class ThongBaoRead(BaseModel):
 def get_thongbao(
     db: Session = Depends(get_db), user: NguoiDung = Depends(get_current_user)
 ):
+    """
+    API này dùng để lấy toàn bộ thông báo đối với từng người dùng
+    """
     if user is None:
         raise HTTPException(status_code=401, detail="Người dùng không hợp lệ")
 
@@ -68,6 +71,9 @@ def create_phan_hoi(
     db: Session = Depends(get_db),
     user_data: dict = Depends(verify_role),  # Lấy dữ liệu người dùng từ token
 ):
+    """
+    API này dùng để tạo phản hồi từ đánh giá đối với người dùng
+    """
     # Lấy mã người dùng từ token
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
     if not ma_nguoi_dung:
@@ -111,6 +117,9 @@ def reply_to_phan_hoi(
     db: Session = Depends(get_db),
     user_data: dict = Depends(verify_role),  # Lấy dữ liệu người dùng từ token
 ):
+    """
+    API này dùng để tạo thông báo phản hồi và trả lời đánh giá
+    """
     # Lấy mã người dùng từ token
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
     if not ma_nguoi_dung:
@@ -148,7 +157,10 @@ def reply_to_phan_hoi(
 
 
 @router.post("/tao_thong_bao_khuyen_mai")
-async def tao_thong_bao_khuyen_mai(khuyen_mai_id: int, db: Session = Depends(get_db)):
+async def tao_thong_bao_khuyen_mai(khuyen_mai_id: int, db: Session = Depends(get_db),_: str = Security(verify_role("Admin"))):
+    """
+    API này dùng để tạo thông báo khuyến mại đến tất cả người dùng
+    """
     # Lấy thông tin khuyến mãi từ bảng KhuyenMai
     khuyen_mai = (
         db.query(KhuyenMai).filter(KhuyenMai.ma_khuyen_mai == khuyen_mai_id).first()
@@ -179,6 +191,9 @@ async def mark_notification_as_read(
     db: Session = Depends(get_db),
     user_data: dict = Depends(verify_role),
 ):
+    """
+    API này dùng để kiểm tra xem người dùng đã đọc thông báo hay chưa
+    """
     # Lấy mã người dùng từ token
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
     if not ma_nguoi_dung:

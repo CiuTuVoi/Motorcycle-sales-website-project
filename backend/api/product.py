@@ -25,6 +25,9 @@ class ProductCreate(BaseModel):
 # API: Lấy danh sách sản phẩm (cho tất cả người dùng, không yêu cầu đăng nhập)
 @router.get("/products")
 def get_products(db: Session = Depends(get_db)):
+    """
+    API này dùng để lấy ra toàn bộ sản phẩm xe 
+    """
     products = db.query(SanPham).all()
     if not products:
         raise HTTPException(status_code=404, detail="Không tìm thấy sản phẩm")
@@ -38,6 +41,9 @@ def create_product(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("Admin")),  # Chỉ cho admin
 ):
+    """
+    API này dùng để thêm sản phẩm mới
+    """
     # Kiểm tra nếu sản phẩm đã tồn tại
     existing_product = (
         db.query(SanPham)
@@ -71,6 +77,9 @@ def update_product(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("Admin")),  # Chỉ cho admin
 ):
+    """
+    API này dùng để sửa sản phẩm
+    """
     # Tìm sản phẩm
     product = db.query(SanPham).filter(SanPham.ma_san_pham == product_id).first()
     if not product:
@@ -96,6 +105,9 @@ def delete_product(
     db: Session = Depends(get_db),
     _: str = Security(verify_role("Admin")),  # Kiểm tra role admin
 ):
+    """
+    API này dùng để xóa sản phẩm
+    """
     product = db.query(SanPham).filter(SanPham.ma_san_pham == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")

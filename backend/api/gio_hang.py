@@ -23,6 +23,9 @@ class GiohangCreate(BaseModel):
 def get_giohang(
     db: Session = Depends(get_db), user_data: dict = Depends(verify_role("User"))
 ):
+    """
+    API này dùng để lấy danh sách sản phẩm mà người dùng đã thêm vào giỏ hàng
+    """
     ma_nguoi_dung = user_data.get("ma_nguoi_dung")
     giohang_list = (
         db.query(GioHang).filter(GioHang.ma_nguoi_dung == ma_nguoi_dung).all()

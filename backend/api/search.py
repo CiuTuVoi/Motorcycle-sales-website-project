@@ -44,6 +44,9 @@ def normalize_string(s: str) -> str:
 # API Gợi ý sản phẩm theo tên sản phẩm
 @router.get("/products/suggestions/by_name/", response_model=List[SanPhamSchema])
 def get_product_suggestions_by_name(query: str, db: Session = Depends(get_db)):
+    """
+    API này dùng để tìm kiếm sản phẩm có gợi ý
+    """
     # Làm sạch chuỗi nhập
     query_clean = normalize_string(query)
     
@@ -68,6 +71,9 @@ def get_product_suggestions_by_name(query: str, db: Session = Depends(get_db)):
 # API Tìm kiếm sản phẩm theo tên sản phẩm (dùng khi người dùng nhấn Enter hoặc tìm kiếm)
 @router.get("/products/search/by_name/", response_model=List[SanPhamSchema])
 def search_products_by_name(query: str, db: Session = Depends(get_db)):
+    """
+    API này dùng để tìm kiếm sản phẩm dựa theo tên xe
+    """
     # Làm sạch chuỗi nhập
     query_clean = normalize_string(query)
     
@@ -91,6 +97,9 @@ def search_products_by_name(query: str, db: Session = Depends(get_db)):
 # API Gợi ý sản phẩm theo hãng xe
 @router.get("/products/suggestions/by_hangxe/", response_model=List[SanPhamSchema])
 def get_product_suggestions_by_hangxe(query: str, db: Session = Depends(get_db)):
+    """
+    API này dùng để tạo tìm kiếm gợi ý xe theo hãng xe
+    """
     # Làm sạch chuỗi nhập
     query_clean = normalize_string(query)
     
@@ -138,6 +147,9 @@ def search_products_by_hangxe(query: str, db: Session = Depends(get_db)):
 # API Tìm kiếm sản phẩm theo thể loại xe (giữ nguyên theo yêu cầu)
 @router.get("/products/by_loaixe/", response_model=List[SanPhamSchema])
 def search_products_by_loaixe(loai_xe: str, db: Session = Depends(get_db)):
+    """
+    API này dùng để tìm kiếm sản phẩm theo thể loại xe (ga, số ...)
+    """
     # Làm sạch chuỗi nhập
     loai_xe_clean = normalize_string(loai_xe)
     
