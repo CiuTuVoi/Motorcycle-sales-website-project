@@ -6,12 +6,14 @@ import "./Cart.scss";
 import Header from "../Header/Header";
 import Footers from "../Footer/Footer";
 import { message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cart, setCart] = useState([]); // Danh sách sản phẩm trong giỏ hàng
   const [products, setProducts] = useState({}); // Lưu thông tin sản phẩm chi tiết với id là key
   const [selectedPromotion, setSelectedPromotion] = useState(null); // Lưu khuyến mãi cụ thể
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchSpecificPromotion = async () => {
     try {
@@ -107,6 +109,38 @@ const Cart = () => {
     }).format(total);
   };
 
+  const handleCheckout = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+
+      // Tạo mảng các sản phẩm từ giỏ hàng với số lượng
+      const orderItems = cart.map(item => ({
+        ma_san_pham: item.ma_san_pham,
+        so_luong: item.so_luong
+      }));
+
+      console.log("Dữ liệu đơn hàng gửi đi:", orderItems);  // In dữ liệu gửi đi để kiểm tra
+
+      // Tạo đơn hàng mới
+      const orderData = {
+        products: orderItems,  // Sản phẩm trong giỏ hàng
+        total_price: calculateTotal(),  // Tổng giá trị đơn hàng
+      };
+
+      const response = await axios.post("http://127.0.0.1:8000/donhang", orderData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      message.success("Đơn hàng đã được tạo thành công!");
+      dispatch(clearCart());
+      setCart([]);
+      navigate("/order");
+    } catch (error) {
+      console.error("Error creating order:", error.response ? error.response.data : error.message);
+      message.error("Không thể tạo đơn hàng.");
+    }
+  };
+
   useEffect(() => {
     fetchCart();
     fetchProduct();
@@ -181,7 +215,9 @@ const Cart = () => {
               <button className="btn-clear" onClick={handleClearCart}>
                 Xóa Tất Cả
               </button>
-              <button className="btn-checkout">Mua hàng</button>
+              <button className="btn-checkout" onClick={handleCheckout}>
+                Mua hàng
+              </button>
             </div>
           </div>
         )}

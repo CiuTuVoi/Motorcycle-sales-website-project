@@ -9,7 +9,7 @@ import { selectCartQuantity } from "../redux/cartSlice";
 import { selectFavoriteQuantity } from "../redux/favoriteSlice";
 import { selectUserName, clearUserName } from "../redux/userSlide";
 import SearchComponent from "../search/SearchComponent";
-import NotificationBell from "../NotificationBell/NotificationBell";
+// import NotificationBell from "../NotificationBell/NotificationBell";
 
 const brandItems = [
   { label: "Yamaha", link: "/listproduct" },
@@ -75,17 +75,35 @@ class Layout extends Component {
             {/* Action Buttons Section */}
             <div className="button-actions">
               <div className="button-icon">
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() =>
+                    window.open(
+                      "https://www.facebook.com/your-facebook-page",
+                      "_blank"
+                    )
+                  }
+                >
                   <FaFacebookF />
                 </button>
               </div>
+
               <div className="button-icon">
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() =>
+                    (window.location.href = "mailto:luongduythai2303@gmail.com")
+                  }
+                >
                   <IoMdMail />
                 </button>
               </div>
+
               <div className="button-icon">
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = "tel:+84338062566")}
+                >
                   <FaPhone />
                 </button>
               </div>
@@ -113,16 +131,13 @@ class Layout extends Component {
                     <span className="favorite-count">{favoriteQuantity}</span>
                   )}
                   <span className="icon-favorite">
-                  <FaHeart />
-                </span>
+                    <FaHeart />
+                  </span>
                 </Link>
-                
               </button>
             </div>
 
-            <div className="notificationbell">
-              <NotificationBell />
-            </div>
+            <div className="notificationbell">{/* <NotificationBell /> */}</div>
 
             {/* Login/Logout Section */}
             <div className="login">

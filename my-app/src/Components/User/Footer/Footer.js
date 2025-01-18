@@ -6,18 +6,21 @@ import "react-slideshow-image/dist/styles.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './Footer.scss'
+import { Link } from "react-router-dom";
 function Footers() {
+
+  
   return (
+    
     <footer className="footer">
       <div className="footer-services">
         <h3>DANH MỤC DỊCH VỤ</h3>
         <div className="services-menu">
-          <button>XE MÁY TRẢ GÓP</button>
-          <button>XE MÁY NHẬP KHẨU</button>
-          <button>XE MÁY CHÍNH HÃNG</button>
+          <Link to = "/listproduct"><button>XE MÁY HONDA</button></Link>
+          <Link to = "/listproduct"><button>XE MÁY YAMAHA</button></Link>
+          <Link to = "/listproduct"><button>XE MÁY ĐIỆN</button></Link>
           <button>PHỤ KIỆN XE MÁY</button>
-          <button>ĐỐI TÁC</button>
-          <button>VỀ CHÚNG TÔI</button>
+          <Link to = "/introduce"><button>VỀ CHÚNG TÔI</button></Link>
         </div>
       </div>
 

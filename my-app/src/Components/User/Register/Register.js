@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './Register.scss';
 
 const RegisterForm = () => {
+  const navigate = useNavigate(); // Sử dụng useNavigate
   const [formData, setFormData] = useState({
     ten_dang_nhap: '',
     mat_khau: '',
@@ -29,6 +31,12 @@ const RegisterForm = () => {
     try {
       const response = await axios.post('http://localhost:8000/dangky', formData);
       setMessage(response.data.message);
+
+      if (response.data.message.includes('thành công')) {
+        setTimeout(() => {
+          navigate('/login'); 
+        }, 2000); 
+      }
     } catch (error) {
       setMessage(error.response?.data?.detail || 'Đăng ký thất bại');
     }

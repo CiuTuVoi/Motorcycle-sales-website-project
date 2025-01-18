@@ -27,56 +27,6 @@ const slideImages = [
   },
 ];
 
-/*img-product-besst-selling*/
-const slideImageProduct = [
-  {
-    title: "Honda SH 125 - Bản Thể Thao",
-    price: "85.000.000đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/August2024/OdEB73r6Io8GOwX51wTV.png",
-  },
-  {
-    title: "Honda SH 125 - Bản Đặc Biệt",
-    price: "83.500.000đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/July2024/humYsFoqZxFLaMIhklZH.png",
-  },
-  {
-    title: "Honda SH 125 - Bản Cao Cấp",
-    price: "83.000.000đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/August2024/4IyI4oAluqwkEzvNl2Yh.png",
-  },
-  {
-    title: "Honda SH Mode 125 - Bản Cao Cấp",
-    price: "64.000.000đ",
-    image:
-      "https://cdn.honda.com.vn/motorbikes/August2024/3mJZ9NV7sBmWVJalt796.png",
-  },
-];
-/*Object-components-slide-product-best-selling */
-const settings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 4,
-  slidesToScroll: 2,
-  arrows: true,
-};
-
-/*img-product-bland-honda */
-
-/*Object-components-slide-bland-honda */
-const settingsHonda = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 5,
-  slidesToScroll: 5,
-  arrows: true,
-  autoplay: true,
-  autoplaySpeed: 3000,
-};
 
 const spanStyle = {
   background: "#efefef",
@@ -103,7 +53,6 @@ const settingProductHot = {
   arrows: true,
 };
 
-const productHotData = require("../../data/dataproduct.json");
 const Home = () => {
   const [SlideProductHonda, setSlideProductHonda] = useState([]);
   const [SlideProductYamaha, setSlideProductYamaha] = useState([]);
@@ -133,7 +82,6 @@ const Home = () => {
   }, []); // Đảm bảo chỉ gọi 1 lần khi component mount
   
 
-  const [productHot, setProductHot] = useState(productHotData[0]);
 
   // Tải danh sách yêu thích từ localStorage khi ứng dụng khởi động
 
@@ -224,23 +172,7 @@ const toggleFavorite = (item) => {
 
       <BestSellingProducts />
 
-      {/* slide-show-product-best-selling
-      <div className="product-slider">
-        <Slide {...settings}>
-          {slideImageProduct.map((product, index) => (
-            <div key={index} className="product-card">
-              <div
-                className="product-image"
-                style={{ backgroundImage: `url(${product.image})` }}
-              ></div>
-              <div className="product-info">
-                <h5>{product.title}</h5>
-                <p className="product-price">{product.price}</p>
-              </div>
-            </div>
-          ))}
-        </Slide>
-      </div> */}
+      
 
       {/*HOTPRODUCT-CART-CONTAINER*/}
       <div className="product-slideshow">
