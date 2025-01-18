@@ -12,21 +12,37 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      // Gửi request đến API
       const response = await axios.post('http://localhost:8000/login', {
         ten_dang_nhap: tenDangNhap,
         mat_khau: matKhau,
       });
-      console.log("Dữ liệu từ API:", response);
-      const { access_token, ten_dang_nhap } = response.data;
 
-      // Lưu token và tên đăng nhập vào localStorage
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('tendangnhap', ten_dang_nhap);
+      // Log phản hồi từ API để kiểm tra
+      console.log("Dữ liệu từ API:", response.data);
 
-      // Chuyển hướng sau khi đăng nhập
+      // Lấy access_token và tendangnhap từ response
+      const { access_token, tendangnhap } = response.data;
+
+      // Kiểm tra và lưu dữ liệu vào localStorage
+      if (access_token) {
+        localStorage.setItem('access_token', access_token);
+      } else {
+        console.error('Không tìm thấy access_token trong phản hồi API.');
+      }
+
+      if (tendangnhap) {
+        localStorage.setItem('tendangnhap', tendangnhap);
+      } else {
+        console.error('Không tìm thấy tendangnhap trong phản hồi API.');
+      }
+
+      // Chuyển hướng sau khi đăng nhập thành công
       navigate('/');
       window.location.reload();
     } catch (err) {
+      // Xử lý lỗi từ API và hiển thị thông báo lỗi
+      console.error("Lỗi đăng nhập:", err.response?.data || err);
       setError(err.response?.data?.detail || 'Đăng nhập thất bại');
     }
   };
@@ -48,14 +64,13 @@ const Login = () => {
           />
         </div>
         <div className="input-group">
-        <label>Nhập mật khẩu</label>
+          <label>Nhập mật khẩu</label>
           <input
             type="password"
             value={matKhau}
             onChange={(e) => setMatKhau(e.target.value)}
             placeholder='Mật khẩu'
             autoComplete="off"
-
             required
           />
         </div>

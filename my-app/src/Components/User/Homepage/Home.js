@@ -12,7 +12,7 @@ import Footer from "../Footer/Footer";
 import axios from "axios";
 import HotProduct from "../hotProduct/hotProduct";
 import { IoIosHeart } from "react-icons/io";
-// import BestSellingProducts from "../BestSellingProducts/BestSellingProducts";
+import BestSellingProducts from "../BestSellingProducts/BestSellingProducts";
 
 
 const slideImages = [
@@ -222,9 +222,9 @@ const toggleFavorite = (item) => {
       </div>
       <div className="border"> </div>
 
-      {/* <BestSellingProducts /> */}
+      <BestSellingProducts />
 
-      {/*slide-show-product-best-selling*/}
+      {/* slide-show-product-best-selling
       <div className="product-slider">
         <Slide {...settings}>
           {slideImageProduct.map((product, index) => (
@@ -240,7 +240,7 @@ const toggleFavorite = (item) => {
             </div>
           ))}
         </Slide>
-      </div>
+      </div> */}
 
       {/*HOTPRODUCT-CART-CONTAINER*/}
       <div className="product-slideshow">

@@ -1,43 +1,95 @@
-.best-selling-products {
-    padding: 20px;
-    h1 {
-      text-align: center;
-      color: #333;
+.product-slider {
+  padding: 20px;
+  background-color: #f9f9f9;
+
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     }
-  
-    .product-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      border-bottom: 1px solid #e0e0e0;
     }
-  
-    .product-card {
-      width: 200px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      overflow: hidden;
+
+    .product-info {
+      padding: 15px;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
-      .product-image {
-        height: 150px;
-        background-size: cover;
-        background-position: center;
+
+      h5 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin: 10px 0;
+        text-transform: capitalize;
       }
-  
-      .product-info {
-        padding: 10px;
-        h5 {
-          font-size: 16px;
-          margin: 10px 0;
-          color:#fff;
-        }
-        p {
+
+      .product-price {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .original-price {
           font-size: 14px;
-          color: #fff;
+          color: #888;
+          text-decoration: line-through;
+          margin-bottom: 5px;
+        }
+
+        .discounted-price {
+          font-size: 18px;
+          font-weight: 700;
+          color: #d9534f;
+        }
+      }
+
+      .product-quantity {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #555;
+      }
+    }
+  }
+
+  .react-slideshow-container {
+    .react-slideshow-arrow {
+      background-color: #d9534f !important;
+      color: #fff !important;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #c9302c !important;
+      }
+    }
+
+    .indicators {
+      button {
+        background-color: #888;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        transition: background-color 0.3s ease;
+
+        &.active {
+          background-color: #d9534f;
         }
       }
     }
   }
-  
+}

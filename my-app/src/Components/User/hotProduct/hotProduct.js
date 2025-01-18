@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Slider from "react-slick";
+import Slide from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./hostProduct.scss";
@@ -70,25 +70,26 @@ const HotProductCartContainer = () => {
 
   return (
     <div className="product-slideshow">
-      {/* Banner giảm giá */}
-
       {/* Danh sách sản phẩm */}
       {products.length > 0 ? (
-        <Slider {...settingProductHot}>
+        <Slide {...settingProductHot}>
           {products.map((product) => (
             <div className="product-card-container" key={product.ma_san_pham}>
               <div className="product-card">
                 <div className="product-img">
-                  <img
-                    src={product.anh_dai_dien || "default_image.jpg"}
-                    alt={product.ten_san_pham || "Sản phẩm"}
-                  />
+                  <Link to = {`/viewProduct/${product.ma_san_pham}`}>
+                    <img
+                      src={product.anh_dai_dien || "default_image.jpg"}
+                      alt={product.ten_san_pham || "Sản phẩm"}
+                    />
+                  </Link>
+
                   <div className="badge">HOT</div>
                 </div>
                 <div className="product-detail">
                   <h3>{product.ten_san_pham}</h3>
                   <div className="price">
-                    {product.gia_cu && (
+                    {product.gia && (
                       <p className="old-price">
                         {product.gia.toLocaleString()} VND
                       </p>
@@ -106,13 +107,13 @@ const HotProductCartContainer = () => {
                     </div>
                   )}
                   <button>
-                    <Link to={`/viewProduct/${product.ma_san_pham}`}>MORE</Link>
+                    <Link to={`/viewProduct/${product.ma_san_pham}`}>XEM CHI TIẾT SẢN PHẨM</Link>
                   </button>
                 </div>
               </div>
             </div>
           ))}
-        </Slider>
+        </Slide>
       ) : (
         <p>Không có sản phẩm nào thuộc loại xe với mã 6.</p>
       )}

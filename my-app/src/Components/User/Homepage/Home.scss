@@ -166,10 +166,10 @@
                 .price {
                     margin: 10px 0 20px;
 
-                    .old-price {
-                        text-decoration: line-through;
-                        font-size: 14px;
-                        color: #999;
+                    .old_price {
+                        font-size: 16px;
+                        color: #888; // Màu xám nhạt cho giá cũ
+                        text-decoration: line-through; // Gạch ngang giá cũ
                         margin-right: 10px;
                     }
 
@@ -253,7 +253,7 @@
         background-color: rgb(55, 80, 206);
         width: 100%;
         height: 3px;
-        margin-top: -40px;
+        margin-top: -48px;
     }
 
 
@@ -332,39 +332,42 @@
             }
 
             .product-price {
-            display: block;
-            font-size: 16px;
-            text-decoration: line-through;
-            color: #999;
-            padding: 10px;
-          }
+                display: block;
+                font-size: 16px;
+                text-decoration: line-through;
+                color: #999;
+                padding: 10px;
+            }
 
-          .new-price {
-            display: block;
-            font-size: 18px;
-            color: red;
-            padding: 0 10px 10px;
-            font-weight: bold;
-          }
-          .favorite-btn {
-            margin-left: 210px;
-            margin-bottom: 150px;
-            border: none;
-            background: transparent;
-            
-            color: gray;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: color 0.3s;
-          }
-          
-          .favorite-btn.active {
-            color: red;
-          }
-          
-          
-          
-            
+            .new-price {
+
+                display: block;
+                font-size: 18px;
+                color: red;
+                padding: 0 10px 10px;
+                font-weight: bold;
+            }
+
+            .favorite-btn {
+                position: absolute;
+                right: 15px;
+                top: 20px;
+                border: none;
+                background: transparent;
+
+                color: gray;
+                cursor: pointer;
+                font-size: 1.7rem;
+                transition: color 0.3s;
+            }
+
+            .favorite-btn.active {
+                color: red;
+            }
+
+
+
+
         }
     }
 

@@ -1,35 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
-
 const cartSlice = createSlice({
   name: "cart",
-  initialState,
+  initialState: {
+    items: [], // Danh sách sản phẩm trong giỏ hàng
+  },
   reducers: {
     addToCart(state, action) {
-      state.push(action.payload);
-    },
-    removeFromCart(state, action) {
-      return state.filter((item) => item.id !== action.payload);
-    },
-    updateQuantity(state, action) {
-      const { id, type } = action.payload; // Nhận id và loại hành động (increase/decrease)
-      const item = state.find((item) => item.id === id);
-      if (item) {
-        if (type === "increase") item.quantity += 1;
-        if (type === "decrease" && item.quantity > 1) item.quantity -= 1;
+      const existingItem = state.items.find(
+        (item) => item.id === action.payload.id
+      );
+      if (existingItem) {
+        existingItem.quantity += action.payload.quantity;
+      } else {
+        state.items.push(action.payload);
       }
     },
+    removeFromCart(state, action) {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
     clearCart(state) {
-      return [];
+      state.items = [];
     },
   },
 });
 
-// Selector tính tổng số lượng sản phẩm trong giỏ hàng
-export const selectCartQuantity = (state) =>
-  state.cart.reduce((total, item) => total + item.quantity, 0);
+export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart } =
-  cartSlice.actions;
+// Selector để lấy tổng số lượng sản phẩm trong giỏ hàng
+export const selectCartQuantity = (state) =>
+  state.cart.items.reduce((total, item) => total + item.quantity, 0);
+
 export default cartSlice.reducer;

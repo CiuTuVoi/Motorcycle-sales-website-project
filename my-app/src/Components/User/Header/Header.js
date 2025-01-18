@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { FaSearch, FaFacebookF, FaPhone, FaShoppingCart, FaHeart } from "react-icons/fa";
+import { FaFacebookF, FaPhone, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import DropdownMenu from "../DropdowMenu/dropoutMenu";
 import "./Header.scss";
 import { connect } from "react-redux";
 import { selectCartQuantity } from "../redux/cartSlice";
+import { selectFavoriteQuantity } from "../redux/favoriteSlice";
 import { selectUserName, clearUserName } from "../redux/userSlide";
 import SearchComponent from "../search/SearchComponent";
 import NotificationBell from "../NotificationBell/NotificationBell";
@@ -48,7 +49,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { cartQuantity, userName } = this.props;
+    const { cartQuantity, favoriteQuantity, userName } = this.props;
 
     return (
       <div className="container">
@@ -97,7 +98,9 @@ class Layout extends Component {
                   GIỎ HÀNG
                 </Link>
                 <FaShoppingCart />
-                {cartQuantity > 0 && <span className="cart-count">{cartQuantity}</span>}
+                {cartQuantity > 0 && (
+                  <span className="cart-count">{cartQuantity}</span>
+                )}
               </button>
             </div>
 
@@ -106,22 +109,26 @@ class Layout extends Component {
               <button type="button">
                 <Link className="link-favorite" to="/favorite">
                   SP YÊU THÍCH
-                  <i className="icon-favorite">
-                    <FaHeart />
-                  </i>
+                  {favoriteQuantity > 0 && (
+                    <span className="favorite-count">{favoriteQuantity}</span>
+                  )}
+                  <span className="icon-favorite">
+                  <FaHeart />
+                </span>
                 </Link>
+                
               </button>
             </div>
 
             <div className="notificationbell">
-              <NotificationBell/>
+              <NotificationBell />
             </div>
 
             {/* Login/Logout Section */}
             <div className="login">
               {userName ? (
                 <>
-                  <span className="user_name">Hello {userName}</span>
+                  <span className="user_name">{userName}</span>
                   <button className="logout-button" onClick={this.handleLogout}>
                     Đăng xuất
                   </button>
@@ -159,8 +166,9 @@ class Layout extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  cartQuantity: selectCartQuantity(state),
-  userName: selectUserName(state),
+  cartQuantity: selectCartQuantity(state), // Lấy tổng số lượng giỏ hàng
+  favoriteQuantity: selectFavoriteQuantity(state), // Lấy tổng số lượng sản phẩm yêu thích
+  userName: selectUserName(state), // Lấy tên người dùng
 });
 
 const mapDispatchToProps = {

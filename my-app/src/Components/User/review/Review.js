@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Input, message } from "antd";
 import axios from "axios";
-import "./Review.scss";
 
 const Review = ({ maSanPham }) => {
   const [rating, setRating] = useState(0);
@@ -11,14 +10,14 @@ const Review = ({ maSanPham }) => {
   const [username, setUsername] = useState("");
   const [product, setProduct] = useState(null);
 
-  const token = localStorage.getItem("access_token");
-  const ten_dang_nhap = localStorage.getItem("tendangnhap")
+  const token = localStorage.getItem("access_token"); // Lấy token từ localStorage
+  const ten_dang_nhap = localStorage.getItem("tendangnhap"); // Lấy tên người dùng từ localStorage
 
   useEffect(() => {
+    // Xử lý người dùng đã đăng nhập
     if (token) {
-      const userNameFromCookie = localStorage.getItem("ten_dang_nhap");
-      setUsername(userNameFromCookie || "Người dùng");
-    } else {
+      const userNameFromLocalStorage = localStorage.getItem("ten_dang_nhap");
+      setUsername(userNameFromLocalStorage || "Người dùng");
     }
   }, [token]);
 
@@ -27,31 +26,41 @@ const Review = ({ maSanPham }) => {
       console.error("maSanPham is undefined");
       return;
     }
+
+    // Lấy thông tin sản phẩm từ API
     axios
       .get(`http://127.0.0.1:8000/products/${maSanPham}`)
       .then((response) => {
         if (response.data) {
           setProduct(response.data);
         } else {
-          console.error("No product data received from API");
+          console.error("Không nhận được dữ liệu sản phẩm từ API");
         }
       })
       .catch((error) => {
-        console.error("Error fetching product details:", error);
+        console.error("Lỗi khi lấy thông tin sản phẩm:", error);
       });
   }, [maSanPham]);
 
   const fetchReviews = () => {
     setLoadingReviews(true);
+    // Lấy đánh giá sản phẩm từ API, thêm token vào header
     axios
-      .get("http://127.0.0.1:8000/danhgia")
+      .get("http://127.0.0.1:8000/danhgia", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Thêm token vào header
+        },
+      })
       .then((response) => {
         const productReviews = response.data.filter(
           (review) => String(review.ma_san_pham) === String(maSanPham)
         );
         setReviews(productReviews);
       })
-      .catch((error) => console.error("Error fetching reviews:", error))
+      .catch((error) => {
+        console.error("Lỗi khi lấy danh sách đánh giá:", error);
+        message.error("Không thể tải đánh giá. Vui lòng thử lại.");
+      })
       .finally(() => setLoadingReviews(false));
   };
 
@@ -73,6 +82,7 @@ const Review = ({ maSanPham }) => {
       nhan_xet: reviewContent,
     };
 
+    // Gửi đánh giá mới
     axios
       .post("http://127.0.0.1:8000/danhgia", reviewData, {
         headers: {
@@ -83,10 +93,10 @@ const Review = ({ maSanPham }) => {
         message.success("Đánh giá của bạn đã được gửi thành công!");
         setRating(0);
         setReviewContent("");
-        fetchReviews();
+        fetchReviews(); // Refresh reviews after submitting a new review
       })
       .catch((error) => {
-        console.error("Error submitting review:", error);
+        console.error("Lỗi khi gửi đánh giá:", error);
         if (error.response && error.response.status === 401) {
           message.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
         } else {
@@ -106,7 +116,7 @@ const Review = ({ maSanPham }) => {
   return (
     <div className="review-container">
       <h3>
-        Chào {ten_dang_nhap}, viết đánh giá của bạn cho{" "}
+        Chào {ten_dang_nhap || username}, viết đánh giá của bạn cho{" "}
         {product ? product.ten_san_pham : "sản phẩm này"}
       </h3>
       <form className="review-form" onSubmit={handleReviewSubmit}>
@@ -144,6 +154,9 @@ const Review = ({ maSanPham }) => {
         ) : reviews.length ? (
           reviews.map((review, index) => (
             <div key={index} className="review-item">
+              <div className="review-user">
+                <strong>{review.ten_dang_nhap || username}</strong>
+              </div>
               <div className="review-stars">
                 {[...Array(5)].map((_, i) => (
                   <span

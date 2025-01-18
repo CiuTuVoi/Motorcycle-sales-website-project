@@ -1,19 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// Khởi tạo trạng thái ban đầu từ localStorage
+const initialState = {
+  tendangnhap: localStorage.getItem('tendangnhap') || null, // Lấy từ localStorage nếu có
+};
+
 // Tạo slice cho user
 const userSlice = createSlice({
   name: 'user', // Tên slice
-  initialState: {
-    tendangnhap: null, // Trạng thái ban đầu
-  },
+  initialState,
   reducers: {
     // Action để cập nhật tên người dùng
     setUserName: (state, action) => {
-      state.tendangnhap = action.payload; // Nhận payload từ action và cập nhật state
+      state.tendangnhap = action.payload; // Cập nhật Redux state
+      localStorage.setItem('tendangnhap', action.payload); // Lưu vào localStorage
     },
     // Action để xóa tên người dùng
     clearUserName: (state) => {
-      state.tendangnhap = null; // Reset state về null
+      state.tendangnhap = null; // Reset Redux state
+      localStorage.removeItem('tendangnhap'); // Xóa khỏi localStorage
     },
   },
 });

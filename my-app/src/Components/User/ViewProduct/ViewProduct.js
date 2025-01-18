@@ -21,88 +21,69 @@ const ViewProduct = () => {
   const { ma_san_pham } = useParams();
   const [reviewContent, setReviewContent] = useState("");
   const [reviews, setReviews] = useState([]);
+  const [selectedPromotion, setSelectedPromotion] = useState(null);
 
   const dispatch = useDispatch();
 
-  // Hàm format key thông số kỹ thuật
   const formatLabel = (key) => {
     return key
-      .replace(/_/g, " ") // Thay dấu "_" bằng dấu cách
-      .replace(/(?:^|\s)\S/g, (a) => a.toUpperCase()); // Viết hoa chữ cái đầu mỗi từ
+      .replace(/_/g, " ")
+      .replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
   };
 
-  // Lấy thông tin sản phẩm
   useEffect(() => {
     if (!ma_san_pham) {
       console.error("ma_san_pham is undefined");
       return;
     }
 
-    axios
-      .get(`http://127.0.0.1:8000/products/${ma_san_pham}`) 
-      .then((response) => setProduct(response.data))
-      .catch((error) =>
-        console.error("Error fetching product details:", error)
-      );
+    const fetchData = async () => {
+      try {
+        const productResponse = await axios.get(
+          `http://127.0.0.1:8000/products/${ma_san_pham}`
+        );
+        setProduct(productResponse.data);
 
-    axios
-      .get(`http://127.0.0.1:8000/thongso`)
-      .then((response) => {
-        const spec = response.data.find(
+        const specResponse = await axios.get("http://127.0.0.1:8000/thongso");
+        const spec = specResponse.data.find(
           (item) => String(item.ma_san_pham) === String(ma_san_pham)
         );
-        setSpecification(spec || null); // Nếu không tìm thấy, set null
-      })
-      .catch((error) => console.error("Error fetching specifications:", error));
+        setSpecification(spec || null);
 
-    axios
-      .get(`http://127.0.0.1:8000/anhxe`)
-      .then((response) => {
-        const images = response.data.filter(
+        const imagesResponse = await axios.get("http://127.0.0.1:8000/anhxe");
+        const images = imagesResponse.data.filter(
           (item) => String(item.ma_san_pham) === String(ma_san_pham)
         );
         setProductImg(images || []);
-      })
-      .catch((error) => console.error("Error fetching product images:", error));
+
+        const promoResponse = await axios.get("http://127.0.0.1:8000/khuyenmai");
+        const promo = promoResponse.data.find((item) => item.ma_khuyen_mai === 1); // Assuming promotion ID is 1
+        setSelectedPromotion(promo);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, [ma_san_pham]);
 
-  // Lấy danh sách đánh giá
-  const fetchReviews = () => {
-    axios
-      .get("http://127.0.0.1:8000/danhgia")
-      .then((response) => {
-        const productReviews = response.data.filter(
-          (review) => String(review.ma_san_pham) === String(ma_san_pham)
-        );
-        setReviews(productReviews);
-      })
-      .catch((error) => console.error("Error fetching reviews:", error));
+  const fetchReviews = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/danhgia");
+      const productReviews = response.data.filter(
+        (review) => String(review.ma_san_pham) === String(ma_san_pham)
+      );
+      setReviews(productReviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
   };
 
   useEffect(() => {
     fetchReviews();
   }, [ma_san_pham]);
 
-  // Xử lý thêm sản phẩm vào giỏ hàng
-  const handleAddToCart = () => {
-    if (!product) {
-      message.error("Không thể thêm sản phẩm vào giỏ hàng.");
-      return;
-    }
-
-    const item = {
-      ma_san_pham: product.ma_san_pham,
-      ten_san_pham: product.ten_san_pham,
-      gia: product.gia,
-      quantity,
-    };
-
-    dispatch(addToCart(item));
-    message.success(`${product.ten_san_pham} đã được thêm vào giỏ hàng`);
-  };
-
-  // Xử lý gửi đánh giá
-  const handleReviewSubmit = (e) => {
+  const handleReviewSubmit = async (e) => {
     e.preventDefault();
 
     if (!rating) {
@@ -121,26 +102,58 @@ const ViewProduct = () => {
       nhan_xet: reviewContent,
     };
 
-    const token = Cookies.get("token"); // Hoặc lấy từ cookie nếu sử dụng
+    const token = Cookies.get("token");
 
-    axios
-      .post("http://127.0.0.1:8000/danhgia", reviewData, {
+    try {
+      await axios.post("http://127.0.0.1:8000/danhgia", reviewData, {
         headers: {
-          Authorization: `Bearer ${token}`, // Gửi token trong header
+          Authorization: `Bearer ${token}`,
         },
-      })
-      .then(() => {
-        message.success("Đánh giá của bạn đã được gửi thành công!");
-        setRating(0); // Reset rating
-        setReviewContent(""); // Reset review content
-
-        // Tải lại danh sách đánh giá
-        fetchReviews();
-      })
-      .catch((error) => {
-        console.error("Error submitting review:", error);
-        message.error("Đã xảy ra lỗi khi gửi đánh giá.");
       });
+      message.success("Đánh giá của bạn đã được gửi thành công!");
+      setRating(0);
+      setReviewContent("");
+      fetchReviews();
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      message.error("Đã xảy ra lỗi khi gửi đánh giá.");
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!product) {
+      message.error("Không thể thêm sản phẩm vào giỏ hàng.");
+      return;
+    }
+
+    const item = {
+      ma_san_pham: product.ma_san_pham,
+      ten_san_pham: product.ten_san_pham,
+      gia: product.gia_khuyen_mai || product.gia,
+      so_luong: quantity,
+    };
+
+    const token = localStorage.getItem("access_token");
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/giohang", item, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch(addToCart(response.data));
+      message.success(`${product.ten_san_pham} đã được thêm vào giỏ hàng.`);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      message.error("Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng.");
+    }
+  };
+
+  const applyDiscount = (price) => {
+    if (selectedPromotion && selectedPromotion.muc_giam) {
+      return price - (price * selectedPromotion.muc_giam) / 100;
+    }
+    return price;
   };
 
   if (!product) return <p>Không tìm thấy sản phẩm.</p>;
@@ -156,7 +169,7 @@ const ViewProduct = () => {
                 productImg.map((item, index) => (
                   <div key={`carousel-color-${index}`}>
                     <img
-                      src={item.anh_1} // Lấy ảnh đại diện (anh_1) cho mỗi màu
+                      src={item.anh_1}
                       alt={`Color ${index + 1}`}
                       style={{ width: "100%", objectFit: "cover" }}
                     />
@@ -174,8 +187,9 @@ const ViewProduct = () => {
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                  }).format(product.gia)}
+                  }).format(applyDiscount(product.gia_khuyen_mai || product.gia))}
                 </p>
+                
               </div>
               <ul>
                 <li>🎁 01 Nón bảo hiểm</li>
@@ -196,7 +210,6 @@ const ViewProduct = () => {
             </div>
           </div>
 
-          {/*hình ảnh xe */}
           <h3 className="detail-specification">Hình ảnh xe</h3>
           <p className="line-specification"></p>
           <div className="productImage">
@@ -206,44 +219,18 @@ const ViewProduct = () => {
                   key={`image-${item.ma_san_pham}-${index}`}
                   style={{ textAlign: "center" }}
                 >
-                  <div>
+                  {[item.anh_1, item.anh_2, item.anh_3, item.anh_4].map((image, idx) => (
                     <img
-                      src={item.anh_1}
-                      alt="Anh 1"
+                      key={`image-${idx}`}
+                      src={image}
+                      alt={`Anh ${idx + 1}`}
                       style={{
                         width: "200px",
                         height: "200px",
                         objectFit: "cover",
                       }}
                     />
-                    <img
-                      src={item.anh_2}
-                      alt="Anh 2"
-                      style={{
-                        width: "200px",
-                        height: "200px",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <img
-                      src={item.anh_3}
-                      alt="Anh 2"
-                      style={{
-                        width: "200px",
-                        height: "200px",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <img
-                      src={item.anh_4}
-                      alt="Anh 2"
-                      style={{
-                        width: "200px",
-                        height: "200px",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </div>
+                  ))}
                 </div>
               ))}
             </div>
