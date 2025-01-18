@@ -1,0 +1,430 @@
+/* General Container and Wrapper Layout */
+
+.container {
+
+    .Header-home {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        max-width: 100%;
+        ;
+        z-index: 9999;
+    }
+
+    /* Slide Show Section */
+    .slide-show {
+        margin-top: -10px;
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    /* Slide Show Product */
+    .product-slider {
+        .product-card {
+            border: 1px solid #dcdcdc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            background-color: #ffffff;
+            margin: 10px;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+
+            .product-image {
+                width: 100%;
+                height: 150px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+
+            .product-info {
+                margin-top: 10px;
+
+                h5 {
+                    font-size: 16px;
+                    color: #333;
+                    margin: 5px 0;
+                }
+
+                .product-price {
+                    font-size: 18px;
+                    color: #d9534f;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+
+    /* Best-Selling Products */
+    .best-selling-products {
+        width: 250px;
+        color: #fff;
+        margin: 50px 0 40px 0;
+        background-color: rgb(55, 80, 206);
+        border-radius: 0 15px 0 0;
+        display: flex;
+        justify-content: center;
+
+        h1 {
+            font-size: 20px;
+            font-weight: normal;
+            padding: 10px;
+        }
+    }
+
+    /* HOTPRODUCT-CART-CONTAINER */
+    .product-card-container {
+        background-color: rgba(65, 88, 208, 0.1);
+        /* Nền xanh nhạt để tạo cảm giác dễ chịu */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        /* Đảm bảo responsive tốt */
+        gap: 20px;
+        /* Khoảng cách giữa các thẻ sản phẩm */
+        padding: 30px;
+
+        .product-card {
+            background-color: #ffffff;
+            /* Màu nền trắng cho sản phẩm */
+            border-radius: 12px;
+            /* Bo góc mềm mại */
+            overflow: hidden;
+            width: 100%;
+            max-width: 1100px;
+            /* Giới hạn chiều rộng */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            /* Đổ bóng tinh tế */
+            display: flex;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+            &:hover {
+                transform: translateY(-5px);
+                /* Hiệu ứng nổi khi hover */
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .product-img {
+                position: relative;
+                width: 45%;
+                /* Chiếm 45% chiều ngang */
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    transition: transform 0.3s ease;
+
+                    &:hover {
+                        transform: scale(1.1);
+                        /* Phóng to ảnh khi hover */
+                    }
+                }
+
+                .badge {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    background-color: #ff4d4d;
+                    /* Màu đỏ nổi bật */
+                    color: #ffffff;
+                    font-weight: bold;
+                    padding: 8px 16px;
+                    border-radius: 50px;
+                    font-size: 14px;
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+                    text-transform: uppercase;
+                }
+            }
+
+            .product-detail {
+                width: 55%;
+                /* Chiếm 55% chiều ngang */
+                padding: 20px 30px;
+                color: #333;
+
+                h3 {
+                    font-size: 22px;
+                    font-weight: bold;
+                    color: #2a4db4;
+                    /* Màu xanh đậm để nổi bật */
+                    margin-bottom: 15px;
+                }
+
+                .price {
+                    margin: 10px 0 20px;
+
+                    .old_price {
+                        font-size: 16px;
+                        color: #888; // Màu xám nhạt cho giá cũ
+                        text-decoration: line-through; // Gạch ngang giá cũ
+                        margin-right: 10px;
+                    }
+
+                    .new-price {
+                        font-size: 26px;
+                        color: #d9534f;
+                        font-weight: bold;
+                    }
+                }
+
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    font-size: 16px;
+                    color: #555;
+
+                    li {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 10px;
+
+                        &:before {
+                            content: "🎁";
+                            /* Icon quà tặng */
+                            margin-right: 8px;
+                            font-size: 18px;
+                        }
+                    }
+                }
+
+                .more-btn {
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 20px;
+
+                    button {
+                        background-color: #2a4db4;
+                        color: #ffffff;
+                        font-size: 16px;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+
+                        &:hover {
+                            background-color: #1e3a8a;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    /* HONDAMENU */
+    .hondamenu {
+        width: 250px;
+        color: #fff;
+        margin-top: 40px;
+        background-color: rgb(55, 80, 206);
+        display: flex;
+        justify-content: center;
+        border-radius: 0 15px 0 0;
+
+        .iconhonda {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: normal;
+            padding: 10px;
+        }
+    }
+
+    /* Border */
+    .border {
+        background-color: rgb(55, 80, 206);
+        width: 100%;
+        height: 3px;
+        margin-top: -48px;
+    }
+
+
+    /* More Honda */
+    .morehonda {
+        position: relative;
+        margin-left: 91%;
+        margin-top: 20px;
+
+        a {
+            font-size: 15px;
+            text-decoration: none;
+            color: rgb(55, 80, 206);
+            transition: transform 0.2s ease-in-out;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    /* BLANDHONDA */
+    .blandhonda {
+        width: 100%;
+        height: auto;
+        text-align: center;
+
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            margin-top: 50px
+        }
+    }
+
+
+    /* SLIDE-PRODUCT-HONDA*/
+    .slide-product-honda {
+        .product-container {
+            height: 330px;
+            width: 220px;
+            margin-top: 20px;
+            border: 1px soid #d9534f;
+            border-radius: 5px;
+            box-shadow: 0px 10px 200px rgba(38, 15, 189, 0.1);
+            padding: 10px;
+            background-color: #fff;
+            margin: 20px;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+
+
+
+        }
+
+        .product-info {
+            margin-top: 10px;
+
+            h5 {
+                font-size: 16px;
+                color: #333;
+                margin: 5px 0;
+            }
+
+            .product-price {
+                display: block;
+                font-size: 16px;
+                text-decoration: line-through;
+                color: #999;
+                padding: 10px;
+            }
+
+            .new-price {
+
+                display: block;
+                font-size: 18px;
+                color: red;
+                padding: 0 10px 10px;
+                font-weight: bold;
+            }
+
+            .favorite-btn {
+                position: absolute;
+                right: 15px;
+                top: 20px;
+                border: none;
+                background: transparent;
+
+                color: gray;
+                cursor: pointer;
+                font-size: 1.7rem;
+                transition: color 0.3s;
+            }
+
+            .favorite-btn.active {
+                color: red;
+            }
+
+
+
+
+        }
+    }
+
+    /*BANNER-YAMAHA*/
+    .banner-yamaha {
+        display: flex;
+        justify-content: space-between;
+
+        img {
+            margin-top: 50px;
+            max-width: 49.7%;
+            height: auto;
+        }
+    }
+
+    /*SLIDE-PRODUCT-YAMAHA*/
+    .slide-product-yamaha {
+        .product-container {
+            border: 1px soid #333;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            background-color: #fff;
+            margin: 10px;
+            text-align: center;
+            margin-top: 60px;
+
+
+            .product-img {
+                width: 100%;
+                height: 200px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                transition: transform 0.2s ease-in-out;
+
+                &:hover {
+                    transform: scale(1.60);
+                }
+            }
+
+            .product-info {
+                font-size: 20px;
+                color: #333;
+                font-weight: bold;
+                text-align: center;
+            }
+
+            .product-price {
+                font-size: 18px;
+                margin-top: 5px;
+                color: red;
+                font-weight: bold;
+            }
+        }
+
+    }
+
+
+}

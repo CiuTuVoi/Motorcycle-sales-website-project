@@ -1,0 +1,105 @@
+.favorites-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f7f8fa;  
+    padding-top: 40px;
+  
+    .favorites-content {
+      flex: 1;
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-radius: 12px;
+      background-color: #fff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
+      h2 {
+        text-align: center;
+        font-size: 25px;
+        color: rgb(65, 88, 208);
+        margin-bottom: 3rem;
+        font-weight: 700;
+      }
+  
+      .favorite-list {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 2rem;
+        overflow-x: auto;  // Cho phép cuộn ngang
+        padding-bottom: 2rem;
+  
+        .favorite-item {
+          position: relative;
+          background-color: #fff;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+          cursor: pointer;
+          width: 280px;  // Chiều rộng cố định cho mỗi sản phẩm
+  
+          &:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            filter: brightness(1.05);
+          }
+  
+          img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid #eee;
+          }
+  
+          .info {
+            padding: 1.5rem;
+            text-align: center;
+  
+            h3 {
+              font-size: 1.6rem;
+              color: rgb(65, 88, 208);
+              margin-bottom: 0.5rem;
+              font-weight: 600;
+            }
+  
+            p {
+              font-size: 1rem;
+              color: rgb(65, 88, 208);;
+              margin-bottom: 1rem;
+              font-style: italic;
+            }
+  
+            .price {
+              font-size: 1.4rem;
+              justify-content: center;
+              font-weight: bold;
+              color: #e74c3c;
+            }
+          }
+  
+          .favorite-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            color: #e74c3c;
+            transition: color 0.3s ease;
+            z-index: 2;
+  
+            &:hover {
+              color: #c0392b;
+            }
+          }
+        }
+      }
+  
+      p {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #555;
+        font-weight: 400;
+      }
+    }
+  }
+  

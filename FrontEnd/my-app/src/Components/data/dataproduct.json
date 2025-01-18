@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "tenXe": "Honda Wave Alpha",
+    "hangXe": "Honda",
+    "gia": "17,000,000 VND",
+    "hinhAnh": {
+      "white": "https://hondahungphat.com.vn/public/upload/images/hinh_sanpham/-1681715357629.png",
+      "red": "https://img.tinxe.vn/resize/1000x-/2020/04/16/XForF7yt/red-1-550x400-acf-cropped-6827-bd85.png",
+      "black": "https://product.hstatic.net/200000560101/product/den_mo_7ac6dd43b2af45d1a1db69a97ba6b6e5.png"
+    },
+    "category": "honda"
+  
+  }
+]

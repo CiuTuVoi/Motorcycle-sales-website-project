@@ -1,0 +1,66 @@
+.search-component {
+  position: relative;
+
+  input {
+    width: 60%; /* Thay đổi width từ 70% xuống 60% */
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .suggestions-list {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+
+    .suggestion-item {
+      display: flex;
+      padding: 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f1f1f1;
+      }
+
+      img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        margin-right: 10px;
+      }
+
+      .product-info {
+        flex-grow: 1;
+
+        h4 {
+          color: rgb(65, 88, 208);
+          margin: 0;
+          font-size: 12px;
+        }
+
+        p {
+          margin: 5px 0;
+          font-size: 12px;
+        }
+
+        span {
+          color: red;
+          font-size: 12px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  p {
+    font-size: 14px;
+    color: #888;
+  }
+}
