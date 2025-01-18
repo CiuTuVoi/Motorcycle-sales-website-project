@@ -1,39 +1,42 @@
+@import "../../styles/variables.scss";
+
 .notifications {
-    width: 300px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-  }
-  
-  .notification-list {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  
-  .notification-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .notification-item.unread {
-    background-color: #f5f5f5;
-  }
-  
-  .notification-item:hover {
-    background-color: #e6e6e6;
-  }
-  
-  .notification-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .notification-time {
-    font-size: 12px;
-    color: gray;
-  }
+  width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background-color: darken($main-bg, 10%); // Màu nền đậm hơn của $main-bg
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #eee ;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.notification-item.unread {
+  background-color: darken($soft-bg, 10%); // Màu nền cho mục chưa đọc, đậm hơn $soft-bg
+}
+
+.notification-item:hover {
+  background-color: lighten($soft-bg, 5%); // Làm sáng lên khi hover
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: $soft-color; // Sử dụng màu $soft-color cho thời gian
+}

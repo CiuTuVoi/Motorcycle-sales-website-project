@@ -59,8 +59,8 @@
       padding: 10px;
       max-height: 400px;
       overflow-y: auto;
-      visibility: hidden; 
-      opacity: 0; 
+      visibility: hidden;
+      opacity: 0;
       transition: visibility 0s, opacity 0.5s linear; /* Cập nhật hiệu ứng chuyển động */
     
       &.visible {
@@ -68,6 +68,7 @@
         opacity: 1;
       }
     }
+    
 
       /* Styling nội dung thông báo */
       .notification-list {
@@ -124,3 +125,4 @@
       }
     }
   }
+

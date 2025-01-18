@@ -8,7 +8,6 @@ type Props = {
   columns: GridColDef[];
   rows: object[];
   slug: string;
-  getRowId?: (row: any) => any;
 };
 
 const DataTableOrders = (props: Props) => {
@@ -21,7 +20,7 @@ const DataTableOrders = (props: Props) => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${Cookies.get("access_token")}`, 
+          "Authorization": `Bearer ${Cookies.get("access_token")}`,
         },
       });
     },
@@ -31,7 +30,7 @@ const DataTableOrders = (props: Props) => {
   });
 
   const handleDelete = (productId: number) => {
-    deleteMutation.mutate({productId});
+    deleteMutation.mutate({ productId });
   };
 
   const actionColumn: GridColDef = {
@@ -41,7 +40,7 @@ const DataTableOrders = (props: Props) => {
     renderCell: (params) => {
       return (
         <div className="action">
-          <Link to={`/${props.slug}/${params.row.id}`}>
+          <Link to={`/${props.slug}/${params.row.ma_don_hang}`}>
             <img src="/view.svg" alt="" />
           </Link>
           <div className="delete" onClick={() => handleDelete(params.row.ma_san_pham)}>
@@ -77,7 +76,6 @@ const DataTableOrders = (props: Props) => {
         disableColumnFilter
         disableDensitySelector
         disableColumnSelector
-        getRowId={props.getRowId}
       />
     </div>
   );

@@ -71,7 +71,7 @@ const Products = () => {
   
   useEffect(() => {
     axios
-      .get("http://localhost:8000/products/1")
+      .get("http://localhost:8000/products")
       .then((response) => {
         setProducts(response.data);
         setIsLoading(false); 

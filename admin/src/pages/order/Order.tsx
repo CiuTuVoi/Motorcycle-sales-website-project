@@ -7,33 +7,13 @@ import Cookies from "js-cookie";
 import DataTableOrder from "../../components/dataTableOrder/DataTableOrder";
 
 const columns: GridColDef[] = [
-  { field: "ma_don_hang", 
-    headerName: "IDO", 
-    width: 10 },
-  { field: "ma_nguoi_dung",
-    headerName: "ID", 
-    width: 10 },
-    { field: "ma_san_pham", 
-        headerName: "IDP", 
-        width: 10 },
-    { field: "so_luong", 
-        headerName: "Số lượng", 
-        width: 20 },  
-  { field: "don_gia", 
-    headerName: "Đơn giá", 
-    width: 150, 
-    type: "number" },
-  { field: "tong_tien", 
-    headerName: "Tổng tiền", 
-    width: 150, 
-    type: "number" },
-  { field: "trang_thai", 
-    headerName: "Trạng thái", 
-    width: 150 },
-  { field: "ngay_tao", 
-    headerName: "Ngày tạo", 
-    width: 200, 
-    type: "string" },
+  { field: "ma_nguoi_dung", headerName: "ID Người dùng", width: 150 },
+  { field: "ma_san_pham", headerName: "ID Sản phẩm", width: 150 },
+  { field: "so_luong", headerName: "Số lượng", width: 150 },
+  { field: "don_gia", headerName: "Đơn giá", width: 150, type: "number" },
+  { field: "tong_tien", headerName: "Tổng tiền", width: 150, type: "number" },
+  { field: "trang_thai", headerName: "Trạng thái", width: 150 },
+  { field: "ngay_tao", headerName: "Ngày tạo", width: 200, type: "string" },
 ];
 
 const Order = () => {
@@ -52,7 +32,7 @@ const Order = () => {
   useEffect(() => {
     // Fetch warehouse data from the API
     axios
-      .get("http://localhost:8000/khohang", {
+      .get("http://localhost:8000/donhang_all", {
         headers: {
           "Authorization": `Bearer ${Cookies.get("access_token")}`,
         },
@@ -62,7 +42,7 @@ const Order = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        setError("Lỗi khi tải kho hàng: " + err.message);
+        setError("Lỗi khi tải đơn hàng: " + err.message);
         setIsLoading(false);
       });
   }, []);
@@ -78,10 +58,9 @@ const Order = () => {
         <p>{error}</p>
       ) : (
         <DataTableOrder
-            slug="donhang"
-            columns={columns}
-            rows={orders}
-            getRowId={(row) => row.ma_don_hang}
+          slug="donhang"
+          columns={columns}
+          rows={orders}
         />
       )}
     </div>

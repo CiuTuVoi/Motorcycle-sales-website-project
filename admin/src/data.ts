@@ -1,17 +1,17 @@
 export const menu = [
   {
     id: 1,
-    title: "main",
+    title: "Tính năng chính",
     listItems: [
       {
         id: 1,
-        title: "Homepage",
+        title: "Trang chủ",
         url: "/",
         icon: "home.svg",
       },
       {
         id: 2,
-        title: "Profile",
+        title: "Tài khoản",
         url: "/users/1",
         icon: "user.svg",
       },
@@ -19,7 +19,7 @@ export const menu = [
   },
   {
     id: 2,
-    title: "lists",
+    title: "Danh sách",
     listItems: [
       {
         id: 1,
@@ -49,17 +49,17 @@ export const menu = [
   },
   {
     id: 3,
-    title: "general",
+    title: "Chung",
     listItems: [
       {
         id: 1,
-        title: "Elements",
+        title: "Chức năng",
         url: "/",
         icon: "element.svg",
       },
       {
         id: 2,
-        title: "Notes",
+        title: "Ghi chú",
         url: "/",
         icon: "note.svg",
       },
@@ -71,7 +71,7 @@ export const menu = [
       },
       {
         id: 4,
-        title: "Calendar",
+        title: "Lịch",
         url: "/",
         icon: "calendar.svg",
       },
@@ -79,17 +79,17 @@ export const menu = [
   },
   {
     id: 4,
-    title: "Maintenance",
+    title: "Bảo trì",
     listItems: [
       {
         id: 1,
-        title: "Settings",
+        title: "Cài đặt",
         url: "/",
         icon: "setting.svg",
       },
       {
         id: 2,
-        title: "Backups",
+        title: "Sao lưu",
         url: "/",
         icon: "backup.svg",
       },
@@ -97,17 +97,17 @@ export const menu = [
   },
   {
     id: 5,
-    title: "analytics",
+    title: "Phân tích",
     listItems: [
       {
         id: 1,
-        title: "Charts",
+        title: "Biểu đồ",
         url: "/",
         icon: "chart.svg",
       },
       {
         id: 2,
-        title: "Logs",
+        title: "Nhật ký",
         url: "/",
         icon: "log.svg",
       },
